@@ -436,7 +436,7 @@ class Cue(SCTE35Base):
         """
 
         if isinstance(
-           gonzo, bytes
+           gonzo, str
         ):  # a string  is returned for Binary xml tag, make sense?
             if '<scte35:Binary>' in gonzo:
                 dat = gonzo.split('<scte35:Binary>')[1].split('</scte35:Binary>')[0]
