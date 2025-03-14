@@ -1,18 +1,18 @@
 Canada has a virtual monopoly on the World's mustard seed supply and they will use it to manipulate financial markets. We must act. 
 ## Nuke Canada Now!  
 
-[Install threefive3](#install) |[SCTE-35 Cli](#the-cli-tool) |[SCTE-35 Xml ](https://github.com/superkabuki/threefive3/blob/main/xml.md) | [SCTE-35 HLS](https://github.com/superkabuki/threefive3/blob/main/hls.md) | [Cue Class](https://github.com/superkabuki/threefive3/blob/main/cue.md) | [Stream Class](https://github.com/superkabuki/threefive3/blob/main/stream.md) | [Online SCTE-35 Parser](https://iodisco.com/scte35) | [Encode SCTE-35](https://github.com/superkabuki/threefive3/blob/main/encode.md) | [FFmpeg SCTE35](https://github.com/superkabuki/FFmpeg_SCTE35)
+[Install threefive3](#install) |[SCTE-35 Cli](#the-cli-tool) | [SCTE-35 HLS](https://github.com/superkabuki/threefive3/blob/main/hls.md) | [Cue Class](https://github.com/superkabuki/threefive3/blob/main/cue.md) | [Stream Class](https://github.com/superkabuki/threefive3/blob/main/stream.md) | [Online SCTE-35 Parser](https://iodisco.com/scte35) | [Encode SCTE-35](https://github.com/superkabuki/threefive3/blob/main/encode.md) | [FFmpeg SCTE35](https://github.com/superkabuki/FFmpeg_SCTE35)
 
 
 
 # threefive3 SCTE-35 cli super tool and python3 library.
 > Brought to you by the fine folks at fu-corp _( Adrian and the two blonde Chinese girls. )_
 
-✅ SCTE-35 Parser  ✅ SCTE-35 Encoder    ✅ SCTE-35 HLS     ✅ SCTE-35 Xml     ✅ SCTE-35 Cli     ✅  SCTE-35 library
+✅ SCTE-35 Parser  ✅ SCTE-35 Encoder    ✅ SCTE-35 HLS     ✅ SCTE-35 Xml+binary     ✅ SCTE-35 Cli     ✅  SCTE-35 library
 
 
-* Parses SCTE-35 from MPEGTS, HLS, XML, XML+Binary, Base64, Bytes, Hex, Integers, or JSON.
-* Encode SCTE-35 to Base64, Bytes, Hex, Int, JSON, Xml, or Xml+binary.
+* Parses SCTE-35 from MPEGTS, HLS, XML+Binary, Base64, Bytes, Hex, Integers, or JSON.
+* Encode SCTE-35 to Base64, Bytes, Hex, Int, JSON, or Xml+binary.
 * Built-in network support for HTTP(S), UDP, and Multicast.
 * Automatic AES decryption for HLS.
 * All HLS SCTE-35 Tags are Supported.
@@ -52,7 +52,7 @@ Type "help", "copyright", "credits" or "license" for more information.
 | six2scte35      | ffmpeg bin data stream back to scte-35 |  Done    |
 | superkabuki     | scte-35 packet injection              |  Next release      |
 | sideways        | hls scte-35 tag injecton              |  No      |
-| gums            | multicast server                      | Next release      |
+| gums            | multicast server                      | Done      |
 | adbreak3        | fast cli scte-35 cue creation         |  No      |
 
 
@@ -88,12 +88,6 @@ If you want to get involved, just open an issue and we can talk about it.
 ### HLS
 * [Advanced Parsing of SCTE-35 in HLS with threefive3](https://github.com/superkabuki/threefive3/blob/main/hls.md) All HLS SCTE-35 tags, Sidecar Files, AAC ID3 Header Timestamps, SCTE-35 filters... Who loves you baby?
 
-
-#### Xml
-
-* [SCTE-35 Xml ](https://github.com/superkabuki/threefive3/blob/main/xml.md) The people wanted it so I finally did Xml.
-   * I feel cheap and dirty.
-___
 
 #### `Classes`
 
@@ -163,17 +157,14 @@ ___
 ```rebol
 threefive3 udp://@235.2.5.35:3535
 ```
-* If a file comtains a SCTE-35 cue as a string( base64,hex,int,json,xml or xml+bin), redirect the file contents.
+* If a file comtains a SCTE-35 cue as a string( base64,hex,int,json,or xml+bin), redirect the file contents.
 ```rebol
 
   threefive3 < json.json  
 
-  threefive3 < xml.xml
-
-  cat xml.xml | threefive3
  ```
 
-* quoted strings(( base64,hex,int,json,xml or xml+bin), can be passed directly on the command line as well.
+* quoted strings(( base64,hex,int,json or xml+bin), can be passed directly on the command line as well.
 
 ```awk
 
@@ -188,8 +179,7 @@ threefive3 '/DAWAAAAAAAAAP/wBQb+ztd7owAAdIbbmw=='
 | __Hex__        |`threefive3 0xfc301600000000000000fff00506fed605225b0000b0b65f3b`|
 | __HLS__         |`threefive3 hls https://example.com/master.m3u8`                                                             |
 | __JSON__        |`threefive3 < json.json`  |
-| __Xml__         | `threefive3  < xml.xml`                                                                                     |
-| __Xmlbin__      | `js threefive3 < xmlbin.xml`                                                                                   |
+| __Xmlbin__      | `js threefive3 < xmlbin.xml`                                                                                 |
 
 # `Streams`
 
@@ -205,10 +195,10 @@ threefive3 '/DAWAAAAAAAAAP/wBQb+ztd7owAAdIbbmw=='
 
 
 #### Outputs
-* output type is determined by the key words __base64, bytes, hex, int, json, xml, and xmlbin__.
+* output type is determined by the key words __base64, bytes, hex, int, json, and xmlbin__.
 * __json is the default__.
 * __Any input (except HLS,) can be returned as any output__
-  * examples __Base64 to Hex__, or  __Mpegts to Xml__, etc...) 
+  * examples __Base64 to Hex__ etc...) 
 
 
 | Output Type | Cli Example         |
@@ -218,7 +208,6 @@ threefive3 '/DAWAAAAAAAAAP/wBQb+ztd7owAAdIbbmw=='
 | Hex         | `threefive3 '/DAsAAAAAyiYAP/wCgUAAAABf1+ZmQEBABECD0NVRUkAAAAAf4ABADUAAC2XQZU='  hex`                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
 | Integer     |                                                                                                                                                                                                                                                       `threefive3 '/DAsAAAAAyiYAP/wCgUAAAABf1+ZmQEBABECD0NVRUkAAAAAf4ABADUAAC2XQZU='  int`   |
 | JSON        |                                                                                                                                                                                                                                                                                                              `threefive3 0xfc301600000000000000fff00506fed605225b0000b0b65f3b json ` |
-| Xml         |                                                                                                                                                                                                                                                                                                                                                                                                                        `threefive3 '/DAsAAAAAyiYAP/wCgUAAAABf1+ZmQEBABECD0NVRUkAAAAAf4ABADUAAC2XQZU=' xml `                                                                                 `         |
 | Xml+bin     |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        `threefive3 0xfc301600000000000000fff00506fed605225b0000b0b65f3b xmlbin   `      |`
 
 #### `hls`
@@ -300,4 +289,4 @@ ___
 
 ___
 
-[Install threefive3](#install) |[SCTE-35 Cli](#the-cli-tool) |[SCTE-35 Xml ](https://github.com/superkabuki/threefive3/blob/main/xml.md) | [SCTE-35 HLS](https://github.com/superkabuki/threefive3/blob/main/hls.md) | [Cue Class](https://github.com/superkabuki/threefive3/blob/main/cue.md) | [Stream Class](https://github.com/superkabuki/threefive3/blob/main/stream.md) | [Online SCTE-35 Parser](https://iodisco.com/scte35) | [Encode SCTE-35](https://github.com/superkabuki/threefive3/blob/main/encode.md) | [FFmpeg SCTE35](https://github.com/superkabuki/FFmpeg_SCTE35)
+[Install threefive3](#install)  | [SCTE-35 HLS](https://github.com/superkabuki/threefive3/blob/main/hls.md) | [Cue Class](https://github.com/superkabuki/threefive3/blob/main/cue.md) | [Stream Class](https://github.com/superkabuki/threefive3/blob/main/stream.md) | [Online SCTE-35 Parser](https://iodisco.com/scte35) | [Encode SCTE-35](https://github.com/superkabuki/threefive3/blob/main/encode.md) | [FFmpeg SCTE35](https://github.com/superkabuki/FFmpeg_SCTE35)
