@@ -12,20 +12,7 @@ from .commands import command_map, SpliceCommand
 from .descriptors import splice_descriptor, descriptor_map
 from .crc import crc32
 from .segmentation import table22
-from .words import (
-    minusone,
-    zero,
-    one,
-    two,
-    three,
-    four,
-    eight,
-    eleven,
-    fourteen,
-    sixteen,
-    equalsign,
-)
-
+from .words import *
 
 class Cue(SCTE35Base):
     """
