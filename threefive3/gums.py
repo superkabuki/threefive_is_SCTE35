@@ -1,5 +1,3 @@
-#!/usr/bin/env python3
-
 """
 
 gums, Grande Unicast Multicast Sender
@@ -13,6 +11,7 @@ import sys
 import time
 from functools import partial
 from .new_reader import reader
+from .stuff import blue
 
 
 DGRAM_SIZE = 1316
@@ -77,8 +76,9 @@ class GumS:
                 total_bytes += len(dgram)
                 elapsed = now() - start_time
                 rate = (total_bytes / million) / elapsed
+                mb=total_bytes/million
                 print(
-                    f"\t{total_bytes/million:0.2f} MB sent in {elapsed:5.2f} seconds. {rate:3.2f} MB/Sec",
+                    f"\t{mb:0.2f} MB sent in {elapsed:5.2f} seconds. {rate:3.2f} MB/Sec",
                     end="\r",
                     file=sys.stderr,
                 )
