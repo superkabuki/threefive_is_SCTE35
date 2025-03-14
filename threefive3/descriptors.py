@@ -6,7 +6,7 @@ from .bitn import Bitn
 from .base import SCTE35Base
 from .segmentation import table20, table22, dvb_table2
 from .upids import upid_map
-from .stuff import red
+from .stuff import red,blue
 
 
 def k_by_v(adict, avalue):
@@ -199,7 +199,7 @@ class DtmfDescriptor(SpliceDescriptor):
             d_c += 1
         return nbin.bites
 
- 
+
 class TimeDescriptor(SpliceDescriptor):
     """
     Table 25 - time_descriptor()
@@ -412,13 +412,13 @@ class SegmentationDescriptor(SpliceDescriptor):
                 self._chk_var(int, nbin.add_int, "sub_segment_num", 8)
                 self._chk_var(int, nbin.add_int, "sub_segments_expected", 8)
             except:
-                self.errors.append(
+                blue(
                     "Adding sub_segment_num and sub_segments_expected. setting to 0, 0"
                 )
                 nbin.add_int(0, 8)
                 nbin.add_int(0, 8)
 
- 
+
 
 # map of known descriptors and associated classes
 descriptor_map = {
@@ -440,6 +440,6 @@ def splice_descriptor(bites):
         spliced = descriptor_map[tag](bites)
     else:
         spliced = SpliceDescriptor(bites)
-        red(f"tag not in descriptor map. 0,1,2,3, 240 are valid tags")
+        red(f"tag not in descriptor map. {list(descriptor_map.keys())} are valid tags")
     spliced.decode()
     return spliced
