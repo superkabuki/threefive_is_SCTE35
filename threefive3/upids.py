@@ -5,7 +5,7 @@ classy Upids
 
 """
 
-from .bitn import Bitn, NBin
+from .bitn import Bitn
 
 
 charset = "ascii"  #  pylint, this isn't a constant.
@@ -41,6 +41,20 @@ class Upid:
         """
         self.upid_value = seg_upid.encode()
         nbin.add_bites(self.upid_value)
+
+    def redecode(self, seg_upid):
+        """
+        redecode is for decoding complex xml upids
+        before encodingto another format.
+        """
+        if isinstance(seg_upid, str):
+            try:
+                self.bitbin = Bitn(bytes.fromhex(seg_upid))
+            except ValueError:
+                self.bitbin = Bitn(seg_upid.encode())
+            return self.decode()
+        self.upid_value = seg_upid
+        return self.upid_name, self.upid_value
 
 
 class NoUpid(Upid):
