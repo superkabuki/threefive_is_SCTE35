@@ -9,12 +9,12 @@ import os
 import sys
 import time
 from collections import deque
-from pprint import pprint
+from .aac import AacParser
 from .hlstags import TagParser, HEADER_TAGS
 from .segment import Segment
 from .cue import Cue
 from .new_reader import reader
-from .stuff import atohif, iso8601, print2, red, blue
+from .stuff import atohif, iso8601, red, blue
 
 
 REV = "\033[7m"
@@ -336,59 +336,6 @@ class SlidingWindow:
         self.pop_pane()
 
 
-class AacParser:
-    """
-    AacParser parses aac segments.
-    """
-
-    applehead = b"com.apple.streaming.transportStreamTimestamp"
-
-    @staticmethod
-    def is_header(header):
-        """
-        is_header tests aac and ac3 files for ID3 headers.
-        """
-        if header[:3] == b"ID3":
-            return True
-        return False
-
-    @staticmethod
-    def id3_len(header):
-        """
-        id3_len parses the length value from ID3 headers
-        """
-        id3len = int.from_bytes(header[6:], byteorder="big")
-        return id3len
-
-    @staticmethod
-    def syncsafe5(somebytes):
-        """
-        syncsafe5 parses PTS from ID3 tags.
-        """
-        lsb = len(somebytes) - 1
-        syncd = 0
-        for idx, bite in enumerate(somebytes):
-            syncd += bite << ((lsb - idx) << 3)
-        return round(syncd / 90000.0, 6)
-
-    def parse(self, media):
-        """
-        aac_pts parses the ID3 header tags in aac and ac3 audio files
-        """
-        pts = 0
-        aac = reader(media)
-        header = aac.read(10)
-        if self.is_header(header):
-            id3len = self.id3_len(header)
-            data = aac.read(id3len)
-            if self.applehead in data:
-                try:
-                    pts = float(data.split(self.applehead)[1].split(b"\x00", 2)[1])
-                except:
-                    pts = self.syncsafe5(data.split(self.applehead)[1][:9])
-        return round((pts % ROLLOVER), 6)
-
-
 class HlsParser:
     """
     HlsParser is the Hls Parser
@@ -441,7 +388,8 @@ class HlsParser:
         """
         for sidef in [self.sidecar, self.dumpfile, self.flat, self.m3u8]:
             with open(sidef, "w+", encoding="utf-8") as side_file:  # touch
-                pass
+                side_file.close()
+               # pass
 
     def chk_aes(self, line):
         """
@@ -468,7 +416,7 @@ class HlsParser:
         """
         to_dump copies all SCTE-35 lines to self.dumpfile.
         """
-        with open(self.dumpfile, "a") as dump:
+        with open(self.dumpfile, "a",encoding ="utf-8") as dump:
             dump_line = f"{pts},{line}\n"
             if dump_line != self.last_dump_line:
                 dump.write(dump_line)
@@ -567,6 +515,9 @@ class HlsParser:
         return "## " + line
 
     def show_tags(self, tags):
+        """
+        show_tags print tags
+        """
         for que, vee in tags.items():
             print(f"{SUB}{que}: {vee}")
 
@@ -701,6 +652,9 @@ class HlsParser:
         return line
 
     def auto_cont(self):
+        """
+        auto_cont automatically add CUE-OUT-CONT tags
+        """
         self.cue_state = "CONT"
         line = (
             f"#EXT-X-CUE-OUT-CONT:{round(self.break_timer,3)}/{self.break_duration}\n"
@@ -897,6 +851,9 @@ class HlsParser:
         return [line.decode() for line in lines]
 
     def parse_line(self, line):
+        """
+        parse_line parse a line from the manifest
+        """
         if "#EXT-X-PROGRAM-DATE-TIME" in line:
             return None
 
@@ -933,7 +890,7 @@ class HlsParser:
         write_flat flatten out the sliding window
         and write all data to flat.m3u8.
         """
-        with open(self.flat, "a") as flat:
+        with open(self.flat, "a",encoding ="utf-8") as flat:
             if self.first_segment:
                 flat.write("#EXTM3U\n")
                 for header in self.headers:
@@ -947,7 +904,7 @@ class HlsParser:
         write_manifest write data to sc.m3u8
         with profile rules applied.
         """
-        with open(self.m3u8, "w") as out:
+        with open(self.m3u8, "w",encoding ="utf-8") as out:
             out.write("#EXTM3U\n")
             out.write("".join(self.headers))
             out.write(self.sliding_window.all_panes())
@@ -1008,7 +965,7 @@ class HlsParser:
         self.sliding_window = SlidingWindow()
         while self.reload:
             self._parse_manifest()
-        with open(self.flat, "a") as flat:
+        with open(self.flat, "a",encoding ="utf-8") as flat:
             flat.write("#EXT-X-ENDLIST\n")
 
     def pick_one(self, lines, uri):
