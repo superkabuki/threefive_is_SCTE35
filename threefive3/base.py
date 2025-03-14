@@ -1,5 +1,5 @@
 """
-scte35.base contains
+threefive3.base contains
 the class SCTE35Base.
 """
 
@@ -35,16 +35,19 @@ class SCTE35Base:
             if isinstance(var_value, bool):
                 self._err2(var_name, var_value, bit_count, var_type)
                 return True
+        return False
 
     def _wrong_type(self, var_name, var_value, bit_count, var_type):
         if not isinstance(var_value, var_type):
             self._err2(var_name, var_value, bit_count, var_type)
             return True
+        return False
 
     def _is_none(self, var_name, var_value, bit_count, var_type):
         if var_value is None:
             self._err2(var_name, var_value, bit_count, var_type)
             return True
+        return False
 
     def _chk_var(self, var_type, nbin_method, var_name, bit_count):
         """
@@ -55,6 +58,7 @@ class SCTE35Base:
             if me(var_name, var_value, bit_count, var_type):
                 return
         nbin_method(var_value, bit_count)
+        return
 
     @staticmethod
     def as_90k(int_time):
