@@ -4,19 +4,7 @@ hlstags.py
 """
 
 from .stuff import atohif
-from .words import (
-    minusone,
-    zero,
-    one,
-    two,
-    equalsign,
-    comma,
-    colon,
-    space,
-    nothing,
-    dblquote,
-    octothorpe,
-)
+from .words import *
 
 BASIC_TAGS = (
     "#EXTM3U",
