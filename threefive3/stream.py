@@ -10,7 +10,7 @@ from .stuff import print2, blue
 from .cue import Cue
 from .packetdata import PacketData
 from .streamtypes import streamtype_map
-#from .iframes import IFramer
+from .words import *
 
 
 def no_op(cue):
@@ -52,7 +52,7 @@ class ProgramInfo:
         self.streams = {}  # pid to stream_type mapping
 
     def _mk_vee(self, k):
-        vee = int(self.streams[k], base=16)
+        vee = int(self.streams[k], base=sixteen)
         if vee in streamtype_map:
             vee = f"{hex(vee)}\t{streamtype_map[vee]}"
         else:
@@ -84,8 +84,8 @@ class Pids:
     Pids holds sets of pids for pat,pcr,pmt, and scte35
     """
 
-    SDT_PID = 0x11
-    PAT_PID = 0x00
+    SDT_PID = eleven
+    PAT_PID = zero
 
     def __init__(self):
         self.pcr = set()
@@ -156,11 +156,9 @@ class Stream:
         self.show_null = show_null
         self.start = {}
         self.info = False
-        # self.the_program = None
         self.the_scte35_pids = []
         self.pids = Pids()
         self.maps = Maps()
-   #     self.iframer = IFramer(shush=True)
         self.pmt_payloads = set()
         self.pmt_count = 0
 
@@ -172,42 +170,42 @@ class Stream:
         """
         as_90k returns ticks as 90k clock time
         """
-        return round((ticks / 90000.0), 6)
+        return round((ticks / 90000.0), six)
 
     @staticmethod
     def _pusi_flag(pkt):
-        return pkt[1] & 0x40
+        return pkt[one] & sixtyfour
 
     @staticmethod
     def _afc_flag(pkt3):
-        return pkt3 & 0x20
+        return pkt3 & thirtytwo
 
     @staticmethod
     def _pcr_flag(pkt):
-        return pkt[5] & 0x10
+        return pkt[five] & sixteen
 
     @staticmethod
     def _spi_flag(pkt):
-        return pkt[5] & 0x20
+        return pkt[five] & thirtytwo
 
     @staticmethod
     def _pts_flag(pay):
         # uses pay not pkt
-        return pay[7] & 0x80
+        return pay[seven] & onetwentyeight
 
     @staticmethod
     def _parse_length(byte1, byte2):
         """
         parse a 12 bit length value
         """
-        return (byte1 & 0xF) << 8 | byte2
+        return (byte1 & fifteen) << eight | byte2
 
     @staticmethod
     def _parse_pid(byte1, byte2):
         """
         parse a 13 bit pid value
         """
-        pid = (byte1 & 0x1F) << 8 | byte2
+        pid = (byte1 & fifteen) << eight | byte2
         return pid
 
     @staticmethod
@@ -215,7 +213,7 @@ class Stream:
         """
         parse a 16 bit program number value
         """
-        return (byte1 << 8) | byte2
+        return (byte1 << eight) | byte2
 
     @staticmethod
     def _split_by_idx(pay, marker):
@@ -231,16 +229,16 @@ class Stream:
         if SYNC_BYTE is found.
         """
         while self._tsdata:
-            one = self._tsdata.read(1)
-            if one:
-                if one[0] == self.SYNC_BYTE:
-                    tail = self._tsdata.read(self.PACKET_SIZE - 1)
-                    self._parse(one + tail)
+            bite = self._tsdata.read(one)
+            if bite:
+                if bite[zero] == self.SYNC_BYTE:
+                    tail = self._tsdata.read(self.PACKET_SIZE - one)
+                    self._parse(bite + tail)
                     return True
         print2("No Stream Found\n")
         return False
 
-    def iter_pkts(self, num_pkts=1):
+    def iter_pkts(self, num_pkts=one):
         """
         iter_pkts iterates a mpegts stream into packets
         """
@@ -249,10 +247,8 @@ class Stream:
         return False
 
     def _mk_pkts(self, chunk):
-        return [
-            self._parse(chunk[i : i + self.PACKET_SIZE])
-            for i in range(0, len(chunk), self.PACKET_SIZE)
-        ]
+        return [self._parse(chunk[i : i + self.PACKET_SIZE])
+            for i in range(0, len(chunk), self.PACKET_SIZE) ]
 
     def _decode2cues(self, chunk, func):
         _ = [func(cue) for cue in self._mk_pkts(chunk) if cue]
@@ -293,8 +289,8 @@ class Stream:
         decode_start_time
         """
         self.decode(func=no_op)
-        if len(self.start.values()) > 0:
-            return self.start.popitem()[1]
+        if len(self.start.values()) > zero:
+            return self.start.popitem()[one]
         return False
 
     def proxy(self, func=show_cue_stderr):
@@ -317,7 +313,7 @@ class Stream:
         self.info = True
         for pkt in self.iter_pkts():
             self._parse(pkt)
-            if self.pmt_count > len(self.pmt_payloads) << 1:
+            if self.pmt_count > len(self.pmt_payloads) << one:
                 blue(f'PMT Count: {self.pmt_count}')
                 break
         if self.maps.prgm.keys():
@@ -354,7 +350,7 @@ class Stream:
         pid2prgm takes a pid,
         returns the program
         """
-        prgm = 1
+        prgm = one
         if pid in self.maps.pid_prgm:
             return self.maps.pid_prgm[pid]
         return False
@@ -380,18 +376,17 @@ class Stream:
         return False
 
     def _unpad(self, bites):
-        pad = 255
-        one = 1
+        pad = twofiftyfive
         if not bites:
             return b""
-        while bites[0] == pad:
-            bites = bites[1:]
+        while bites[zero] == pad:
+            bites = bites[one:]
         return self._unpad2(bites)
 
     def _unpad2(self, bites):
-        pad = 255
-        while bites[-1] == pad:
-            bites = bites[:-1]
+        pad = twofiftyfive
+        while bites[minusone] == pad:
+            bites = bites[:minusone]
         return bites
 
     def _mk_packet_data(self, pid):
@@ -403,10 +398,10 @@ class Stream:
 
     def _parse_cc(self, pkt, pid):
         last_cc = None
-        c_c = pkt[3] & 0xF
+        c_c = pkt[three] & fifteen
         if pid in self.maps.pid_cc:
             last_cc = self.maps.pid_cc[pid]
-            good = (last_cc, ((last_cc + 1) % 16))
+            good = (last_cc, ((last_cc + one) % sixteen))
             if c_c not in good:
                 print2(f" # BAD --> pid:\t{hex(pid)}\tlast cc:\t{last_cc}\tcc:\t{c_c}")
         self.maps.pid_cc[pid] = c_c
@@ -420,25 +415,25 @@ class Stream:
         ##            idx = pkt.index(b"\x00\x00\x01")
         ##            if pkt[idx + 3 : idx + 4] in [b"\xe0", b"\xc0", b"\xbd"]:
         payload = self._parse_payload(pkt)
-        if len(payload) > 13:
+        if len(payload) > thirteen:
             if self._pts_flag(payload):
-                pts = (payload[9] & 14) << 29
-                pts |= payload[10] << 22
-                pts |= (payload[11] >> 1) << 15
-                pts |= payload[12] << 7
-                pts |= payload[13] >> 1
+                pts = (payload[nine] & fourteen) << twentynine
+                pts |= payload[ten] << twentytwo
+                pts |= (payload[eleven] >> one) << fifteen
+                pts |= payload[twelve] << seven
+                pts |= payload[thirteen] >> one
                 prgm = self.pid2prgm(pid)
                 self.maps.prgm_pts[prgm] = pts
                 if prgm not in self.start:
                     self.start[prgm] = pts
 
     def _parse_pcr(self, pkt, pid):
-        if self._afc_flag(pkt[3]):
-            pcr = pkt[6] << 25
-            pcr |= pkt[7] << 17
-            pcr |= pkt[8] << 9
-            pcr |= pkt[9] << 1
-            pcr |= pkt[10] >> 7
+        if self._afc_flag(pkt[three]):
+            pcr = pkt[six] << twentyfive
+            pcr |= pkt[seven] << seventeen
+            pcr |= pkt[eight] << nine
+            pcr |= pkt[nine] << one
+            pcr |= pkt[ten] >> seven
             prgm = self.pid2prgm(pid)
             self.maps.prgm_pcr[prgm] = pcr
 
@@ -446,17 +441,17 @@ class Stream:
         """
         _parse_payload returns the packet payload
         """
-        head_size = 4
-        if self._afc_flag(pkt[3]):
-            pkt = pkt[:4] + self._unpad(pkt[4:])
-            afl = pkt[4]
-            head_size += afl + 1  # +1 for afl byte
+        head_size = four
+        if self._afc_flag(pkt[three]):
+            pkt = pkt[:four] + self._unpad(pkt[four:])
+            afl = pkt[four]
+            head_size += afl + one  # +1 for afl byte
         return pkt[head_size:]
 
     def _pmt_pid(self, pay, pid):
-        self.pmt_count += 1
+        self.pmt_count += one
         if pay in self.pmt_payloads:
-            if self.pmt_count > len(self.pmt_payloads) << 1:
+            if self.pmt_count > len(self.pmt_payloads) << one:
                 return
         self.pmt_payloads.add(pay)
         self._parse_pmt(pay, pid)
@@ -488,7 +483,7 @@ class Stream:
         _parse_info parses the packet for tables
         and returns the pid
         """
-        pid = self._parse_pid(pkt[1], pkt[2])
+        pid = self._parse_pid(pkt[one], pkt[two])
         if pid in self.pids.tables:
             self._parse_tables(pkt, pid)
         return pid
@@ -534,9 +529,9 @@ class Stream:
 
     def _section_incomplete(self, pay, pid, seclen):
         # + 3 for the bytes before section starts
-        if len(pay) > (seclen + 3):
+        if len(pay) > (seclen + three):
             return False
-        if (seclen + 3) > len(pay):
+        if (seclen + three) > len(pay):
             self.maps.partial[pid] = pay
             return True
 
@@ -551,8 +546,8 @@ class Stream:
     def _strip_scte35_pes(self, pkt):
         pay = self._parse_payload(pkt)
         if self.SCTE35_PES_START in pay:
-            pay = pay.split(self.SCTE35_PES_START, 1)[-1]
-            peslen = pay[4] + 5  # PES header length
+            pay = pay.split(self.SCTE35_PES_START, 1)[minusone]
+            peslen = pay[four] + five  # PES header length
             pay = pay[peslen:]
         return pay
 
@@ -565,7 +560,7 @@ class Stream:
         if not pay:
             self._pop_maybe_pid(pid)
             return False
-        if pay[13] == self.show_null:
+        if pay[thirteen] == self.show_null:
             return False
         return pay
 
@@ -582,10 +577,10 @@ class Stream:
         pay = self._mk_scte35_payload(pkt, pid)
         if not pay:
             return False
-        seclen = self._parse_length(pay[1], pay[2])
+        seclen = self._parse_length(pay[one], pay[two])
         if self._section_incomplete(pay, pid, seclen):
             return False
-        pay = pay[: seclen + 3]
+        pay = pay[: seclen + three]
         cue = self._parse_cue(pay, pid)
         return cue
 
@@ -603,25 +598,25 @@ class Stream:
         pay = self._chk_partial(pay, self.pids.SDT_PID, self.SDT_TID)
         if not pay:
             return False
-        seclen = self._parse_length(pay[1], pay[2])
+        seclen = self._parse_length(pay[one], pay[two])
         if self._section_incomplete(pay, self.pids.SDT_PID, seclen):
             return False
         idx = 11
-        while idx < seclen + 3:
-            service_id = self._parse_program(pay[idx], pay[idx + 1])
-            idx += 3
-            dloop_len = self._parse_length(pay[idx], pay[idx + 1])
-            idx += 2
-            i = 0
+        while idx < seclen + three:
+            service_id = self._parse_program(pay[idx], pay[idx + one])
+            idx += three
+            dloop_len = self._parse_length(pay[idx], pay[idx + one])
+            idx += two
+            i = zero
             while i < dloop_len:
                 if pay[idx] == 0x48:
-                    i += 3
+                    i += three
                     spnl = pay[idx + i]
-                    i += 1
+                    i += one
                     provider_name = pay[idx + i : idx + i + spnl]
                     i += spnl
                     snl = pay[idx + i]
-                    i += 1
+                    i += one
                     service_name = pay[idx + i : idx + i + snl]
                     i += snl
                     self._mk_pinfo(service_id, provider_name, service_name)
@@ -636,16 +631,16 @@ class Stream:
         for program to pmt_pid mappings.
         """
         pay = self._chk_partial(pay, self.pids.PAT_PID, b"")
-        seclen = self._parse_length(pay[2], pay[3])
+        seclen = self._parse_length(pay[two], pay[three])
         if self._section_incomplete(pay, self.pids.PAT_PID, seclen):
             return False
-        seclen -= 5  # pay bytes 4,5,6,7,8
-        idx = 9
-        chunk_size = 4
-        while seclen > 4:  #  4 bytes for crc
-            program_number = self._parse_program(pay[idx], pay[idx + 1])
-            if program_number > 0:
-                pmt_pid = self._parse_pid(pay[idx + 2], pay[idx + 3])
+        seclen -= five  # pay bytes 4,5,6,7,8
+        idx = nine
+        chunk_size = four
+        while seclen > four:  #  4 bytes for crc
+            program_number = self._parse_program(pay[idx], pay[idx + one])
+            if program_number > zero:
+                pmt_pid = self._parse_pid(pay[idx + two], pay[idx + three])
                 self.pids.pmt.add(pmt_pid)
                 self.pids.tables.add(pmt_pid)
             seclen -= chunk_size
@@ -659,13 +654,13 @@ class Stream:
         pay = self._chk_partial(pay, pid, self.PMT_TID)
         if not pay:
             return False
-        seclen = self._parse_length(pay[1], pay[2])
+        seclen = self._parse_length(pay[one], pay[two])
         if self._section_incomplete(pay, pid, seclen):
             return False
-        program_number = self._parse_program(pay[3], pay[4])
+        program_number = self._parse_program(pay[three], pay[four])
         if not program_number:
             return False
-        pcr_pid = self._parse_pid(pay[8], pay[9])
+        pcr_pid = self._parse_pid(pay[eight], pay[nine])
         if program_number not in self.maps.prgm:
             self.maps.prgm[program_number] = ProgramInfo()
         pinfo = self.maps.prgm[program_number]
@@ -673,9 +668,9 @@ class Stream:
         pinfo.pcr_pid = pcr_pid
         self.pids.pcr.add(pcr_pid)
         self.maps.pid_prgm[pcr_pid] = program_number
-        proginfolen = self._parse_length(pay[10], pay[11])
-        idx = 12 + proginfolen
-        si_len = seclen - (9 + proginfolen)
+        proginfolen = self._parse_length(pay[ten], pay[eleven])
+        idx = twelve + proginfolen
+        si_len = seclen - (nine + proginfolen)
         self._parse_program_streams(si_len, pay, idx, program_number)
         return True
 
@@ -685,8 +680,8 @@ class Stream:
         from a program
         """
         # 5 bytes for stream_type info
-        chunk_size = 5
-        end_idx = (idx + si_len) - 4
+        chunk_size = five
+        end_idx = (idx + si_len) - four
         while end_idx - chunk_size >= idx:
             stream_type, pid, ei_len = self._parse_stream_type(pay, idx)
             pinfo = self.maps.prgm[program_number]
@@ -699,8 +694,8 @@ class Stream:
         extract stream pid and type
         """
         stream_type = hex(pay[idx])
-        el_pid = self._parse_pid(pay[idx + 1], pay[idx + 2])
-        ei_len = self._parse_length(pay[idx + 3], pay[idx + 4])
+        el_pid = self._parse_pid(pay[idx + one], pay[idx + two])
+        ei_len = self._parse_length(pay[idx + three], pay[idx + four])
         self._set_scte35_pids(el_pid, stream_type)
         return stream_type, el_pid, ei_len
 
