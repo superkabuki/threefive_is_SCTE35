@@ -389,7 +389,7 @@ class HlsParser:
         for sidef in [self.sidecar, self.dumpfile, self.flat, self.m3u8]:
             with open(sidef, "w+", encoding="utf-8") as side_file:  # touch
                 side_file.close()
-               # pass
+            # pass
 
     def chk_aes(self, line):
         """
@@ -416,7 +416,7 @@ class HlsParser:
         """
         to_dump copies all SCTE-35 lines to self.dumpfile.
         """
-        with open(self.dumpfile, "a",encoding ="utf-8") as dump:
+        with open(self.dumpfile, "a", encoding="utf-8") as dump:
             dump_line = f"{pts},{line}\n"
             if dump_line != self.last_dump_line:
                 dump.write(dump_line)
@@ -890,7 +890,7 @@ class HlsParser:
         write_flat flatten out the sliding window
         and write all data to flat.m3u8.
         """
-        with open(self.flat, "a",encoding ="utf-8") as flat:
+        with open(self.flat, "a", encoding="utf-8") as flat:
             if self.first_segment:
                 flat.write("#EXTM3U\n")
                 for header in self.headers:
@@ -904,7 +904,7 @@ class HlsParser:
         write_manifest write data to sc.m3u8
         with profile rules applied.
         """
-        with open(self.m3u8, "w",encoding ="utf-8") as out:
+        with open(self.m3u8, "w", encoding="utf-8") as out:
             out.write("#EXTM3U\n")
             out.write("".join(self.headers))
             out.write(self.sliding_window.all_panes())
@@ -965,7 +965,7 @@ class HlsParser:
         self.sliding_window = SlidingWindow()
         while self.reload:
             self._parse_manifest()
-        with open(self.flat, "a",encoding ="utf-8") as flat:
+        with open(self.flat, "a", encoding="utf-8") as flat:
             flat.write("#EXT-X-ENDLIST\n")
 
     def pick_one(self, lines, uri):
