@@ -79,17 +79,19 @@ def lshiftbuf(socked):
         socked.setsockopt(socket.SOL_SOCKET, socket.SO_RCVBUF, rcvbuf_size)
         blue(f" socket.SO_RCVBUF set to {rcvbuf_size}")
     except:
-        blue("Unable to left shift socket.SO_RCVBUF")
+        blue(" Unable to left shift socket.SO_RCVBUF")
 
 
 def _mk_socked():
     socked = Socked(socket.AF_INET, socket.SOCK_DGRAM, socket.IPPROTO_UDP)
     lshiftbuf(socked)
     socked.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+    blue(" setting socket.SO_REUSEADDR")
     if hasattr(socket, "SO_REUSEPORT"):
-        blue('setting SO_REUSEPORT')
+        blue(" setting socket.SO_REUSEPORT")
         socked.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEPORT, 1)
     socked.settimeout(TIMEOUT)
+    blue(f" setting socket timeout to {TIMEOUT}")
     return socked
 
 
@@ -97,6 +99,7 @@ def _mk_udp_sock(udp_ip, udp_port):
     """
     udp socket setup
     """
+    blue(" Opening UDP  Unicast socket")
     udp_sock = _mk_socked()
     udp_sock.bind((udp_ip, udp_port))
     return udp_sock
@@ -115,11 +118,14 @@ def _open_mcast(uri):
     """
     udp://@227.1.3.10:4310
     """
+    blue(" Opening Multicast socket")
+    TTL=32
     interface_ip = "0.0.0.0"
     multicast_group, port = (uri.split("udp://@")[1]).rsplit(":", 1)
     multicast_port = int(port)
     socked = _mk_socked()
-    socked.setsockopt(socket.IPPROTO_IP, socket.IP_MULTICAST_TTL, struct.pack("b", 32))
+    socked.setsockopt(socket.IPPROTO_IP, socket.IP_MULTICAST_TTL, struct.pack("b", TTL))
+    blue(f" TTL set to {TTL}")
     socked.bind(("", multicast_port))
     socked.setsockopt(
         socket.SOL_IP,
