@@ -13,7 +13,7 @@ import sys
 import time
 from functools import partial
 from .new_reader import reader
-from .stuff import blue
+from .stuff import blue, reblue,print2
 
 
 DGRAM_SIZE = 1316
@@ -79,11 +79,7 @@ class GumS:
                 elapsed = now() - start_time
                 rate = (total_bytes / million) / elapsed
                 mb=total_bytes/million
-                print(
-                    f"\t{mb:0.2f} MB sent in {elapsed:5.2f} seconds. {rate:3.2f} MB/Sec",
-                    end="\r",
-                    file=sys.stderr,
-                )
+                reblue(f"\t{mb:0.2f} MB sent in {elapsed:5.2f} seconds. {rate:3.2f} MB/Sec")
             print("\n", file=sys.stderr)
 
     def send_stream(self, vid):
@@ -100,11 +96,8 @@ class GumS:
             proto = proto + "@"
             pre = "Multicast"
         src_ip, src_port = self.sock.getsockname()
-        print(
-            f"\n\t{pre} Stream\n\t{proto}{self.dest_ip}:{self.dest_port}",
-            file=sys.stderr,
-        )
-        print(f"\n\tSource\n\t{src_ip}:{src_port}\n", file=sys.stderr)
+        print2(f"\n\t{pre} Stream\n\t{proto}{self.dest_ip}:{self.dest_port}")
+        print2(f"\n\tSource\n\t{src_ip}:{src_port}\n")
 
         self.iter_dgrams(vid)
         self.sock.close()
@@ -165,6 +158,7 @@ def fork():
 def daemonize():
     """
     The Steven's double fork
+    detach process from controling tty
     """
 
     fork()
@@ -189,7 +183,7 @@ def cli():
     """
 
     args = parse_args()
-    #  daemonize()
+    #daemonize()
     ttl = int(args.ttl).to_bytes(1, byteorder="big")
     dest_addr = args.addr
     gummie = GumS(dest_addr, ttl, args.bind_addr)
