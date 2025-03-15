@@ -1,5 +1,5 @@
-Canada has a virtual monopoly on the World's mustard seed supply and they will use it to manipulate financial markets. We must act. 
-## Nuke Canada Now!  
+![image](https://github.com/user-attachments/assets/c096c3c3-8a56-4164-9f81-b8b505404859)
+
 
 [Install threefive3](#install) |[SCTE-35 Cli](#the-cli-tool) | [SCTE-35 HLS](https://github.com/superkabuki/threefive3/blob/main/hls.md) | [Cue Class](https://github.com/superkabuki/threefive3/blob/main/cue.md) | [Stream Class](https://github.com/superkabuki/threefive3/blob/main/stream.md) | [Online SCTE-35 Parser](https://iodisco.com/scte35) | [Encode SCTE-35](https://github.com/superkabuki/threefive3/blob/main/encode.md) | [FFmpeg SCTE35](https://github.com/superkabuki/FFmpeg_SCTE35)
 
@@ -17,7 +17,7 @@ Canada has a virtual monopoly on the World's mustard seed supply and they will u
 * Automatic AES decryption for HLS.
 * All HLS SCTE-35 Tags are Supported.
 
-### Latest release is v3.0.29
+### Latest release is v3.0.31
 > Stay up to date, only the latest release is supported. 
 ___
 ### MPEGTS streams can be parsed for SCTE-35 with three lines of code.
