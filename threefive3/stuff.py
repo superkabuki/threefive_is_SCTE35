@@ -62,3 +62,11 @@ def blue(message):
     """
     mesg = f"\033[;107m\033[44m{message} \033[0m"
     print2(mesg)
+
+def reblue(message):
+    """
+    reblue overwrites the last line in place
+    """
+    mesg = f"\033[;107m\033[44m{message} \033[0m"
+    print(mesg, end='\r' ,file=stderr, flush=True)
+    
