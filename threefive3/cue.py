@@ -14,6 +14,7 @@ from .crc import crc32
 from .segmentation import table22
 from .words import *
 
+
 class Cue(SCTE35Base):
     """
     The threefive3.Cue class handles parsing
@@ -423,23 +424,24 @@ class Cue(SCTE35Base):
         """
 
         if isinstance(
-           gonzo, str
+            gonzo, str
         ):  # a string  is returned for Binary xml tag, make sense?
-            if '<scte35:Binary>' in gonzo:
-                dat = gonzo.split('<scte35:Binary>')[1].split('</scte35:Binary>')[0]
+            if "<scte35:Binary>" in gonzo:
+                dat = gonzo.split("<scte35:Binary>")[1].split("</scte35:Binary>")[0]
                 self.bites = self._mk_bits(dat)
                 self.decode()
+            else:
+                blue("Only xml+binary format supported ")
         else:
-            blue('Only xml+binary format supported ')
-  
+            blue("xmlbin data needs to be str instance")
 
     def xmlbin(self, ns="scte35"):
         """
         xml returns a threefive3.Node instance
         which can be edited as needed or printed.
         xmlbin
-   
+
         """
-        return  f'''<scte35:Signal xmlns:scte35="https://scte.org/schemas/35">
+        return f"""<scte35:Signal xmlns:scte35="https://scte.org/schemas/35">
     <scte35:Binary>{self.base64()}</scte35:Binary>
-</scte35:Signal>'''
+</scte35:Signal>"""
