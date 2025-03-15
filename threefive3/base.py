@@ -1,201 +1,185 @@
 """
-The bitn.Bitn and bitn.NBin classes
+scte35.base contains
+the class SCTE35Base.
 """
 
-from .stuff import red
+import json
+from .bitn import NBin
+from .stuff import print2, red
 
 
-class Bitn:
+class SCTE35Base:
     """
-    bitn.Bitbin takes a byte string and
-    converts it to a integer, a very large integer
-    if needed. A 1500 bit integer is no problem.
-    several methods are available for slicing off bits.
+    SCTE35Base is a base class for
+    SpliceCommand and SpliceDescriptor classes
     """
 
-    def __init__(self, bites):
-        # self.bites = bites
-        self.bitsize = self.idx = len(bites) << 3
-        if isinstance(bites, bytes):
-            self.bits = int.from_bytes(bites, byteorder="big")
-        if isinstance(bites, int):
-            self.bits = bites
+    ROLLOVER = 8589934591
 
     def __repr__(self):
-        return str(vars(self))
+        return str(self.__dict__)
 
-    def as_90k(self, num_bits):
-        """
-        Returns num_bits
-        of bits as 90k time
-        """
-        ninetyk = self.as_int(num_bits) / 90000.0
-        return round(ninetyk, 6)
+    @staticmethod
+    def _chk_nbin(nbin):
+        if not nbin:
+            nbin = NBin()
+        return nbin
 
-    def as_int(self, num_bits):
-        """
-        Starting at self.idx of self.bits,
-        slice off num_bits of bits.
-        """
-        if self.idx >= num_bits:
-            self.idx -= num_bits
-            return (self.bits >> (self.idx)) & ~(~0 << num_bits)
-        return False
+    def _err2(self, var_name, var_value, bit_count, var_type):
+        var_type = str(var_type).split("'")[1]
+        err_mesg = f"{var_name} is {var_value} , it should be type {var_type}, {bit_count} bit(s) long."
+        red(err_mesg)
 
-    def as_hex(self, num_bits):
+    def _bool_int(self, var_name, var_value, bit_count, var_type):
+        if var_type == int:
+            if isinstance(var_value, bool):
+                self._err2(var_name, var_value, bit_count, var_type)
+                return True
+
+    def _wrong_type(self, var_name, var_value, bit_count, var_type):
+        if not isinstance(var_value, var_type):
+            self._err2(var_name, var_value, bit_count, var_type)
+            return True
+
+    def _is_none(self, var_name, var_value, bit_count, var_type):
+        if var_value is None:
+            self._err2(var_name, var_value, bit_count, var_type)
+            return True
+
+    def _chk_var(self, var_type, nbin_method, var_name, bit_count):
         """
-        Returns the hex value
-        of num_bits of bits
+        _chk_var is used to check var values and types before encoding
         """
-        hexed = hex(self.as_int(num_bits))
+        var_value = self.__dict__[var_name]
+        for me in [self._is_none, self._bool_int, self._wrong_type]:
+            if me(var_name, var_value, bit_count, var_type):
+                return
+        nbin_method(var_value, bit_count)
+
+    @staticmethod
+    def as_90k(int_time):
+        """
+        ticks to 90k timestamps
+        """
+        return round((int_time / 90000.0), 6)
+
+    @staticmethod
+    def as_ticks(float_time):
+        """
+        90k timestamps to ticks
+        """
+        return int(round(float_time * 90000))
+
+    @staticmethod
+    def as_hms(secs_of_time):
+        """
+        as_hms converts timestamp to
+        00:00:00.000 format
+        """
+        hours, seconds = divmod(secs_of_time, 3600)
+        mins, seconds = divmod(seconds, 60)
+        seconds = round(seconds, 3)
+        output = f"{int(hours):02}:{int(mins):02}:{seconds:02}"
+        if len(output.split(".")[1]) < 2:
+            output += "0"
+        return output
+
+    @staticmethod
+    def fix_hex(hexed):
+        """
+        fix_hex adds padded zero if needed for byte conversion.
+        """
         return (hexed.replace("0x", "0x0", 1), hexed)[len(hexed) % 2 == 0]
 
-    def as_charset(self, num_bits, charset="ascii"):
+    def get(self):
         """
-        Returns num_bits of bits
-        as bytes decoded as charset
-        default charset is ascii.
+        Returns instance as a kv_clean'ed dict
         """
-        # print(charset)
-        gonzo = self.as_int(num_bits)
-        wide = num_bits >> 3
-        if charset is None:
-            return int.to_bytes(gonzo, wide, byteorder="big")
-        return int.to_bytes(gonzo, wide, byteorder="big").decode(
-            charset, errors="replace"
-        )
+        return self.kv_clean()
 
-    def as_bytes(self, num_bits):
+    def has(self, what):
         """
-        Returns num_bits of bits
-        as bytes
+        has runs hasattr with self and what
+        returns value if set.
         """
-        gonzo = self.as_int(num_bits)
-        wide = num_bits >> 3
-        return int.to_bytes(gonzo, wide, byteorder="big")
+        if hasattr(self, what):
+            return vars(self)[what]
+        return None
 
-    def as_flag(self, num_bits=1):
+    @staticmethod
+    def idxsplit(gonzo, sep):
         """
-        Returns one bit as True or False
+        idxsplit is like split but you keep
+        the sep
+        example:
+                >>> idxsplit('123456789',4)
+                >>>'456789'
         """
-        return self.as_int(num_bits) & 1 == 1
+        if sep in gonzo:
+            return gonzo[gonzo.index(sep) :]
+        return False
 
-    def forward(self, num_bits):
+    def json(self):
         """
-        Advances the start point
-        forward by num_bits
+        json returns self as kv_clean'ed json
         """
-        self.idx -= num_bits
+        return json.dumps(self.get(), indent=4)
 
-    def negative_shift(self, num_bits):
+    def kv_clean(self):
         """
-        negative_shift is called instead of
-        throwing a negative shift count error.
+        kv_clean recursively removes items
+        from a dict if the value is None.
         """
-        red(f"{num_bits} bits requested, but only {self.idx} bits left.")
-        red(f"\n bytes remaining: {self.as_bytes(self.idx)} ")
 
+        def b2l(val):
+            if isinstance(val, (SCTE35Base)):
+                val.kv_clean()
+            if isinstance(val, (list)):
+                val = [b2l(v) for v in val]
+            if isinstance(val, (dict)):
+                val = {k: b2l(v) for k, v in val.items()}
+            if isinstance(val, (bytes, bytearray)):
+                val = list(val)
+            return val
 
-class NBin:
-    """
-    bitn.NBin is
-    the reverse Bitn.
-    Encodes data to integers
-    and then bytes
-    """
+        return {
+            k: b2l(v)
+            for k, v in vars(self).items()
+            if v
+            not in [
+                None,
+                [],
+            ]
+        }  # added empty list []
 
-    def __init__(self):
-        self.nbits = 0
-        self.idx = 0
-        self.bites = b""
+    def _json2dict(self, gonzo):
+        if isinstance(gonzo, str):
+            gonzo = json.loads(gonzo)
+        return gonzo
 
-    def nbits2bites(self):
-        """
-        nbits2bites converts
-        the int self.nbits to bytes as self.bites
-        and sets self.nbits  and self.idx to 0
-        """
-        bites_wide = self.idx >> 3
-        self.bites += int.to_bytes(self.nbits, bites_wide, byteorder="big")
-        self.nbits = 0
-        self.idx = 0
+    def _chk_vars(self, k, v):
+        if k in vars(self):
+            self.__dict__[k] = v
 
-    def add_bites(self, plus_bites):
-        """
-        add_bites appends plus_bites
-        to self.bites
-        """
-        if isinstance(plus_bites, int):
-            plus_bites = bytes.fromhex(hex(plus_bites)[2:])
-        self.bites += plus_bites
+    def _vrfy_load(self, gonzo):
+        for k, v in gonzo.items():
+            self._chk_vars(k, v)
 
-    #  if self.idx % 8 == 0:
-    #     self.nbits2bites()
+    def _load_dict(self, gonzo):
+        if isinstance(gonzo, dict):
+            self._vrfy_load(gonzo)
 
-    def add_int(self, int_bits, bit_len):
+    def load(self, gonzo):
         """
-        left shift nbits and append new_bits
+        load is used to load
+        data from a dict or json string.
+        only updates vars that exist in the obj.
         """
-        self.idx += bit_len
-        self.nbits = (self.nbits << bit_len) | int_bits
-        if self.idx % 8 == 0:
-            self.nbits2bites()
+        gonzo = self._json2dict(gonzo)
+        self._load_dict(gonzo)
 
-    def add_90k(self, pts, bit_len=33):
+    def show(self):
         """
-        Converts 90k  float timestamps
-        to an int and appends it to nbits
-        via self.add_int
+        show prints self as json to stderr (2)
         """
-        ninetyk = int(pts * 90000.0)
-        self.add_int(ninetyk, bit_len)
-
-    def add_hex(self, hex_str, bit_len):
-        """
-        add_hex converts a
-        hex encoded string to an int
-        and appends it to self.nbits
-        via self.add_int
-        """
-        dehexed=False
-        if isinstance(hex_str, str):
-            dehexed = int(hex_str, 16)
-        # just in case hex_str is an int....
-        if isinstance(hex_str, int):
-            dehexed = hex_str
-        if dehexed:
-            self.add_int(dehexed, bit_len)
-
-    def add_flag(self, flg, bit_len=1):
-        """
-        add_flag takes a boolean
-        value and adds it as an integer
-        to self.nbits via self.add_int
-        """
-        bit_len = 1
-        self.add_int(flg.real, bit_len)
-
-    def reserve(self, num):
-        """
-        reserve sets 'num'  bits to 1
-        and appends them to self.nbits
-        via self.add_int
-        """
-        bit_len = 1
-        while num:
-            self.add_int(1, bit_len)
-            num -= 1
-
-    def forward(self, num):
-        """
-        Currently just an alias to reserve
-        """
-        self.reserve(num)
-
-    def zeroed(self, num):
-        """
-        zeroed sets num bits to zero
-        """
-        bit_len = 1
-        while num:
-            self.add_int(0, bit_len)
+        print2(self.json())
