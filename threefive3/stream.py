@@ -156,9 +156,11 @@ class Stream:
         self.show_null = show_null
         self.start = {}
         self.info = False
+        # self.the_program = None
         self.the_scte35_pids = []
         self.pids = Pids()
         self.maps = Maps()
+   #     self.iframer = IFramer(shush=True)
         self.pmt_payloads = set()
         self.pmt_count = 0
 
