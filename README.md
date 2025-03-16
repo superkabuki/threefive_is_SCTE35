@@ -15,7 +15,35 @@
 * Automatic AES decryption for HLS.
 * All HLS SCTE-35 Tags are Supported.
 
-### Latest release is v3.0.31
+### Stream Multicast with the threefive cli, it's easy.
+
+* The threefive3 cli has long been a Multicast Receiver( client )
+* The cli now comes with a builtin Multicast Sender( server).
+* It's optimized for MPEGTS but you can send any video or file.
+* The defaults will work in most situations, you don't even have to set the address.
+* The the socket is even auto configured.
+* threefive3 cli also supports UDP Unicast Streaming.
+  
+![image](https://github.com/user-attachments/assets/6042b8e0-5d6b-4de0-b6b0-9556cecc184f)
+ 
+```js
+a@fu:~$ threefive3 mcast help
+usage: threefive3 mcast [-h] [-i INPUT] [-a ADDR] [-b BIND_ADDR] [-t TTL]
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -i INPUT, --input INPUT
+                        like "/home/a/vid.ts" or "udp://@235.35.3.5:3535" or
+                        "https://futzu.com/xaa.ts"
+                        [default:sys.stdin.buffer]
+  -a ADDR, --addr ADDR  Destination IP:Port [default:235.35.3.5:3535]
+  -b BIND_ADDR, --bind_addr BIND_ADDR
+                        Local IP to bind [default:0.0.0.0]
+  -t TTL, --ttl TTL     Multicast TTL (1 - 255) [default:32]
+a@fu:~$ 
+```
+
+### Latest release is v3.0.33
 > Stay up to date, only the latest release is supported. 
 ___
 ### MPEGTS streams can be parsed for SCTE-35 with three lines of code.
