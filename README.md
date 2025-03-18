@@ -81,32 +81,12 @@ Type "help", "copyright", "credits" or "license" for more information.
 | gums            | multicast server                      | Done      |
 | adbreak3        | fast cli scte-35 cue creation         |  No      |
 
-
-# Little Help?
-
- I could use a hand.with these <br>
-
-* Writing docs. Explain how to use threefive3.
-* Easy Examples. Light coding.
-* Unit Testing. light coding with some SCTE-35.
-* Pylint and PEP compliance. medium python knowledge.
-* Profiling and Benchmarking. Help make threefive3 faster.
-* Replacing setup tools. Using setup.py for packaging has been deprecated, medium python knowledge.
-* DASH parsing. I need somebody to explain the non-SCTE-35 parts of DASH to me.  
-
- You don't have to be a master of python or SCTE-35,<BR> but helping will make you better at both.<BR>
- __I value enthusiasm over skill, I can teach you what you don't know.__ <BR> 
- Don't worry, I won't let you break anything, that's my job.
-
-If you want to get involved, just open an issue and we can talk about it. 
-
-
 # `Documentation`
 
 
 * [Install](#install)
 
-#### Cli
+### Cli
 
 * [SCTE-35 Cli Super Tool](#the-cli-tool) Encodes, Decodes, and Recodes. This is pretty cool, it does SCTE-35 seven different ways.
      * The cli tool comes with builtin documentation just type `threefive3 help`
@@ -115,7 +95,7 @@ If you want to get involved, just open an issue and we can talk about it.
 * [Advanced Parsing of SCTE-35 in HLS with threefive3](https://github.com/superkabuki/threefive3/blob/main/hls.md) All HLS SCTE-35 tags, Sidecar Files, AAC ID3 Header Timestamps, SCTE-35 filters... Who loves you baby?
 
 
-#### `Classes`
+### `Classes`
 
 * The python built in help is always the most up to date docs for the library.
 
@@ -132,7 +112,7 @@ Type "help", "copyright", "credits" or "license" for more information.
 * [Stream Class](https://github.com/superkabuki/threefive3/blob/main/stream.md)  The Stream class handles MPEGTS SCTE-35 streams local, Http(s), UDP, and Multicast.
 ___
 
-#### `| more`
+### `| more`
 
 * [Online SCTE-35 Parser](https://iodisco.com/scte35)  Supporte Base64, Bytes,Hex,Int, Json, Xml, and Xml+binary.
 
