@@ -68,7 +68,7 @@ Type "help", "copyright", "credits" or "license" for more information.
 
 > The master plan for threefive3 is to consolidate code from several of my projects.
         
-| Project         |  Description                           | Status |
+|Project         |Description                           |Status |
 |-----------------|---------------------------------------|----------|
 | threefive       | scte-35 parser                         |  Done    |
 | bitn            | bitslicer for byte strings             |  Done   |
