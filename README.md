@@ -43,10 +43,10 @@ optional arguments:
 a@fu:~$ 
 ```
 
-### Latest release is v3.0.33
+# Latest release is v3.0.33
 > Stay up to date, only the latest release is supported. 
 ___
-### MPEGTS streams can be parsed for SCTE-35 with three lines of code.
+## MPEGTS streams can be parsed for SCTE-35 with three lines of code.
 
 ```py3
 a@fu:~/build5/scte35/scte35$ pypy3
