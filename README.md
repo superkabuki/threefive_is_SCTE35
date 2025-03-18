@@ -1,5 +1,5 @@
 
-[Install threefive3](#install) |[SCTE-35 Cli](#the-cli-tool) | [SCTE-35 HLS](https://github.com/superkabuki/threefive3/blob/main/hls.md) | [Cue Class](https://github.com/superkabuki/threefive3/blob/main/cue.md) | [Stream Class](https://github.com/superkabuki/threefive3/blob/main/stream.md) | [Online SCTE-35 Parser](https://iodisco.com/scte35) | [Encode SCTE-35](https://github.com/superkabuki/threefive3/blob/main/encode.md) | [Examples](https://github.com/superkabuki/threefive3/tree/main/examples)
+[__Install__ threefive3](#install) |[__SCTE-35 Cli__](#the-cli-tool) | [SCTE-35 __HLS__](https://github.com/superkabuki/threefive3/blob/main/hls.md) | [__Cue__ Class](https://github.com/superkabuki/threefive3/blob/main/cue.md) | [__Stream__ Class](https://github.com/superkabuki/threefive3/blob/main/stream.md) | [__Online SCTE-35 Parser__](https://iodisco.com/scte35) | [__Encode__ SCTE-35](https://github.com/superkabuki/threefive3/blob/main/encode.md) | [__Examples__](https://github.com/superkabuki/threefive3/tree/main/examples)
 
 
 
