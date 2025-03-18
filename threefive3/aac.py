@@ -63,6 +63,6 @@ class AacParser:
             id3len = self.id3_len(header)
             data = aac.read(id3len)
             if self.applehead in data:
-                return self.parse_pts(data)
-        return 0
+                pts = self.parse_pts(data)
+        return pts
 
