@@ -1,6 +1,7 @@
 """
 next.py demonstrates how to use Stream.decode_next() to grab and process
 the next SCTE-35 Cue in an MPEGTS stream.
+
 Here, if the Cue Splice Command is a Splice Insert, we print the Splice Command vars,
 but you trigger any action you like, this is just an example. 
 
