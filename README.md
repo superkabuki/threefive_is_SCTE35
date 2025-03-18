@@ -15,6 +15,10 @@
 * Automatic AES decryption for HLS.
 * All HLS SCTE-35 Tags are Supported.
 
+# Latest release is v3.0.33
+> Stay up to date, only the latest release is supported. 
+___
+
 ### Stream Multicast with the threefive cli, it's easy.
 
 * The threefive3 cli has long been a Multicast Receiver( client )
@@ -43,9 +47,7 @@ optional arguments:
 a@fu:~$ 
 ```
 
-# Latest release is v3.0.33
-> Stay up to date, only the latest release is supported. 
-___
+
 ## MPEGTS streams can be parsed for SCTE-35 with three lines of code.
 
 ```py3
