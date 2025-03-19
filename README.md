@@ -16,8 +16,7 @@
 * All HLS __SCTE-35__ Tags are Supported.
 
 # Latest release is v3.0.33
-> Stay up to date, only the latest release is supported. 
-___
+> Stay up to date, only the latest release is supported.
 
 # Checkout the Super Cool SCTE-35 [__Examples__](https://github.com/superkabuki/threefive3/tree/main/examples)
 
