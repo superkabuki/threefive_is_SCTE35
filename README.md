@@ -1,23 +1,26 @@
 
-[__Install__ threefive3](#install) |[__SCTE-35 Cli__](#the-cli-tool) | [SCTE-35 __HLS__](https://github.com/superkabuki/threefive3/blob/main/hls.md) | [__Cue__ Class](https://github.com/superkabuki/threefive3/blob/main/cue.md) | [__Stream__ Class](https://github.com/superkabuki/threefive3/blob/main/stream.md) | [__Online SCTE-35 Parser__](https://iodisco.com/scte35) | [__Encode__ SCTE-35](https://github.com/superkabuki/threefive3/blob/main/encode.md) | [__Examples__](https://github.com/superkabuki/threefive3/tree/main/examples)
+[__Install__ threefive3](#install) |[__SCTE-35 Cli__](#the-cli-tool) | [SCTE-35 __HLS__](https://github.com/superkabuki/threefive3/blob/main/hls.md) | [__Cue__ Class](https://github.com/superkabuki/threefive3/blob/main/cue.md) | [__Stream__ Class](https://github.com/superkabuki/threefive3/blob/main/stream.md) | [__Online SCTE-35 Parser__](https://iodisco.com/scte35) | [__Encode__ SCTE-35](https://github.com/superkabuki/threefive3/blob/main/encode.md) | [__SCTE-35 Examples__](https://github.com/superkabuki/threefive3/tree/main/examples)
 
 
 
-# threefive3 SCTE-35 cli super tool and python3 library.
+# The threefive3 SCTE-35 Cli Super Tool and python3 library.
 > Brought to you by the fine folks at fu-corp _( Adrian and the two blonde Chinese girls. )_
 
-✅ SCTE-35 Parser  ✅ SCTE-35 Encoder    ✅ SCTE-35 HLS     ✅ SCTE-35 Xml+binary     ✅ SCTE-35 Cli     ✅  SCTE-35 library
+✅ SCTE-35 __Parser__  ✅ SCTE-35 __Encoder__    ✅ SCTE-35 __HLS__     ✅ SCTE-35 __Xml+binary__     ✅ SCTE-35 __Cli__     ✅  SCTE-35 __library__
 
 
-* Parses SCTE-35 from MPEGTS, HLS, XML+Binary, Base64, Bytes, Hex, Integers, or JSON.
-* Encode SCTE-35 to Base64, Bytes, Hex, Int, JSON, or Xml+binary.
+* Parses __SCTE-35__ from MPEGTS, HLS, XML+Binary, Base64, Bytes, Hex, Integers, or JSON.
+* Encode __SCTE-35__ to Base64, Bytes, Hex, Int, JSON, or Xml+binary.
 * Built-in network support for HTTP(S), UDP, and Multicast.
 * Automatic AES decryption for HLS.
-* All HLS SCTE-35 Tags are Supported.
+* All HLS __SCTE-35__ Tags are Supported.
 
 # Latest release is v3.0.33
 > Stay up to date, only the latest release is supported. 
 ___
+
+# Checkout the Super Cool SCTE-35 [__Examples__](https://github.com/superkabuki/threefive3/tree/main/examples)
+
 
 ### Stream Multicast with the threefive cli, it's easy.
 
