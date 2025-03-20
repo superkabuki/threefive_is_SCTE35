@@ -66,7 +66,6 @@ class ProgramInfo:
         """
         serv = self.service.decode(errors="ignore")
         prov = self.provider.decode(errors="ignore")
-        # print2("")
         print2(f"\tService:  {serv}\n\tProvider: {prov}")
         print2(f"\tPMT PID:  {self.pid}\n\tPCR PID:  {self.pcr_pid}")
         print2("\tStreams:")
@@ -74,7 +73,6 @@ class ProgramInfo:
         keys = sorted(self.streams)
         print2("\t\tPID:\t\tType:")
         print2("\t \t" + "-" * 44)
-
         for k in keys:
             self._mk_vee(k)
 
@@ -121,21 +119,14 @@ class Stream:
     """
     Stream class for parsing MPEG-TS data.
     """
-
-    # the _CONST are deprecated
-    # please switch to CONST
-
-    _PACKET_SIZE = PACKET_SIZE = 188
-    _SYNC_BYTE = SYNC_BYTE = 0x47
-
-    # tids
-
-    _PMT_TID = PMT_TID = b"\x02"
-    _SCTE35_TID = SCTE35_TID = b"\xfc"
-    _SDT_TID = SDT_TID = b"\x42"
-    ROLLOVER = 8589934591  # 95443.717678
+    PACKET_SIZE = _PACKET_SIZE = 188
+    PMT_TID = _PMT_TID = b"\x02"
+    ROLLOVER = 8589934591
     ROLLOVER9K = 95443.717678
     SCTE35_PES_START = b"\x00\x00\x01\xfc"
+    SCTE35_TID = _SCTE35_TID = b"\xfc"
+    SDT_TID = _SDT_TID = b"\x42"
+    SYNC_BYTE = _SYNC_BYTE = 0x47
 
     def __init__(self, tsdata, show_null=True):
         """
@@ -156,11 +147,9 @@ class Stream:
         self.show_null = show_null
         self.start = {}
         self.info = False
-        # self.the_program = None
         self.the_scte35_pids = []
         self.pids = Pids()
         self.maps = Maps()
-   #     self.iframer = IFramer(shush=True)
         self.pmt_payloads = set()
         self.pmt_count = 0
 
@@ -172,7 +161,7 @@ class Stream:
         """
         as_90k returns ticks as 90k clock time
         """
-        return round((ticks / 90000.0), six)
+        return round((ticks / ninetythousand), six)
 
     @staticmethod
     def _pusi_flag(pkt):
@@ -380,12 +369,6 @@ class Stream:
     def _unpad(self, bites=b''):
         return bites.strip(b'\xff')
 
-##    def _unpad2(self, bites):
-##        pad = twofiftyfive
-##        while bites[minusone] == pad:
-##            bites = bites[:minusone]
-##        return bites
-
     def _mk_packet_data(self, pid):
         prgm = self.maps.pid_prgm[pid]
         pdata = PacketData(pid, prgm)
@@ -408,9 +391,6 @@ class Stream:
         parse pts and store by program key
         in the dict Stream._pid_pts
         """
-        ##        if b"\x00\x00\x01" in pkt:
-        ##            idx = pkt.index(b"\x00\x00\x01")
-        ##            if pkt[idx + 3 : idx + 4] in [b"\xe0", b"\xc0", b"\xbd"]:
         payload = self._parse_payload(pkt)
         if len(payload) > thirteen:
             if self._pts_flag(payload):
@@ -442,7 +422,7 @@ class Stream:
         if self._afc_flag(pkt):
             pkt = pkt[:four] + self._unpad(pkt[four:])
             afl = pkt[four]
-            head_size += afl + one  # +1 for afl byte
+            head_size += afl + one  # +one for afl byte
         return pkt[head_size:]
 
     def _pmt_pid(self, pay, pid):
@@ -502,7 +482,6 @@ class Stream:
     def _parse(self, pkt):
         pid = self._parse_info(pkt)
         if pid in self.pids.pcr:
-            #    self._chk_pcr(pkt, pid)
             self._chk_pts(pkt, pid)
         return self._chk_scte35(pkt, pid)
 
@@ -510,7 +489,43 @@ class Stream:
         #  return pid in self.pids.scte35.union(self.pids.maybe_scte35) #   union sucks. 4.47 secs
         # return (pid in self.pids.scte35 or pid in self.pids.maybe_scte35) # 3.37 secs
         return pid in (self.pids.scte35 or self.pids.maybe_scte35)  # 3.326 secs
-        # return pid in (self.pids.scte35|self.pids.maybe_scte35)  # wtf? 4.128  secs
+        # return pid in (self.pids.scte35|self.pids.maybe_scte35)  # wtf? 4.128  secs"""
+Mpeg-TS Stream parsing class Stream
+"""
+
+import sys
+
+from functools import partial
+from .new_reader import reader
+from .stuff import print2, blue
+from .cue import Cue
+from .packetdata import PacketData
+from .streamtypes import streamtype_map
+from .words import *
+
+
+def no_op(cue):
+    """
+    no_op is just a dummy func to pass to Stream.decode()
+    to suppress output.
+    """
+    return cue
+
+
+def show_cue(cue):
+    """
+    default function call for Stream.decode
+    when a SCTE-35 packet is found.
+    """
+    cue.show()
+
+
+def show_cue_stderr(cue):
+    """
+    print2 cue data to sys.stderr
+    for Stream.decode_proxy
+    """
+
 
     def _chk_partial(self, pay, pid, sep):
         if pid in self.maps.partial:
@@ -598,7 +613,7 @@ class Stream:
         seclen = self._parse_length(pay[one], pay[two])
         if self._section_incomplete(pay, self.pids.SDT_PID, seclen):
             return False
-        idx = 11
+        idx = eleven
         while idx < seclen + three:
             service_id = self._parse_program(pay[idx], pay[idx + one])
             idx += three
