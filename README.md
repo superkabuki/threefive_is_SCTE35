@@ -1,4 +1,3 @@
-
 [__Install__ threefive3](#install) |[__SCTE-35 Cli__](#the-cli-tool) | [SCTE-35 __HLS__](https://github.com/superkabuki/threefive3/blob/main/hls.md) | [__Cue__ Class](https://github.com/superkabuki/threefive3/blob/main/cue.md) | [__Stream__ Class](https://github.com/superkabuki/threefive3/blob/main/stream.md) | [__Online SCTE-35 Parser__](https://iodisco.com/scte35) | [__Encode__ SCTE-35](https://github.com/superkabuki/threefive3/blob/main/encode.md) | [__SCTE-35 Examples__](https://github.com/superkabuki/threefive3/tree/main/examples)
  <pre>
      My pf rules are nothing but block in quicks on /24s.
@@ -6,7 +5,7 @@
    The jackasses, they have big numbers man.
 
       I spend more time trying to format markdown
-   than I do writing code. I'm going just going to start 
+   than I do writing code. I'm just going to start 
    using plain text in pre tags. 
 
      This is what is destroying humanity, 
