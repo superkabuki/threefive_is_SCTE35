@@ -23,17 +23,28 @@ thirteen = 0xD
 fourteen = 0xE
 fifteen = 0xF
 sixteen = 0x10
-twentyone=0x15
-twentytwo=0x16
+seventeen = 0x11
+eighteen=0x12
+nineteen= 0x13
+twenty= 0x14
+twentyone = 0x15
+twentytwo = 0x16
+twentythree=0x17
 twentyfour = 0x18
-twentynine=0x1D
+twentyfive= 0x19
+twentysix=0x1A
+twentyseven=0x1B
+twentyeight=0x1C
+twentynine = 0x1D
+thirty = 0x1E
+thirtyone= 0x1F
 thirtytwo = 0x20
-thirtythree= 0x21
+thirtythree = 0x21
 sixtyfour = 0x40
-onetwentyeight=0x80
+onetwentyeight = 0x80
 twofiftyfive = 0xFF
 twofiftysix = 0x100
-
+ninetythousand=90000.0
 
 # Quotes
 dblquote = '"'
