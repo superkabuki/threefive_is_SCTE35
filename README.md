@@ -1,7 +1,23 @@
 
 [__Install__ threefive3](#install) |[__SCTE-35 Cli__](#the-cli-tool) | [SCTE-35 __HLS__](https://github.com/superkabuki/threefive3/blob/main/hls.md) | [__Cue__ Class](https://github.com/superkabuki/threefive3/blob/main/cue.md) | [__Stream__ Class](https://github.com/superkabuki/threefive3/blob/main/stream.md) | [__Online SCTE-35 Parser__](https://iodisco.com/scte35) | [__Encode__ SCTE-35](https://github.com/superkabuki/threefive3/blob/main/encode.md) | [__SCTE-35 Examples__](https://github.com/superkabuki/threefive3/tree/main/examples)
+ <pre>
+     My pf rules are nothing but block in quicks on /24s.
+   That's crazy man, a whole class C blocked. 
+   The jackasses, they have big numbers man.
 
+      I spend more time trying to format markdown
+   than I do writing code. I'm going just going to start 
+   using plain text in pre tags. 
 
+     This is what is destroying humanity, 
+   people producing nonsense not because somebody wants it, 
+   but just because they can do it.
+
+  
+   The actions of a few can put us all in harm's way. 
+ 
+   
+</pre>
 
 # The threefive3 SCTE-35 Cli Super Tool and python3 library.
 > Brought to you by the fine folks at fu-corp _( Adrian and the two blonde Chinese girls. )_
