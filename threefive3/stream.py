@@ -179,8 +179,8 @@ class Stream:
         return pkt[one] & sixtyfour
 
     @staticmethod
-    def _afc_flag(pkt3):
-        return pkt3 & thirtytwo
+    def _afc_flag(pkt):
+        return pkt[three] & thirtytwo
 
     @staticmethod
     def _pcr_flag(pkt):
@@ -377,19 +377,14 @@ class Stream:
             return self.as_90k(self.maps.prgm_pcr[prgm])
         return False
 
-    def _unpad(self, bites):
-        pad = twofiftyfive
-        if not bites:
-            return b""
-        while bites[zero] == pad:
-            bites = bites[one:]
-        return self._unpad2(bites)
+    def _unpad(self, bites=b''):
+        return bites.strip(b'\xff')
 
-    def _unpad2(self, bites):
-        pad = twofiftyfive
-        while bites[minusone] == pad:
-            bites = bites[:minusone]
-        return bites
+##    def _unpad2(self, bites):
+##        pad = twofiftyfive
+##        while bites[minusone] == pad:
+##            bites = bites[:minusone]
+##        return bites
 
     def _mk_packet_data(self, pid):
         prgm = self.maps.pid_prgm[pid]
@@ -430,7 +425,7 @@ class Stream:
                     self.start[prgm] = pts
 
     def _parse_pcr(self, pkt, pid):
-        if self._afc_flag(pkt[three]):
+        if self._afc_flag(pkt):
             pcr = pkt[six] << twentyfive
             pcr |= pkt[seven] << seventeen
             pcr |= pkt[eight] << nine
@@ -444,7 +439,7 @@ class Stream:
         _parse_payload returns the packet payload
         """
         head_size = four
-        if self._afc_flag(pkt[three]):
+        if self._afc_flag(pkt):
             pkt = pkt[:four] + self._unpad(pkt[four:])
             afl = pkt[four]
             head_size += afl + one  # +1 for afl byte
