@@ -1,3 +1,23 @@
+# [ The problem with SCTE-35 and HLS ]
+<pre> 
+	The SCTE-35 spec uses the SCTE35 HLS tags. 
+	
+	The HLS spec uses the DateRange HLS tags for SCTE-35. 
+
+	The mosty commonly used SCTE-35 HLS tags are actually from an old Adobe specification, 
+and not officially acknowledged by the SCTE-35 or HLS spec. 
+	
+	To make it just a little bit more confusing, SCTE-35 can be also be embedded in the video segments, 
+with or without any HLS tags.
+
+</pre>
+# Don't worry man, threefive3 supports HLS SCTE-35 in every way possible. 
+<pre>
+	Most of the options presented here are for filtering the SCTE-35 data to what you need,
+	
+	By default, threefive3 parses everything. 
+	
+</pre>
 
 # [ threefive3 hls ]
 
