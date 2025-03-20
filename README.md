@@ -12,9 +12,10 @@
    people producing nonsense not because somebody wants it, 
    but just because they can do it.
 
-  
-   The actions of a few can put us all in harm's way. 
- 
+
+  Welcome to the show, and death to those who oppose me. 
+
+  Adrian
    
 </pre>
 
