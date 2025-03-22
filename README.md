@@ -1,14 +1,17 @@
 [__Install__ threefive3](#install) |[__SCTE-35 Cli__](#the-cli-tool) | [SCTE-35 __HLS__](https://github.com/superkabuki/threefive3/blob/main/hls.md) | [__Cue__ Class](https://github.com/superkabuki/threefive3/blob/main/cue.md) | [__Stream__ Class](https://github.com/superkabuki/threefive3/blob/main/stream.md) | [__Online SCTE-35 Parser__](https://iodisco.com/scte35) | [__Encode__ SCTE-35](https://github.com/superkabuki/threefive3/blob/main/encode.md) | [__SCTE-35 Examples__](https://github.com/superkabuki/threefive3/tree/main/examples)
- <pre>
- 
-
-  Welcome to the show, and death to those who oppose me. 
-
-  Adrian
-   
+ <pre> 
+ Myself and several others spent five years developing threefive, 
+ and then I got F2A'ed out of the github account.
+ threefive3 is the next step.
+  
+ Welcome to the show.
+  
+ Adrian
+  
 </pre>
 
-# The threefive3 SCTE-35 Cli Super Tool and python3 library.
+# The threefive3 SCTE-35 Cli Super Tool 
+# and python3 library.
 
 ✅ SCTE-35 __Parser__  ✅ SCTE-35 __Encoder__    ✅ SCTE-35 __HLS__     ✅ SCTE-35 __Xml+binary__     ✅ SCTE-35 __Cli__     ✅  SCTE-35 __library__
 
