@@ -127,7 +127,6 @@ ___
 
 * [Encode SCTE-35](https://github.com/superkabuki/threefive3/blob/main/encode.md) Some encoding code examples. 
 
-* [FFmpeg SCTE35](https://github.com/superkabuki/FFmpeg_SCTE35) FFmpeg with the SuperKabui SCTE-35 Patch applied.
 
 ___
 
