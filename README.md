@@ -9,7 +9,6 @@
 </pre>
 
 # The threefive3 SCTE-35 Cli Super Tool and python3 library.
-> Brought to you by the fine folks at fu-corp _( Adrian and the two blonde Chinese girls. )_
 
 ✅ SCTE-35 __Parser__  ✅ SCTE-35 __Encoder__    ✅ SCTE-35 __HLS__     ✅ SCTE-35 __Xml+binary__     ✅ SCTE-35 __Cli__     ✅  SCTE-35 __library__
 
@@ -70,24 +69,6 @@ Type "help", "copyright", "credits" or "license" for more information.
 ```
 
 
-# threefive3 Road Map.
-
-> The master plan for threefive3 is to consolidate code from several of my projects.
-        
-|Project         |Description                           |Status |
-|-----------------|---------------------------------------|----------|
-| threefive       | scte-35 parser                         |  Done    |
-| bitn            | bitslicer for byte strings             |  Done   |
-| new_reader      | reader for files and network data      |  Done   |
-| showcues        | hls scte35 parser                      |  Done    |
-| m3ufu tagparser | hls scte-35 tag parser                 |  Done    |
-| iframes         | iframe detection for mpegts            |  Done    |
-| dash rip rock   | scte-35 xml parser and generator       |  Done    |
-| six2scte35      | ffmpeg bin data stream back to scte-35 |  Done    |
-| superkabuki     | scte-35 packet injection              |  Next release      |
-| sideways        | hls scte-35 tag injecton              |  No      |
-| gums            | multicast server                      | Done      |
-| adbreak3        | fast cli scte-35 cue creation         |  No      |
 
 # `Documentation`
 
@@ -146,9 +127,7 @@ make install
 ```
 ___
 
-
 ### `The Cli tool`
-
 
 #### The cli tool installs automatically with pip or the Makefile.
 
@@ -296,11 +275,9 @@ ___
 
 
 ### [iodisco.com/scte35](https://iodisco.com/scte35)
-![image](https://github.com/user-attachments/assets/4df85c44-a078-4da0-97e2-5daefcf2509d)
-
+![image](https://github.com/user-attachments/assets/e07af2ad-29fe-4dae-8568-b168c3d5a591)
 
 
 ___
 
 [Install threefive3](#install)  | [SCTE-35 HLS](https://github.com/superkabuki/threefive3/blob/main/hls.md) | [Cue Class](https://github.com/superkabuki/threefive3/blob/main/cue.md) | [Stream Class](https://github.com/superkabuki/threefive3/blob/main/stream.md) | [Online SCTE-35 Parser](https://iodisco.com/scte35) | [Encode SCTE-35](https://github.com/superkabuki/threefive3/blob/main/encode.md) 
-![image](https://github.com/user-attachments/assets/5b77329c-b65f-4d07-ab03-b6a5559f5dc4)
