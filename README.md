@@ -30,9 +30,8 @@
 
 * The threefive3 cli has long been a Multicast Receiver( client )
 * The cli now comes with a builtin Multicast Sender( server).
-* It's optimized for MPEGTS but you can send any video or file.
+* It's optimized for MPEGTS (1316 Datagrams) but you can send any video or file.
 * The defaults will work in most situations, you don't even have to set the address.
-* The the socket is even auto configured.
 * threefive3 cli also supports UDP Unicast Streaming.
   
 ![image](https://github.com/user-attachments/assets/6042b8e0-5d6b-4de0-b6b0-9556cecc184f)
@@ -303,6 +302,5 @@ ___
 
 ___
 
-[Install threefive3](#install)  | [SCTE-35 HLS](https://github.com/superkabuki/threefive3/blob/main/hls.md) | [Cue Class](https://github.com/superkabuki/threefive3/blob/main/cue.md) | [Stream Class](https://github.com/superkabuki/threefive3/blob/main/stream.md) | [Online SCTE-35 Parser](https://iodisco.com/scte35) | [Encode SCTE-35](https://github.com/superkabuki/threefive3/blob/main/encode.md) | [FFmpeg SCTE35](https://github.com/superkabuki/FFmpeg_SCTE35)
-
+[Install threefive3](#install)  | [SCTE-35 HLS](https://github.com/superkabuki/threefive3/blob/main/hls.md) | [Cue Class](https://github.com/superkabuki/threefive3/blob/main/cue.md) | [Stream Class](https://github.com/superkabuki/threefive3/blob/main/stream.md) | [Online SCTE-35 Parser](https://iodisco.com/scte35) | [Encode SCTE-35](https://github.com/superkabuki/threefive3/blob/main/encode.md) 
 ![image](https://github.com/user-attachments/assets/5b77329c-b65f-4d07-ab03-b6a5559f5dc4)
