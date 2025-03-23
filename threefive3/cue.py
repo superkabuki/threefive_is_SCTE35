@@ -12,7 +12,7 @@ from .commands import command_map, SpliceCommand
 from .descriptors import splice_descriptor, descriptor_map
 from .crc import crc32
 from .segmentation import table22
-from .words import minusone, zero, one, two, three, four, eight,
+from .words import minusone, zero, one, two, three, four, eight
 from .words import  eleven, fourteen, sixteen, colon,equalsign
 
 
