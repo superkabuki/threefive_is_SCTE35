@@ -12,7 +12,8 @@ from .commands import command_map, SpliceCommand
 from .descriptors import splice_descriptor, descriptor_map
 from .crc import crc32
 from .segmentation import table22
-from .words import *
+from .words import minusone, zero, one, two, three, four, eight,
+from .words import  eleven, fourteen, sixteen, colon,equalsign
 
 
 class Cue(SCTE35Base):
@@ -53,7 +54,6 @@ class Cue(SCTE35Base):
         if data:
             self.bites = self._mk_bits(data)
         self.packet_data = packet_data
-        self.dash_data = None
         self.decode()
 
     def __repr__(self):
@@ -92,11 +92,6 @@ class Cue(SCTE35Base):
             del spliced.bites
             self.descriptors.append(spliced)
 
-    def _get_dash_data(self, scte35_dict):
-        if self.dash_data:
-            scte35_dict["dash_data"] = self.dash_data
-        return scte35_dict
-
     def _get_packet_data(self, scte35_dict):
         if self.packet_data:
             scte35_dict["packet_data"] = self.packet_data.get()
@@ -113,9 +108,7 @@ class Cue(SCTE35Base):
                 "command": self.command.get(),
                 "descriptors": self.get_descriptors(),
             }
-            scte35_data = self._get_dash_data(scte35_data)
             scte35_data = self._get_packet_data(scte35_data)
-
             return scte35_data
         return False
 
@@ -125,20 +118,6 @@ class Cue(SCTE35Base):
         SCTE 35 splice descriptors as dicts.
         """
         return [d.get() for d in self.descriptors]
-
-    def bytes(self):
-        """
-        get_bytes returns Cue.bites
-        """
-        return self.bites
-
-    def fix_bad_b64(self, data):
-        """
-        fix_bad_b64 fixes bad padding on Base64
-        """
-        while len(data) % four != zero:
-            data = data + equalsign
-        return data
 
     def _int_bits(self, data):
         """
@@ -283,11 +262,25 @@ class Cue(SCTE35Base):
             return b64encode(self.bites).decode()
         return False
 
+    def bytes(self):
+        """
+        get_bytes returns Cue.bites
+        """
+        return self.bites
+
     def encode(self):
         """
         encode is an alias for base64
         """
         return self.base64()
+
+    def fix_bad_b64(self, data):
+        """
+        fix_bad_b64 fixes bad padding on Base64
+        """
+        while len(data) % four != zero:
+            data = data + equalsign
+        return data
 
     def int(self):
         """
@@ -295,12 +288,6 @@ class Cue(SCTE35Base):
         """
         self.encode()
         return int.from_bytes(self.bites, byteorder="big")
-
-    def encode_as_int(self):
-        """
-        encode_as_int backward compatibility
-        """
-        return self.int()
 
     def hex(self):
         """
@@ -378,12 +365,6 @@ class Cue(SCTE35Base):
             dscptr.load(dstuff)
             self.descriptors.append(dscptr)
 
-    def _no_cmd(self):
-        """
-        _no_cmd raises an exception if no splice command.
-        """
-        red("A splice command is required")
-
     def load(self, gonzo):
         """
         Cue.load loads SCTE35 data for encoding.
@@ -417,6 +398,12 @@ class Cue(SCTE35Base):
         self.encode()
         return self.bites
 
+    def _no_cmd(self):
+        """
+        _no_cmd raises an exception if no splice command.
+        """
+        red("A splice command is required")
+
     def _from_xml(self, gonzo):
         """
         _from_xml converts xml to data that can
@@ -426,8 +413,11 @@ class Cue(SCTE35Base):
         if isinstance(
             gonzo, str
         ):  # a string  is returned for Binary xml tag, make sense?
-            if "<scte35:Binary>" in gonzo:
-                dat = gonzo.split("<scte35:Binary>")[1].split("</scte35:Binary>")[0]
+            spliton ="Binary"
+            if "scte35:Binary" in gonzo:
+                spliton = "scte35:Binary"
+            if spliton in gonzo:
+                dat = gonzo.split(f"<{spliton}>")[1].split(f"</{spliton}>")[0]
                 self.bites = self._mk_bits(dat)
                 self.decode()
             else:
@@ -435,7 +425,7 @@ class Cue(SCTE35Base):
         else:
             blue("xmlbin data needs to be str instance")
 
-    def xmlbin(self, ns="scte35"):
+    def xmlbin(self):
         """
         xml returns a threefive3.Node instance
         which can be edited as needed or printed.
