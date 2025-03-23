@@ -28,7 +28,7 @@ class AacParser:
         """
         id3_len parses the length value from ID3 headers
         """
-        return  int.from_bytes(header[6:], byteorder="big")
+        return int.from_bytes(header[6:], byteorder="big")
 
     @staticmethod
     def syncsafe5(somebytes):
@@ -50,7 +50,7 @@ class AacParser:
             pts = float(data.split(self.applehead)[1].split(b"\x00", 2)[1])
         except:
             pts = self.syncsafe5(data.split(self.applehead)[1][:9])
-        return round((pts % ROLLOVER), 6)        
+        return round((pts % ROLLOVER), 6)
 
     def parse(self, media):
         """
@@ -65,4 +65,3 @@ class AacParser:
             if self.applehead in data:
                 pts = self.parse_pts(data)
         return pts
-
