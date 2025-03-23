@@ -8,12 +8,11 @@ from .stuff import red, blue
 from .bitn import NBin
 from .base import SCTE35Base
 from .section import SpliceInfoSection
-from .commands import command_map, SpliceCommand
+from .commands import command_map
 from .descriptors import splice_descriptor, descriptor_map
 from .crc import crc32
-from .segmentation import table22
 from .words import minusone, zero, one, two, three, four, eight
-from .words import  eleven, fourteen, sixteen, colon,equalsign
+from .words import  eleven, fourteen, sixteen, equalsign
 
 
 class Cue(SCTE35Base):
@@ -187,6 +186,7 @@ class Cue(SCTE35Base):
             return self._int_bits(data)
         if isinstance(data, str):
             return self._str_bits(data)
+        return data
 
     def _mk_descriptors(self, bites):
         """
