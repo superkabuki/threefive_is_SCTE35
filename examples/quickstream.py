@@ -18,23 +18,10 @@ Quickstream.py
 
     threefive3 show video.ts
 
-* Output looks like this:
-
-            Program: 1
-                    Service:  
-                    Provider: 
-                    PMT PID:  480
-                    PCR PID:  481
-                    Streams:
-                                 PID:	        Type:
-                                 -----------------------------------
-                                481      [0x1e1]         0x1b  H.264
-                                482     [0x1e2]        0x0f  ADTS AAC 
-      scte35 pid -->  483      [0x1e3]        0x86  SCTE-35  
-                                484     [0x1e4]        0xfc   KLV
-                                485     [0x1e5]        0x15   ID3
-
-
+* look for a line with SCTE-35 in it like:
+            
+            483      [0x1e3]        0x86  SCTE-35  
+      
 * Then you'd run:
 
                 python3 quickstream.py video.ts 483
