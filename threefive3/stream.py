@@ -10,7 +10,10 @@ from .stuff import print2, blue
 from .cue import Cue
 from .packetdata import PacketData
 from .streamtypes import streamtype_map
-from .words import *
+from .words import minusone, zero, one, two, three, four, five, six, seven, eight
+from .words import nine, ten, eleven, twelve, thirteen, fourteen, fifteen, sixteen
+from .words import seventeen, twentytwo, twentyfive, twentynine
+from .words import thirtytwo, sixtyfour, onetwentyeight, ninetythousand
 
 
 def no_op(cue):
@@ -119,6 +122,7 @@ class Stream:
     """
     Stream class for parsing MPEG-TS data.
     """
+
     PACKET_SIZE = _PACKET_SIZE = 188
     PMT_TID = _PMT_TID = b"\x02"
     ROLLOVER = 8589934591
@@ -210,7 +214,7 @@ class Stream:
     def _split_by_idx(pay, marker):
         try:
             return pay[pay.index(marker) :]
-        except:
+        except (LookupError, TypeError, ValueError):
             return False
 
     def _find_start(self):
@@ -238,8 +242,10 @@ class Stream:
         return False
 
     def _mk_pkts(self, chunk):
-        return [self._parse(chunk[i : i + self.PACKET_SIZE])
-            for i in range(0, len(chunk), self.PACKET_SIZE) ]
+        return [
+            self._parse(chunk[i : i + self.PACKET_SIZE])
+            for i in range(0, len(chunk), self.PACKET_SIZE)
+        ]
 
     def _decode2cues(self, chunk, func):
         _ = [func(cue) for cue in self._mk_pkts(chunk) if cue]
@@ -305,14 +311,13 @@ class Stream:
         for pkt in self.iter_pkts():
             self._parse(pkt)
             if self.pmt_count > len(self.pmt_payloads) << one:
-                blue(f'PMT Count: {self.pmt_count}')
+                blue(f"PMT Count: {self.pmt_count}")
                 break
         if self.maps.prgm.keys():
             sopro = sorted(self.maps.prgm.items())
             for k, vee in sopro:
                 print2(f"\nProgram: {k}")
                 vee.show()
-            return True
 
     def show_pts(self):
         """
@@ -343,8 +348,8 @@ class Stream:
         """
         prgm = one
         if pid in self.maps.pid_prgm:
-            return self.maps.pid_prgm[pid]
-        return False
+            prgm = self.maps.pid_prgm[pid]
+        return prgm
 
     def pid2pts(self, pid):
         """
@@ -366,8 +371,8 @@ class Stream:
             return self.as_90k(self.maps.prgm_pcr[prgm])
         return False
 
-    def _unpad(self, bites=b''):
-        return bites.strip(b'\xff')
+    def _unpad(self, bites=b""):
+        return bites.strip(b"\xff")
 
     def _mk_packet_data(self, pid):
         prgm = self.maps.pid_prgm[pid]
@@ -475,57 +480,22 @@ class Stream:
 
     def _chk_scte35(self, pkt, pid):
         cue = False
-        if self._pid_has_scte35(pid):
-            cue = self._parse_scte35(pkt, pid)
+        cue = self._parse_scte35(pkt, pid)
         return cue
 
     def _parse(self, pkt):
         pid = self._parse_info(pkt)
         if pid in self.pids.pcr:
             self._chk_pts(pkt, pid)
-        return self._chk_scte35(pkt, pid)
+        if self._pid_has_scte35(pid):
+            return self._chk_scte35(pkt, pid)
+        return False
 
     def _pid_has_scte35(self, pid):
-        #  return pid in self.pids.scte35.union(self.pids.maybe_scte35) #   union sucks. 4.47 secs
-        # return (pid in self.pids.scte35 or pid in self.pids.maybe_scte35) # 3.37 secs
-        return pid in (self.pids.scte35 or self.pids.maybe_scte35)  # 3.326 secs
-        # return pid in (self.pids.scte35|self.pids.maybe_scte35)  # wtf? 4.128  secs"""
-Mpeg-TS Stream parsing class Stream
-"""
-
-import sys
-
-from functools import partial
-from .new_reader import reader
-from .stuff import print2, blue
-from .cue import Cue
-from .packetdata import PacketData
-from .streamtypes import streamtype_map
-from .words import *
-
-
-def no_op(cue):
-    """
-    no_op is just a dummy func to pass to Stream.decode()
-    to suppress output.
-    """
-    return cue
-
-
-def show_cue(cue):
-    """
-    default function call for Stream.decode
-    when a SCTE-35 packet is found.
-    """
-    cue.show()
-
-
-def show_cue_stderr(cue):
-    """
-    print2 cue data to sys.stderr
-    for Stream.decode_proxy
-    """
-
+        #  return pid in self.pids.scte35.union(self.pids.maybe_scte35) #   union sucks. Worst
+        # return (pid in self.pids.scte35 or pid in self.pids.maybe_scte35) # Good
+        return pid in (self.pids.scte35 or self.pids.maybe_scte35)  # Best
+        # return pid in (self.pids.scte35|self.pids.maybe_scte35)  # wtf? Bad
 
     def _chk_partial(self, pay, pid, sep):
         if pid in self.maps.partial:
@@ -543,9 +513,9 @@ def show_cue_stderr(cue):
         # + 3 for the bytes before section starts
         if len(pay) > (seclen + three):
             return False
-        if (seclen + three) > len(pay):
-            self.maps.partial[pid] = pay
-            return True
+        #   if (seclen + three) > len(pay):
+        self.maps.partial[pid] = pay
+        return True
 
     def _parse_cue(self, pay, pid):
         packet_data = None
