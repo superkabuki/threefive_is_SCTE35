@@ -50,13 +50,23 @@ class SpliceInfoSection(SCTE35Base):
         bitbin = Bitn(bites)
         self.table_id = bitbin.as_hex(8)
         if self.table_id != "0xfc":
-            red(f"splice_info_section.table_id should be 0xfc Not:  {self.table_id}")
+            red(f"splice_info_section.table_id should be 0xfc not  {self.table_id}")
+            return False
         self.section_syntax_indicator = bitbin.as_flag(1)
+        if self.section_syntax_indicator  !=0:
+            red(f'section_syntax_indicator should be 0 not {self.section_syntax_indicator}')
+            return False
         self.private = bitbin.as_flag(1)
         self.sap_type = bitbin.as_hex(2)
+        if self.sap_type not in sap_map:
+            red('Invalid sap_type')
+            return False
         self.sap_details = sap_map[self.sap_type]
         self.section_length = bitbin.as_int(12)
         self.protocol_version = bitbin.as_int(8)
+        if self.protocol_version !=0:
+            red(f'protocol_version should be 0 not {self.protocol_version}')
+            return False
         self.encrypted_packet = bitbin.as_flag(1)
         self.encryption_algorithm = bitbin.as_int(6)
         pts_adjustment_ticks = bitbin.as_int(33)
@@ -65,6 +75,7 @@ class SpliceInfoSection(SCTE35Base):
         self.tier = bitbin.as_hex(12)
         self.splice_command_length = bitbin.as_int(12)
         self.splice_command_type = bitbin.as_int(8)
+        
 
     def _encode_table_id(self, nbin):
         """
