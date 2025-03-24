@@ -52,8 +52,8 @@ class Cue(SCTE35Base):
         self.bites = None
         if data:
             self.bites = self._mk_bits(data)
-        self.packet_data = packet_data
-        self.decode()
+            self.packet_data = packet_data
+            self.decode()
 
     def __repr__(self):
         return str(self.__dict__)
@@ -186,7 +186,6 @@ class Cue(SCTE35Base):
             return self._int_bits(data)
         if isinstance(data, str):
             return self._str_bits(data)
-        return data
 
     def _mk_descriptors(self, bites):
         """
