@@ -6,6 +6,8 @@ SCTE35 Splice Info Section
 
 from .bitn import Bitn
 from .base import SCTE35Base
+from .commands import command_map
+from .descriptors import splice_descriptor, descriptor_map
 from .stuff import red
 
 
@@ -43,45 +45,105 @@ class SpliceInfoSection(SCTE35Base):
         self.descriptor_loop_length = 0
         self.crc = None
 
-    def decode(self, bites):
+    def _set_splice_command(self, cmd_bytes):
         """
-        InfoSection.decode
+        _set_splice_command parses the Splice Command
         """
-        bitbin = Bitn(bites)
-        self.table_id = bitbin.as_hex(8)
+        sct = self.splice_command_type
+        if sct not in command_map:
+            red(f"Splice Command type {sct} not recognized")
+            return False
+        command = command_map[sct](cmd_bytes)
+        command.command_length = len(cmd_bytes)
+        command.decode()
+        del command.bites
+        return command
+
+    def _parse_dloop(self, dloop_bites):
+        """
+        _parse_loop parses all splice descriptors
+        """
+        descriptors = []
+        tag_n_len = 2
+        while len(dloop_bites) > tag_n_len:
+            spliced = splice_descriptor(dloop_bites)
+            if not spliced:
+                return
+            sd_size = tag_n_len + spliced.descriptor_length
+            dloop_bites = dloop_bites[sd_size:]
+            del spliced.bites
+            descriptors.append(spliced)
+        return descriptors
+
+    def _unroll(self,bitbin):
+        self.descriptor_loop_length = bitbin.as_int(16)
+        descriptor_loop = bitbin.as_bytes(self.descriptor_loop_length << 3)
+        descriptors = self._parse_dloop(descriptor_loop)
+        return descriptors
+
+    def _parse_cmd(self,bitbin):
+        self.splice_command_length = bitbin.as_int(12)
+        self.splice_command_type = bitbin.as_int(8)
+        cmd_bytes = bitbin.as_bytes(self.splice_command_length << 3)
+        cmd =self._set_splice_command(cmd_bytes)
+        return cmd
+
+    def _chk_tid(self):
         if self.table_id != "0xfc":
             red(f"splice_info_section.table_id should be 0xfc not  {self.table_id}")
             return False
-        self.section_syntax_indicator = bitbin.as_flag(1)
+        return True
+
+    def _chk_sap(self):
+        if self.sap_type not in sap_map:
+            red("Invalid sap_type")
+            return False
+        return True
+
+    def _chk_ssi(self):
         if self.section_syntax_indicator != 0:
             red(
                 f"section_syntax_indicator should be 0 not {self.section_syntax_indicator}"
             )
             return False
+        return True
+
+    def chks(self):
+        chklist = [self._chk_tid,self._chk_ssi, self._chk_sap]
+        while chklist:
+            if not chklist.pop()():
+                  return False
+        return True
+
+    def decode(self, bites):
+        """
+        InfoSection.decode
+        """
+        cmd = False
+        descriptors = False
+        bitbin = Bitn(bites)
+        self.table_id = bitbin.as_hex(8)
+        self.section_syntax_indicator = bitbin.as_flag(1)
         self.private = bitbin.as_flag(1)
         self.sap_type = bitbin.as_hex(2)
-        if self.sap_type not in sap_map:
-            red("Invalid sap_type")
-            return False
         self.sap_details = sap_map[self.sap_type]
+        if not self.chks():
+            return cmd,descriptors
         self.section_length = bitbin.as_int(12)
         self.protocol_version = bitbin.as_int(8)
         if self.protocol_version != 0:
             red(f"protocol_version should be 0 not {self.protocol_version}")
-            return False
+            return cmd, descriptors
         self.encrypted_packet = bitbin.as_flag(1)
         self.encryption_algorithm = bitbin.as_int(6)
         pts_adjustment_ticks = bitbin.as_int(33)
         self.pts_adjustment = self.as_90k(pts_adjustment_ticks)
         self.cw_index = bitbin.as_hex(8)
         self.tier = bitbin.as_hex(12)
-        self.splice_command_length = bitbin.as_int(12)
-        self.splice_command_type = bitbin.as_int(8)
-        cmd_bytes = bitbin.as_bytes(self.splice_command_length << 3)
-        self.descriptor_loop_length = bitbin.as_int(16)
-        descriptor_loop = bitbin.as_bytes(self.descriptor_loop_length << 3)
+        cmd = self._parse_cmd(bitbin)
+        descriptors = self._unroll(bitbin)
         self.crc = bitbin.as_hex(32)
-        return cmd_bytes, descriptor_loop
+        return cmd, descriptors
 
     def _encode_table_id(self, nbin):
         """
