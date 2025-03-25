@@ -12,7 +12,7 @@ from .commands import command_map
 from .descriptors import splice_descriptor, descriptor_map
 from .crc import crc32
 from .words import minusone, zero, one, two, three, four, eight
-from .words import  eleven, fourteen, sixteen, equalsign
+from .words import eleven, fourteen, sixteen, equalsign
 
 
 class Cue(SCTE35Base):
@@ -68,13 +68,10 @@ class Cue(SCTE35Base):
         bites = self.bites
         self.descriptors = []
         while bites:
-            bites = self.mk_info_section(bites)
-            bites = self._set_splice_command(bites)
-            bites = self._mk_descriptors(bites)
-            if bites:
-                crc = hex(int.from_bytes(bites[zero:four], byteorder="big"))
-                self.info_section.crc = crc
-                return True
+            cmd_bytes, dloop_bytes = self.info_section.decode(bites)
+            bites = self._set_splice_command(cmd_bytes)
+            bites = self._descriptor_loop(dloop_bytes)
+            return True
         return False
 
     def _descriptor_loop(self, loop_bites):
@@ -187,32 +184,6 @@ class Cue(SCTE35Base):
         if isinstance(data, str):
             return self._str_bits(data)
 
-    def _mk_descriptors(self, bites):
-        """
-        Cue._mk_descriptors parses
-        Cue.info_section.descriptor_loop_length,
-        then call Cue._descriptor_loop
-        """
-        ##        if len(bites) < 2:
-        ##            return False
-        while bites:
-            dll = (bites[zero] << eight) | bites[one]
-            self.info_section.descriptor_loop_length = dll
-            bites = bites[two:]
-            self._descriptor_loop(bites[:dll])
-            return bites[dll:]
-
-    def mk_info_section(self, bites):
-        """
-        Cue.mk_info_section parses the
-        Splice Info Section
-        of a SCTE35 cue.
-        """
-        info_size = fourteen
-        info_bites = bites[:info_size]
-        self.info_section.decode(info_bites)
-        return bites[info_size:]
-
     def _set_splice_command(self, bites):
         """
         Cue._set_splice_command parses
@@ -222,15 +193,11 @@ class Cue(SCTE35Base):
         if sct not in command_map:
             red(f"Splice Command type {sct} not recognized")
             return False
-        iscl = self.info_section.splice_command_length
-        cmd_bites = bites[:iscl]
+        cmd_bites = bites
         self.command = command_map[sct](cmd_bites)
-        self.command.command_length = iscl
+        self.command.command_length = len(cmd_bites)
         self.command.decode()
         del self.command.bites
-        return bites[iscl:]
-
-    # encode related
 
     def _assemble(self):
         dscptr_bites = self._unloop_descriptors()
@@ -412,7 +379,7 @@ class Cue(SCTE35Base):
         if isinstance(
             gonzo, str
         ):  # a string  is returned for Binary xml tag, make sense?
-            spliton ="Binary"
+            spliton = "Binary"
             if "scte35:Binary" in gonzo:
                 spliton = "scte35:Binary"
             if spliton in gonzo:
