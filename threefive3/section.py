@@ -108,12 +108,11 @@ class SpliceInfoSection(SCTE35Base):
             return False
         return True
 
-    def chks(self):
-        chklist = [self._chk_tid,self._chk_ssi, self._chk_sap]
-        while chklist:
-            if not chklist.pop()():
-                  return False
-        return True
+    def _chks(self):
+        """
+        _chks fail if any check fails
+        """
+        return all([self._chk_tid(), self._chk_ssi(), self._chk_sap()])
 
     def decode(self, bites):
         """
@@ -127,7 +126,7 @@ class SpliceInfoSection(SCTE35Base):
         self.private = bitbin.as_flag(1)
         self.sap_type = bitbin.as_hex(2)
         self.sap_details = sap_map[self.sap_type]
-        if not self.chks():
+        if not self._chks():
             return cmd,descriptors
         self.section_length = bitbin.as_int(12)
         self.protocol_version = bitbin.as_int(8)
