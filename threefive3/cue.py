@@ -9,7 +9,6 @@ from .bitn import NBin
 from .base import SCTE35Base
 from .section import SpliceInfoSection
 from .commands import command_map
-from .descriptors import splice_descriptor, descriptor_map
 from .crc import crc32
 from .words import minusone, zero, one, two, three, four, eight
 from .words import eleven, fourteen, sixteen, equalsign
@@ -67,26 +66,8 @@ class Cue(SCTE35Base):
         """
         bites = self.bites
         self.descriptors = []
-        while bites:
-            cmd_bytes, dloop_bytes = self.info_section.decode(bites)
-            bites = self._set_splice_command(cmd_bytes)
-            bites = self._descriptor_loop(dloop_bytes)
-            return True
-        return False
-
-    def _descriptor_loop(self, loop_bites):
-        """
-        Cue._descriptor_loop parses all splice descriptors
-        """
-        tag_n_len = two
-        while len(loop_bites) > tag_n_len:
-            spliced = splice_descriptor(loop_bites)
-            if not spliced:
-                return
-            sd_size = tag_n_len + spliced.descriptor_length
-            loop_bites = loop_bites[sd_size:]
-            del spliced.bites
-            self.descriptors.append(spliced)
+        self.command, self.descriptors= self.info_section.decode(bites)
+        return True
 
     def _get_packet_data(self, scte35_dict):
         if self.packet_data:
@@ -183,21 +164,6 @@ class Cue(SCTE35Base):
             return self._int_bits(data)
         if isinstance(data, str):
             return self._str_bits(data)
-
-    def _set_splice_command(self, bites):
-        """
-        Cue._set_splice_command parses
-        the command section of a SCTE35 cue.
-        """
-        sct = self.info_section.splice_command_type
-        if sct not in command_map:
-            red(f"Splice Command type {sct} not recognized")
-            return False
-        cmd_bites = bites
-        self.command = command_map[sct](cmd_bites)
-        self.command.command_length = len(cmd_bites)
-        self.command.decode()
-        del self.command.bites
 
     def _assemble(self):
         dscptr_bites = self._unloop_descriptors()
