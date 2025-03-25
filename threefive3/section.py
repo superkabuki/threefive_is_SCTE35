@@ -53,19 +53,21 @@ class SpliceInfoSection(SCTE35Base):
             red(f"splice_info_section.table_id should be 0xfc not  {self.table_id}")
             return False
         self.section_syntax_indicator = bitbin.as_flag(1)
-        if self.section_syntax_indicator  !=0:
-            red(f'section_syntax_indicator should be 0 not {self.section_syntax_indicator}')
+        if self.section_syntax_indicator != 0:
+            red(
+                f"section_syntax_indicator should be 0 not {self.section_syntax_indicator}"
+            )
             return False
         self.private = bitbin.as_flag(1)
         self.sap_type = bitbin.as_hex(2)
         if self.sap_type not in sap_map:
-            red('Invalid sap_type')
+            red("Invalid sap_type")
             return False
         self.sap_details = sap_map[self.sap_type]
         self.section_length = bitbin.as_int(12)
         self.protocol_version = bitbin.as_int(8)
-        if self.protocol_version !=0:
-            red(f'protocol_version should be 0 not {self.protocol_version}')
+        if self.protocol_version != 0:
+            red(f"protocol_version should be 0 not {self.protocol_version}")
             return False
         self.encrypted_packet = bitbin.as_flag(1)
         self.encryption_algorithm = bitbin.as_int(6)
@@ -75,7 +77,11 @@ class SpliceInfoSection(SCTE35Base):
         self.tier = bitbin.as_hex(12)
         self.splice_command_length = bitbin.as_int(12)
         self.splice_command_type = bitbin.as_int(8)
-        
+        cmd_bytes = bitbin.as_bytes(self.splice_command_length << 3)
+        self.descriptor_loop_length = bitbin.as_int(16)
+        descriptor_loop = bitbin.as_bytes(self.descriptor_loop_length << 3)
+        self.crc = bitbin.as_hex(32)
+        return cmd_bytes, descriptor_loop
 
     def _encode_table_id(self, nbin):
         """
