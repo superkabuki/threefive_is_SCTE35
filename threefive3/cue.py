@@ -68,7 +68,6 @@ class Cue(SCTE35Base):
            unless you initialize a Cue without data.
         """
         bites = self.bites
-        red(f' DECODE BYTES --> {bites}')
         self.command, self.descriptors= self.info_section.decode(bites)
         return True
 
@@ -319,7 +318,6 @@ class Cue(SCTE35Base):
         if isinstance(gonzo, bytes):
             gonzo = gonzo.decode()
         if isinstance(gonzo, str):
-            blue("gonzo is string")
             if gonzo.isdigit():
                 gonzo = int(gonzo)
                 self.bites = self._int_bits(int(gonzo))
@@ -334,8 +332,6 @@ class Cue(SCTE35Base):
                 self._load_command(data)
                 self._load_descriptors(data["descriptors"])
                 self.encode()
-                blue(f"bites -->{self.bites}")
-                self.show()
                 bites = self.bites
                 return bites
 
