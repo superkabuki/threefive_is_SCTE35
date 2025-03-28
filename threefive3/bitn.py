@@ -14,9 +14,11 @@ class Bitn:
     """
 
     def __init__(self, bites):
-        self.bitsize = self.idx = len(bites) << 3
-        self.bits = int.from_bytes(bites, byteorder="big")
-
+        self.bits = bites
+        self.idx = len(bites) << 3
+        self.bitsize = self.idx
+        if isinstance(bites, bytes):
+            self.bits = int.from_bytes(bites, byteorder="big")
 
     def __repr__(self):
         return str(vars(self))
@@ -154,13 +156,15 @@ class NBin:
         and appends it to self.nbits
         via self.add_int
         """
+        dehexed = False
         if isinstance(hex_str, str):
             dehexed = int(hex_str, 16)
         # just in case hex_str is an int....
-        else:
+        if isinstance(hex_str, int):
             dehexed = hex_str
-        self.add_int(dehexed, bit_len)
-        
+        if dehexed:
+            self.add_int(dehexed, bit_len)
+
     def add_flag(self, flg, bit_len=1):
         """
         add_flag takes a boolean
