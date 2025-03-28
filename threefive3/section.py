@@ -8,7 +8,7 @@ from .bitn import Bitn
 from .base import SCTE35Base
 from .commands import command_map
 from .descriptors import splice_descriptor, descriptor_map
-from .stuff import red
+from .stuff import red, blue
 
 
 sap_map = {
@@ -75,19 +75,6 @@ class SpliceInfoSection(SCTE35Base):
             descriptors.append(spliced)
         return descriptors
 
-    def _unroll(self,bitbin):
-        self.descriptor_loop_length = bitbin.as_int(16)
-        descriptor_loop = bitbin.as_bytes(self.descriptor_loop_length << 3)
-        descriptors = self._parse_dloop(descriptor_loop)
-        return descriptors
-
-    def _parse_cmd(self,bitbin):
-        self.splice_command_length = bitbin.as_int(12)
-        self.splice_command_type = bitbin.as_int(8)
-        cmd_bytes = bitbin.as_bytes(self.splice_command_length << 3)
-        cmd =self._set_splice_command(cmd_bytes)
-        return cmd
-
     def _chk_tid(self):
         if self.table_id != "0xfc":
             red(f"splice_info_section.table_id should be 0xfc not  {self.table_id}")
@@ -98,7 +85,7 @@ class SpliceInfoSection(SCTE35Base):
         if self.sap_type not in sap_map:
             red("Invalid sap_type")
             return False
-        return True
+        return False
 
     def _chk_ssi(self):
         if self.section_syntax_indicator != 0:
@@ -108,11 +95,17 @@ class SpliceInfoSection(SCTE35Base):
             return False
         return True
 
+    def _chk_proto(self):
+        if self.protocol_version != 0:
+            red(f"protocol_version should be 0 not {self.protocol_version}")
+            return False
+        return True
+
     def _chks(self):
         """
         _chks fail if any check fails
         """
-        return all([self._chk_tid(), self._chk_ssi(), self._chk_sap()])
+        return all([self._chk_tid(), self._chk_ssi(), self._chk_sap(), self._chk_proto()])
 
     def decode(self, bites):
         """
@@ -126,21 +119,21 @@ class SpliceInfoSection(SCTE35Base):
         self.private = bitbin.as_flag(1)
         self.sap_type = bitbin.as_hex(2)
         self.sap_details = sap_map[self.sap_type]
-        if not self._chks():
-            return cmd,descriptors
         self.section_length = bitbin.as_int(12)
         self.protocol_version = bitbin.as_int(8)
-        if self.protocol_version != 0:
-            red(f"protocol_version should be 0 not {self.protocol_version}")
-            return cmd, descriptors
         self.encrypted_packet = bitbin.as_flag(1)
         self.encryption_algorithm = bitbin.as_int(6)
         pts_adjustment_ticks = bitbin.as_int(33)
         self.pts_adjustment = self.as_90k(pts_adjustment_ticks)
         self.cw_index = bitbin.as_hex(8)
         self.tier = bitbin.as_hex(12)
-        cmd = self._parse_cmd(bitbin)
-        descriptors = self._unroll(bitbin)
+        self.splice_command_length = bitbin.as_int(12)
+        self.splice_command_type = bitbin.as_int(8)
+        cmd_bytes = bitbin.as_bytes(self.splice_command_length <<3)
+        cmd =self._set_splice_command(cmd_bytes)
+        self.descriptor_loop_length = bitbin.as_int(16)
+        descriptor_loop = bitbin.as_bytes(self.descriptor_loop_length << 3)
+        descriptors = self._parse_dloop(descriptor_loop)
         self.crc = bitbin.as_hex(32)
         return cmd, descriptors
 
