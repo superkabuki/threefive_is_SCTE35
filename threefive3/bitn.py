@@ -14,11 +14,12 @@ class Bitn:
     """
 
     def __init__(self, bites):
-        self.bits = bites
-        self.idx = len(bites) << 3
-        self.bitsize = self.idx
-        if isinstance(bites, bytes):
-            self.bits = int.from_bytes(bites, byteorder="big")
+        """
+        __init__ should just  be two lines,
+        stop trying to be fancy.
+        """
+        self.bitsize = self.idx = len(bites) << 3
+        self.bits = int.from_bytes(bites, byteorder="big")
 
     def __repr__(self):
         return str(vars(self))
