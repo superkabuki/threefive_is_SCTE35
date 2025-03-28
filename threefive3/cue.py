@@ -9,6 +9,7 @@ from .bitn import NBin
 from .base import SCTE35Base
 from .section import SpliceInfoSection
 from .commands import command_map
+from .descriptors import descriptor_map
 from .crc import crc32
 from .words import minusone, zero, one, two, three, four, eight
 from .words import eleven, fourteen, sixteen, equalsign
@@ -49,10 +50,12 @@ class Cue(SCTE35Base):
         self.descriptors = []
         self.info_section = SpliceInfoSection()
         self.bites = None
+        self.packet_data=None
         if data:
             self.bites = self._mk_bits(data)
             self.packet_data = packet_data
-            self.decode()
+            if data.strip()[0] not in ['{',b'{']:
+                self.decode()
 
     def __repr__(self):
         return str(self.__dict__)
@@ -65,7 +68,7 @@ class Cue(SCTE35Base):
            unless you initialize a Cue without data.
         """
         bites = self.bites
-        self.descriptors = []
+        red(f' DECODE BYTES --> {bites}')
         self.command, self.descriptors= self.info_section.decode(bites)
         return True
 
@@ -131,8 +134,8 @@ class Cue(SCTE35Base):
 
     def _str_bits(self, data):
         try:
-            self.load(data)
-            return self.bites
+            fu= self.load(data)
+            return fu
         except (LookupError, TypeError, ValueError):
             hex_bits = self._hex_bits(data)
             if hex_bits:
@@ -152,6 +155,8 @@ class Cue(SCTE35Base):
         cue._mk_bits Converts
         Hex and Base64 strings into bytes.
         """
+        if isinstance(data, str):
+            return self._str_bits(data)
         bites = data
         if isinstance(data, dict):
             self.load(data)
@@ -162,8 +167,6 @@ class Cue(SCTE35Base):
             return bites
         if isinstance(data, int):
             return self._int_bits(data)
-        if isinstance(data, str):
-            return self._str_bits(data)
 
     def _assemble(self):
         dscptr_bites = self._unloop_descriptors()
@@ -275,9 +278,9 @@ class Cue(SCTE35Base):
         if 'command_type' is included,
         the command instance will be created.
         """
-        if "command" not in gonzo:
-            self._no_cmd()
-            return False
+##        if "command" not in gonzo:
+##            self._no_cmd()
+##            return False
         cmd = gonzo["command"]
         if "command_type" in cmd:
             self.command = command_map[cmd["command_type"]]()
@@ -297,6 +300,7 @@ class Cue(SCTE35Base):
             dscptr.load(dstuff)
             self.descriptors.append(dscptr)
 
+
     def load(self, gonzo):
         """
         Cue.load loads SCTE35 data for encoding.
@@ -315,6 +319,7 @@ class Cue(SCTE35Base):
         if isinstance(gonzo, bytes):
             gonzo = gonzo.decode()
         if isinstance(gonzo, str):
+            blue("gonzo is string")
             if gonzo.isdigit():
                 gonzo = int(gonzo)
                 self.bites = self._int_bits(int(gonzo))
@@ -323,12 +328,16 @@ class Cue(SCTE35Base):
             if gonzo.strip()[zero] == "<":
                 self._from_xml(gonzo)
                 return self.bites
-            gonzo = json.loads(gonzo)
-        self._load_info_section(gonzo)
-        self._load_command(gonzo)
-        self._load_descriptors(gonzo["descriptors"])
-        self.encode()
-        return self.bites
+            if gonzo.strip()[zero] == "{":
+                data = json.loads(gonzo)
+                self._load_info_section(data)
+                self._load_command(data)
+                self._load_descriptors(data["descriptors"])
+                self.encode()
+                blue(f"bites -->{self.bites}")
+                self.show()
+                bites = self.bites
+                return bites
 
     def _no_cmd(self):
         """
