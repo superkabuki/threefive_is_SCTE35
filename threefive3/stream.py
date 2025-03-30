@@ -3,7 +3,6 @@ Mpeg-TS Stream parsing class Stream
 """
 
 import sys
-
 from functools import partial
 from .new_reader import reader
 from .stuff import print2, blue
@@ -37,7 +36,7 @@ def show_cue_stderr(cue):
     print2 cue data to sys.stderr
     for Stream.decode_proxy
     """
-    cue.to_stderr()
+    cue.show()
 
 
 class ProgramInfo:
@@ -50,8 +49,8 @@ class ProgramInfo:
     def __init__(self, pid=None, pcr_pid=None):
         self.pid = pid
         self.pcr_pid = pcr_pid
-        self.provider = b""
-        self.service = b""
+        self.provider = b"fu-corp"
+        self.service = b"threefive3"
         self.streams = {}  # pid to stream_type mapping
 
     def _mk_vee(self, k):
@@ -478,18 +477,14 @@ class Stream:
         if self._pusi_flag(pkt):
             self._parse_pts(pkt, pid)
 
-    def _chk_scte35(self, pkt, pid):
-        cue = False
-        cue = self._parse_scte35(pkt, pid)
-        return cue
-
     def _parse(self, pkt):
+        cue = False
         pid = self._parse_info(pkt)
         if pid in self.pids.pcr:
             self._chk_pts(pkt, pid)
         if self._pid_has_scte35(pid):
-            return self._chk_scte35(pkt, pid)
-        return False
+            cue = self._parse_scte35(pkt, pid)
+        return cue
 
     def _pid_has_scte35(self, pid):
         #  return pid in self.pids.scte35.union(self.pids.maybe_scte35) #   union sucks. Worst
@@ -571,6 +566,7 @@ class Stream:
             self.maps.prgm[service_id] = ProgramInfo()
         pinfo = self.maps.prgm[service_id]
         pinfo.provider = pn
+        blue(pn)
         pinfo.service = sn
 
     def _parse_sdt(self, pay):
@@ -586,6 +582,7 @@ class Stream:
         idx = eleven
         while idx < seclen + three:
             service_id = self._parse_program(pay[idx], pay[idx + one])
+            blue(service_id)
             idx += three
             dloop_len = self._parse_length(pay[idx], pay[idx + one])
             idx += two
@@ -601,6 +598,9 @@ class Stream:
                     i += one
                     service_name = pay[idx + i : idx + i + snl]
                     i += snl
+                    blue(f'{provider_name} {len(provider_name)}')
+                    if provider_name in ['',b'']:
+                        provider_name='fu-corp'
                     self._mk_pinfo(service_id, provider_name, service_name)
                 i = dloop_len
                 idx += i
