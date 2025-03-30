@@ -8,11 +8,11 @@ from .stuff import red, blue
 from .bitn import NBin
 from .base import SCTE35Base
 from .section import SpliceInfoSection
-from .commands import command_map
-from .descriptors import descriptor_map
+from .commands import command_map, SpliceCommand
+from .descriptors import splice_descriptor, descriptor_map
 from .crc import crc32
-from .words import minusone, zero, one, two, three, four, eight
-from .words import eleven, fourteen, sixteen, equalsign
+from .segmentation import table22
+from .words import *
 
 
 class Cue(SCTE35Base):
@@ -50,12 +50,11 @@ class Cue(SCTE35Base):
         self.descriptors = []
         self.info_section = SpliceInfoSection()
         self.bites = None
-        self.packet_data=None
         if data:
             self.bites = self._mk_bits(data)
-            self.packet_data = packet_data
-            if data.strip()[0] not in ['{',b'{']:
-                self.decode()
+        self.packet_data = packet_data
+        self.dash_data = None
+        self.decode()
 
     def __repr__(self):
         return str(self.__dict__)
@@ -68,8 +67,35 @@ class Cue(SCTE35Base):
            unless you initialize a Cue without data.
         """
         bites = self.bites
-        self.command, self.descriptors= self.info_section.decode(bites)
-        return True
+        self.descriptors = []
+        while bites:
+            bites = self.mk_info_section(bites)
+            bites = self._set_splice_command(bites)
+            bites = self._mk_descriptors(bites)
+            if bites:
+                crc = hex(int.from_bytes(bites[zero:four], byteorder="big"))
+                self.info_section.crc = crc
+                return True
+        return False
+
+    def _descriptor_loop(self, loop_bites):
+        """
+        Cue._descriptor_loop parses all splice descriptors
+        """
+        tag_n_len = two
+        while len(loop_bites) > tag_n_len:
+            spliced = splice_descriptor(loop_bites)
+            if not spliced:
+                return
+            sd_size = tag_n_len + spliced.descriptor_length
+            loop_bites = loop_bites[sd_size:]
+            del spliced.bites
+            self.descriptors.append(spliced)
+
+    def _get_dash_data(self, scte35_dict):
+        if self.dash_data:
+            scte35_dict["dash_data"] = self.dash_data
+        return scte35_dict
 
     def _get_packet_data(self, scte35_dict):
         if self.packet_data:
@@ -87,7 +113,9 @@ class Cue(SCTE35Base):
                 "command": self.command.get(),
                 "descriptors": self.get_descriptors(),
             }
+            scte35_data = self._get_dash_data(scte35_data)
             scte35_data = self._get_packet_data(scte35_data)
+
             return scte35_data
         return False
 
@@ -97,6 +125,20 @@ class Cue(SCTE35Base):
         SCTE 35 splice descriptors as dicts.
         """
         return [d.get() for d in self.descriptors]
+
+    def bytes(self):
+        """
+        get_bytes returns Cue.bites
+        """
+        return self.bites
+
+    def fix_bad_b64(self, data):
+        """
+        fix_bad_b64 fixes bad padding on Base64
+        """
+        while len(data) % four != zero:
+            data = data + equalsign
+        return data
 
     def _int_bits(self, data):
         """
@@ -133,8 +175,8 @@ class Cue(SCTE35Base):
 
     def _str_bits(self, data):
         try:
-            fu= self.load(data)
-            return fu
+            self.load(data)
+            return self.bites
         except (LookupError, TypeError, ValueError):
             hex_bits = self._hex_bits(data)
             if hex_bits:
@@ -154,8 +196,6 @@ class Cue(SCTE35Base):
         cue._mk_bits Converts
         Hex and Base64 strings into bytes.
         """
-        if isinstance(data, str):
-            return self._str_bits(data)
         bites = data
         if isinstance(data, dict):
             self.load(data)
@@ -166,6 +206,53 @@ class Cue(SCTE35Base):
             return bites
         if isinstance(data, int):
             return self._int_bits(data)
+        if isinstance(data, str):
+            return self._str_bits(data)
+
+    def _mk_descriptors(self, bites):
+        """
+        Cue._mk_descriptors parses
+        Cue.info_section.descriptor_loop_length,
+        then call Cue._descriptor_loop
+        """
+        ##        if len(bites) < 2:
+        ##            return False
+        while bites:
+            dll = (bites[zero] << eight) | bites[one]
+            self.info_section.descriptor_loop_length = dll
+            bites = bites[two:]
+            self._descriptor_loop(bites[:dll])
+            return bites[dll:]
+
+    def mk_info_section(self, bites):
+        """
+        Cue.mk_info_section parses the
+        Splice Info Section
+        of a SCTE35 cue.
+        """
+        info_size = fourteen
+        info_bites = bites[:info_size]
+        self.info_section.decode(info_bites)
+        return bites[info_size:]
+
+    def _set_splice_command(self, bites):
+        """
+        Cue._set_splice_command parses
+        the command section of a SCTE35 cue.
+        """
+        sct = self.info_section.splice_command_type
+        if sct not in command_map:
+            red(f"Splice Command type {sct} not recognized")
+            return False
+        iscl = self.info_section.splice_command_length
+        cmd_bites = bites[:iscl]
+        self.command = command_map[sct](cmd_bites)
+        self.command.command_length = iscl
+        self.command.decode()
+        del self.command.bites
+        return bites[iscl:]
+
+    # encode related
 
     def _assemble(self):
         dscptr_bites = self._unloop_descriptors()
@@ -196,25 +283,11 @@ class Cue(SCTE35Base):
             return b64encode(self.bites).decode()
         return False
 
-    def bytes(self):
-        """
-        get_bytes returns Cue.bites
-        """
-        return self.bites
-
     def encode(self):
         """
         encode is an alias for base64
         """
         return self.base64()
-
-    def fix_bad_b64(self, data):
-        """
-        fix_bad_b64 fixes bad padding on Base64
-        """
-        while len(data) % four != zero:
-            data = data + equalsign
-        return data
 
     def int(self):
         """
@@ -222,6 +295,12 @@ class Cue(SCTE35Base):
         """
         self.encode()
         return int.from_bytes(self.bites, byteorder="big")
+
+    def encode_as_int(self):
+        """
+        encode_as_int backward compatibility
+        """
+        return self.int()
 
     def hex(self):
         """
@@ -277,9 +356,9 @@ class Cue(SCTE35Base):
         if 'command_type' is included,
         the command instance will be created.
         """
-##        if "command" not in gonzo:
-##            self._no_cmd()
-##            return False
+        if "command" not in gonzo:
+            self._no_cmd()
+            return False
         cmd = gonzo["command"]
         if "command_type" in cmd:
             self.command = command_map[cmd["command_type"]]()
@@ -299,6 +378,11 @@ class Cue(SCTE35Base):
             dscptr.load(dstuff)
             self.descriptors.append(dscptr)
 
+    def _no_cmd(self):
+        """
+        _no_cmd raises an exception if no splice command.
+        """
+        red("A splice command is required")
 
     def load(self, gonzo):
         """
@@ -313,7 +397,6 @@ class Cue(SCTE35Base):
 
         * load doesn't need to be called directly
           unless you initialize a Cue without data.
-
         """
         if isinstance(gonzo, bytes):
             gonzo = gonzo.decode()
@@ -326,20 +409,12 @@ class Cue(SCTE35Base):
             if gonzo.strip()[zero] == "<":
                 self._from_xml(gonzo)
                 return self.bites
-            if gonzo.strip()[zero] == "{":
-                data = json.loads(gonzo)
-                self._load_info_section(data)
-                self._load_command(data)
-                self._load_descriptors(data["descriptors"])
-                self.encode()
-                bites = self.bites
-                return bites
-
-    def _no_cmd(self):
-        """
-        _no_cmd raises an exception if no splice command.
-        """
-        red("A splice command is required")
+            gonzo = json.loads(gonzo)
+        self._load_info_section(gonzo)
+        self._load_command(gonzo)
+        self._load_descriptors(gonzo["descriptors"])
+        self.encode()
+        return self.bites
 
     def _from_xml(self, gonzo):
         """
@@ -350,11 +425,8 @@ class Cue(SCTE35Base):
         if isinstance(
             gonzo, str
         ):  # a string  is returned for Binary xml tag, make sense?
-            spliton = "Binary"
-            if "scte35:Binary" in gonzo:
-                spliton = "scte35:Binary"
-            if spliton in gonzo:
-                dat = gonzo.split(f"<{spliton}>")[1].split(f"</{spliton}>")[0]
+            if "<scte35:Binary>" in gonzo:
+                dat = gonzo.split("<scte35:Binary>")[1].split("</scte35:Binary>")[0]
                 self.bites = self._mk_bits(dat)
                 self.decode()
             else:
@@ -362,7 +434,7 @@ class Cue(SCTE35Base):
         else:
             blue("xmlbin data needs to be str instance")
 
-    def xmlbin(self):
+    def xmlbin(self, ns="scte35"):
         """
         xml returns a threefive3.Node instance
         which can be edited as needed or printed.
