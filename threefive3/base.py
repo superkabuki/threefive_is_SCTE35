@@ -1,5 +1,5 @@
 """
-scte35.base contains
+threefive3.base contains
 the class SCTE35Base.
 """
 
@@ -110,14 +110,15 @@ class SCTE35Base:
     def idxsplit(gonzo, sep):
         """
         idxsplit is like split but you keep
-        the sep
+        the sep.
+        
         example:
                 >>> idxsplit('123456789',4)
                 >>>'456789'
         """
         if sep in gonzo:
             return gonzo[gonzo.index(sep) :]
-        return False
+        return gonzo
 
     def json(self):
         """
