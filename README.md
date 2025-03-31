@@ -62,6 +62,8 @@ Type "help", "copyright", "credits" or "license" for more information.
 
 ### `Classes`
 
+* [Class Structure](https://github.com/superkabuki/threefive3/blob/main/classes.md)
+* 
 * The python built in help is always the most up to date docs for the library.
 
 ```rebol
