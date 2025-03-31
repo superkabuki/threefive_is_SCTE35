@@ -213,8 +213,8 @@ class SpliceInfoSection(SCTE35Base):
         """
         encode SpliceInfoSection.tier
         """
-        #     if not self.tier:
-        self.tier = "0xfff"
+        if not self.tier:
+            self.tier = "0xfff"
         nbin.add_hex(self.tier, 12)
 
     def _encode_splice_command(self, nbin):
