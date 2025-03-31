@@ -1,4 +1,4 @@
-# Help on class Cue in module threefive3.cue
+# Help on class Cue in module threefive3.Cue
 
 
 ```py3
@@ -27,14 +27,13 @@ class Cue(threefive3.base.SCTE35Base)
  |  >>>> cue.command.pts_time
  |  21695.740089
 ```
-### SCTE-35 data comes in a variety of formats. threefive3 handles all of the SCTE-35 formats.
+### SCTE-35 data comes in a variety of formats. threefive3 handles many of the SCTE-35 formats.
 
 * base64
 * bytes
 * hex
 * int
 * json
-* xml
 * xml+ binary
 
 
@@ -135,15 +134,7 @@ b'\xfc0 \x00\x00\x00\x00\x00\x00\x00\xff\xf0\x0f\x05\x00\x00\x00\x01\x7f\xff\xfe
 >>>> cue.hex()
 '0xfc302000000000000000fff00f05000000017ffffe005265c0000100000000c38e9258'
 ```
-* xml
-```py3
->>>> cue.xml()
-<scte35:SpliceInfoSection xmlns:scte35="https://scte.org/schemas/35"  ptsAdjustment="0" protocolVersion="0" sapType="3" tier="4095">
-   <scte35:SpliceInsert spliceEventId="1" spliceEventCancelIndicator="false" spliceImmediateFlag="true" eventIdComplianceFlag="true" availNum="0" availsExpected="0" outOfNetworkIndicator="true" uniqueProgramId="1">
-      <scte35:BreakDuration autoReturn="true" duration="5400000"/>
-   </scte35:SpliceInsert>
-</scte35:SpliceInfoSection>
-```
+
 * xml+binary
 ```py3
 >>>> cue.xmlbin()
