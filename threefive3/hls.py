@@ -713,11 +713,11 @@ class HlsParser:
         """
         gonzo = ""
         if self.break_timer:
-            gonzo = f"{REV} Break {NORM} {round(self.break_timer,3)}"
+            gonzo = f"\t{REV} Break {NORM} {round(self.break_timer,3)}"
             if self.break_duration:
                 gonzo = f"{gonzo} / {round(self.break_duration,3)}"
         print(
-            f"\r\r{iso8601()}{REV} {self.hls_pts} {NORM} {self.pts} {gonzo}",
+            f"\r\r\t{REV} Clock {NORM} {iso8601()}{REV} {self.hls_pts} {NORM} {self.pts} {gonzo}",
             end="\r",
             file=sys.stderr,
             flush=True,
