@@ -567,7 +567,7 @@ class HlsParser:
         if self.cue_state not in ["OUT", "CONT"] and not self.first_segment:
             return None
         if self.first_segment:
-            blue(f"{REV} Resuming Ad Break {NORM} {iso8601()}")
+            blue(f"\t\t{REV} Resuming Ad Break {NORM} {iso8601()}")
             self.cue_state = "CONT"
             self._set_break_timer(line, cont_tags)
             self._set_break_duration(line, cont_tags)
