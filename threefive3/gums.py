@@ -13,7 +13,7 @@ import sys
 import time
 from functools import partial
 from .new_reader import reader
-from .stuff import blue, reblue,print2
+from .stuff import blue, reblue, print2
 
 
 DGRAM_SIZE = 1316
@@ -58,7 +58,7 @@ class GumS:
         sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM, socket.IPPROTO_UDP)
         sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
         if hasattr(socket, "SO_REUSEPORT"):
-            blue('setting SO_REUSEPORT')
+            blue("setting SO_REUSEPORT")
             sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEPORT, 1)
         return sock
 
@@ -78,8 +78,10 @@ class GumS:
                 total_bytes += len(dgram)
                 elapsed = now() - start_time
                 rate = (total_bytes / million) / elapsed
-                mb=total_bytes/million
-                reblue(f"\t{mb:0.2f} MB sent in {elapsed:5.2f} seconds. {rate:3.2f} MB/Sec")
+                mb = total_bytes / million
+                reblue(
+                    f"\t{mb:0.2f} MB sent in {elapsed:5.2f} seconds. {rate:3.2f} MB/Sec"
+                )
             print("\n", file=sys.stderr)
 
     def send_stream(self, vid):
@@ -183,7 +185,7 @@ def cli():
     """
 
     args = parse_args()
-    #daemonize()
+    # daemonize()
     ttl = int(args.ttl).to_bytes(1, byteorder="big")
     dest_addr = args.addr
     gummie = GumS(dest_addr, ttl, args.bind_addr)
