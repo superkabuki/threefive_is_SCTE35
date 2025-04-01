@@ -119,7 +119,7 @@ def _open_mcast(uri):
     udp://@227.1.3.10:4310
     """
     blue(" Opening Multicast socket")
-    TTL=32
+    TTL = 32
     interface_ip = "0.0.0.0"
     multicast_group, port = (uri.split("udp://@")[1]).rsplit(":", 1)
     multicast_port = int(port)
