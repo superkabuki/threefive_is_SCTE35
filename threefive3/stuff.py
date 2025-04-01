@@ -20,19 +20,23 @@ def print2(gonzo=b""):
         print(gonzo)
 
 
+def _isfloat(value):
+    return "." in value and value.replace('.','').isdigit()
+   
+
 def atohif(value):
     """
-    atoif converts ascii to (int|float)
+    atohif converts ascii to (hex|int|float)
     """
     if isinstance(value, str):
         value = value.strip()
         value = value.strip(",")
-        if "." in value:
-            value = float(value)
-        elif "0x" in value.lower():
+        if "0x" in value.lower():
             value = int(value, 16)
         elif value.isdigit():
             value = int(value)
+        elif _isfloat(value):
+            value = float(value)
     return value
 
 

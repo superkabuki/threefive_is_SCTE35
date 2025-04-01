@@ -1,5 +1,5 @@
 """
-threefive3.base contains
+scte35.base contains
 the class SCTE35Base.
 """
 

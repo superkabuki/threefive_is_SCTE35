@@ -4,8 +4,7 @@ hlstags.py
 """
 
 from .stuff import atohif
-from .words import minusone, zero, one, two, equalsign
-from .words import dblquote, colon, comma, space, octothorpe, nothing
+from .words import *
 
 BASIC_TAGS = (
     "#EXTM3U",
@@ -47,8 +46,7 @@ class TagParser:
 
     Example 1:
 
-      #EXT-X-STREAM-INF:AVERAGE-BANDWIDTH=2030321,BANDWIDTH=2127786,
-      CODECS="avc1.4D401F,mp4a.40.2",RESOLUTION=768x432,CLOSED-CAPTIONS="text"
+      #EXT-X-STREAM-INF:AVERAGE-BANDWIDTH=2030321,BANDWIDTH=2127786,CODECS="avc1.4D401F,mp4a.40.2",RESOLUTION=768x432,CLOSED-CAPTIONS="text"
 
       TagParser.tags["#EXT-X-STREAM-INF"]= { "CLOSED-CAPTIONS": "text",
                                              "RESOLUTION": "768x432",
@@ -57,11 +55,9 @@ class TagParser:
                                              "AVERAGE-BANDWIDTH": 2030321}
     Example 2:
 
-      #EXT-X-CUE-OUT-CONT:ElapsedTime=21.000,Duration=30,
-      SCTE35=/DAnAAAAAAAAAP/wBQb+AGb/MAARAg9DVUVJAAAAAn+HCQA0AALMua1L
+      #EXT-X-CUE-OUT-CONT:ElapsedTime=21.000,Duration=30,SCTE35=/DAnAAAAAAAAAP/wBQb+AGb/MAARAg9DVUVJAAAAAn+HCQA0AALMua1L
 
-      TagParser.tags["#EXT-X-CUE-OUT-CONT"] =
-      { "SCTE35": "/DAnAAAAAAAAAP/wBQb+AGb/MAARAg9DVUVJAAAAAn+HCQA0AALMua1L",
+      TagParser.tags["#EXT-X-CUE-OUT-CONT"] = { "SCTE35": "/DAnAAAAAAAAAP/wBQb+AGb/MAARAg9DVUVJAAAAAn+HCQA0AALMua1L",
                                                 "Duration": 30,
                                                 "ElapsedTime": 21.0}
     """
@@ -84,14 +80,11 @@ class TagParser:
         _parse_tags parses tags and
         associated attributes
         """
-        # remove spaces
         line = line.replace(space, nothing)
         if not line:
             return
-        # tags start with a octothorpe
         if line[zero] != octothorpe:
             return
-        # tags and the attruibute list are separated with colons
         if colon not in line:
             self.tags[line] = None
             return
@@ -137,10 +130,11 @@ class TagParser:
         _split_value does a right split
         off tail for the value in a key=value pair.
         """
+        dblquote = '"'
         if tail[minusone:] == dblquote:
             tail, value = self._quoted(tag, tail)
         else:
-            tail, value = self._unquoted(tail)
+            tail, value = self._unquoted(tag, tail)
         return tail, value
 
     def _quoted(self, tag, tail):
@@ -152,17 +146,17 @@ class TagParser:
             tail, value = tail[:minusone].rsplit(equalsign + dblquote, one)
         except:
             self.tags[tag]
-            value = tail.replace(dblquote, nothing)
+            value = tail.replace(doublequote, nothing)
             tail = None
         return tail, value
 
-    def _unquoted(self, tail):
+    def _unquoted(self, tag, tail):
         """
         _unquoted handles unquoted attributes
         """
         value = None
         hold = ""
-        # equalsign is only allowed as a suffix in base64
+        # = is only allowed as a suffix in base64
         while tail.endswith(equalsign):
             hold += tail[minusone]
             tail = tail[:minusone]

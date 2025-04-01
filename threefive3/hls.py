@@ -567,7 +567,7 @@ class HlsParser:
         if self.cue_state not in ["OUT", "CONT"] and not self.first_segment:
             return None
         if self.first_segment:
-            blue(f"{REV} Resuming Ad Break {NORM} {iso8601()}")
+            blue(f"\t\t{REV} Resuming Ad Break {NORM} {iso8601()}")
             self.cue_state = "CONT"
             self._set_break_timer(line, cont_tags)
             self._set_break_duration(line, cont_tags)
@@ -713,11 +713,11 @@ class HlsParser:
         """
         gonzo = ""
         if self.break_timer:
-            gonzo = f"{REV} Break {NORM} {round(self.break_timer,3)}"
+            gonzo = f"\t{REV} Break {NORM} {round(self.break_timer,3)}"
             if self.break_duration:
                 gonzo = f"{gonzo} / {round(self.break_duration,3)}"
         print(
-            f"\r\r{iso8601()}{REV} {self.hls_pts} {NORM} {self.pts} {gonzo}",
+            f"\r\r\t{REV} Clock {NORM} {iso8601()}{REV} {self.hls_pts} {NORM} {self.pts} {gonzo}",
             end="\r",
             file=sys.stderr,
             flush=True,

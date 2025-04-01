@@ -474,13 +474,13 @@ class Stream:
             self._parse_pcr(pkt, pid)
 
     def _chk_pts(self, pkt, pid):
-        if self._pusi_flag(pkt):
+        if pid in self.pids.pcr:
             self._parse_pts(pkt, pid)
 
     def _parse(self, pkt):
         cue = False
         pid = self._parse_info(pkt)
-        if pid in self.pids.pcr:
+        if self._pusi_flag(pkt):
             self._chk_pts(pkt, pid)
         if self._pid_has_scte35(pid):
             cue = self._parse_scte35(pkt, pid)
@@ -516,7 +516,7 @@ class Stream:
         packet_data = None
         packet_data = self._mk_packet_data(pid)
         cue = Cue(pay, packet_data)
-        if cue.decode():
+        if cue.bites:
             return cue
         return False
 
@@ -566,7 +566,6 @@ class Stream:
             self.maps.prgm[service_id] = ProgramInfo()
         pinfo = self.maps.prgm[service_id]
         pinfo.provider = pn
-        blue(pn)
         pinfo.service = sn
 
     def _parse_sdt(self, pay):
@@ -598,9 +597,7 @@ class Stream:
                     i += one
                     service_name = pay[idx + i : idx + i + snl]
                     i += snl
-                    blue(f'{provider_name} {len(provider_name)}')
-                    if provider_name in ['',b'']:
-                        provider_name='fu-corp'
+                    blue(f"{provider_name} {len(provider_name)}")
                     self._mk_pinfo(service_id, provider_name, service_name)
                 i = dloop_len
                 idx += i
