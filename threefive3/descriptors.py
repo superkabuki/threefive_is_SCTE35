@@ -6,7 +6,7 @@ from .bitn import Bitn
 from .base import SCTE35Base
 from .segmentation import table20, table22, dvb_table2
 from .upids import upid_map
-from .stuff import red,blue
+from .stuff import red, blue
 
 
 def k_by_v(adict, avalue):
@@ -417,7 +417,6 @@ class SegmentationDescriptor(SpliceDescriptor):
                 )
                 nbin.add_int(0, 8)
                 nbin.add_int(0, 8)
-
 
 
 # map of known descriptors and associated classes
