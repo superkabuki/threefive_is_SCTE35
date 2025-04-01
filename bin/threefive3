@@ -15,7 +15,8 @@ from threefive3.new_reader import reader
 from threefive3 import Cue, Stream, print2, blue, version, red
 from threefive3.hls import cli as hlscli
 from threefive3.sixfix import sixfix
-import cProfile
+# import cProfile
+
 # from sideways import cli as sidecli
 
 REV = "\033[7;1m"
@@ -32,12 +33,13 @@ class SupaStream(Stream):
     SupaStream is subclass of Stream used
     to print raw SCTE-35 packets.
     """
+
     def _parse_scte35(self, pkt, pid):
         print2(pkt)
         print2("")
         super()._parse_scte35(pkt, pid)
 
-        
+
 def mk_sidecar(cue):
     """
     mk_sidecar generates a sidecar file with the SCTE-35 Cues
@@ -311,12 +313,12 @@ def to_funk(this):
         strm.decode(func=funk())  # funk() works here
     except:  # try to load json or xml
         cue = Cue()
-##        try:
+        ##        try:
         cue.bites = cue._mk_bits(this)
         cue.decode()
-##        except:
-##            print2("Bad Data:\n")
-##            sys.exit()
+    ##        except:
+    ##            print2("Bad Data:\n")
+    ##            sys.exit()
     if cue:
         funk()(cue)  #   func works here too.
 
@@ -337,7 +339,7 @@ def chk_stdin(args):
             strm = Stream(sys.stdin.buffer)
             strm._parse(one + two)  # dont drop first packet
             strm.decode(func=funk())
-            sys.exit() # I keep forgetting why I do
+            sys.exit()  # I keep forgetting why I do
     return args
 
 
@@ -351,6 +353,7 @@ def chk_funk_map():
     if args:
         _ = [to_funk(arg) for arg in args]  # multiple file input
     sys.exit()
+
 
 # cli map
 
@@ -367,7 +370,7 @@ def dashdashhelp():
     """
     if "help" in sys.argv:
         idx = sys.argv.index("help")
-        sys.argv[idx]= "--help"    
+        sys.argv[idx] = "--help"
 
 
 def chk_cli_map():
@@ -390,18 +393,6 @@ def go():
     chk_print_map()
     if len(sys.argv) < 2:
         sys.argv.append("json")
-    chk_mpegts_map()
-    chk_funk_map()
-
-
-if __name__ == "__main__":
-    go()
-
-
-def go():
-    if len(sys.argv) < 2:
-        sys.argv.append("json")
-    chk_print_map()
     chk_mpegts_map()
     chk_funk_map()
 
