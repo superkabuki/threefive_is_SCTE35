@@ -404,7 +404,7 @@ class Cue(SCTE35Base):
             if gonzo.isdigit():
                 gonzo = int(gonzo)
                 self.bites = self._int_bits(int(gonzo))
-                self.decode()
+                # self.decode()
                 return self.bites
             if gonzo.strip()[zero] == "<":
                 self._from_xml(gonzo)
