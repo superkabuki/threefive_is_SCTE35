@@ -333,6 +333,7 @@ class SegmentationDescriptor(SpliceDescriptor):
                 self.sub_segments_expected = bitbin.as_int(8)
             finally:
                 self._chk_sub_segments()
+                
 
     def encode(self, nbin=None):
         """
@@ -398,16 +399,7 @@ class SegmentationDescriptor(SpliceDescriptor):
     def _encode_segments(self, nbin):
         self._chk_var(int, nbin.add_int, "segment_num", 8)
         self._chk_var(int, nbin.add_int, "segments_expected", 8)
-        if self.segmentation_type_id in [
-            0x30,
-            0x32,
-            0x34,
-            0x36,
-            0x38,
-            0x3A,
-            0x44,
-            0x46,
-        ]:
+        if self.segmentation_type_id in self.SUB_SEG_TYPES:
             try:
                 self._chk_var(int, nbin.add_int, "sub_segment_num", 8)
                 self._chk_var(int, nbin.add_int, "sub_segments_expected", 8)
