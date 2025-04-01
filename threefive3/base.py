@@ -111,7 +111,7 @@ class SCTE35Base:
         """
         idxsplit is like split but you keep
         the sep.
-        
+
         example:
                 >>> idxsplit('123456789',4)
                 >>>'456789'
