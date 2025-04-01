@@ -84,6 +84,7 @@ class PrivateCommand(SpliceCommand):
         nbin.add_bites(self.private_bytes)
         return nbin.bites
 
+
 class SpliceNull(SpliceCommand):
     """
     Table 8 - splice_null()
