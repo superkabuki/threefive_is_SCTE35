@@ -27,7 +27,7 @@ def atohif(value):
     if isinstance(value, str):
         value = value.strip()
         value = value.strip(",")
-        if "." in value:
+        if "." in value and value.replace('.','').isdigit():
             value = float(value)
         elif "0x" in value.lower():
             value = int(value, 16)
