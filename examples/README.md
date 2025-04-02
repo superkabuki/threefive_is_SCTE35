@@ -1,5 +1,7 @@
 # Examples
 
+* `aac_id3header.py` - use the __threefive3.aac.AacParser__ class to parse __HLS AAC__ segments for __PTS__ in __ID3 header tags__.
+
 * `base64toxmlbin.py`- __convert__ __base64__ encoded SCTE-35 to __xml+binary__ encoded SCTE-35 and back.
   
 * `cue2vtt.py` - display SCTE-35 data on video using __WebVTT__ subtitles to __verify__ SCTE-35 __splice points__.
