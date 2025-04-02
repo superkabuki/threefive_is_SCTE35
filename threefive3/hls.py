@@ -97,7 +97,7 @@ class Scte35Profile:
 
     def write_profile(self, pro_file):
         """
-        write_profile writes sc.profile for editing.
+        write_profile writes hls.profile for editing.
         """
         with open(pro_file, "w", encoding="utf-8") as pro_f:
             self._write_profile_lines(pro_f)
@@ -495,7 +495,7 @@ class HlsParser:
         if cue.encode() == self.last_cue:
             return ""
         self.last_cue = cue.encode()
-        if "CONT" not in line:
+        if line and  "CONT" not in line:
             head = f"\n{iso8601()}{REV}{line}{NORM}{self.pts_stuff()} {REV} Splice Point {NORM}"
             line = self._chk_cue_in(line, head)
             line = self._chk_cue_out(line, head)
@@ -563,11 +563,14 @@ class HlsParser:
         chk_x_cue_out_const processes
         #EXT-X-CUE-OUT-CONT tags
         """
+##        if "#EXT-X-CUE-OUT-CONT" not in self.prof.hls_tags:
+##            return ""
         cont_tags = tags["#EXT-X-CUE-OUT-CONT"]
+        
         if self.cue_state not in ["OUT", "CONT"] and not self.first_segment:
             return None
         if self.first_segment:
-            blue(f"\t\t{REV} Resuming Ad Break {NORM} {iso8601()}")
+            blue(f"{NORM}{iso8601()}{REV} Resuming Ad Break")
             self.cue_state = "CONT"
             self._set_break_timer(line, cont_tags)
             self._set_break_duration(line, cont_tags)
@@ -578,6 +581,8 @@ class HlsParser:
         chk_x_cue_in processes
         #EXT-X-CUE-IN tags.
         """
+##        if "#EXT-X-CUE-IN" not in self.prof.hls_tags:
+##            return self.invalid(line)
         return self.set_cue_state(line, line)
 
     def chk_x_cue_out(self, tags, line):
@@ -585,23 +590,29 @@ class HlsParser:
         chk_x_cue_out processes
         #EXT-X-CUE-OUT tags
         """
+##        if "#EXT-X-CUE-OUT" not in self.prof.hls_tags:
+##            return self.invalid(line)
         return self.set_cue_state(line, line)
 
     def chk_x_scte35(self, tags, line):
         """
         chk_x_scte35 handles #EXT-X-SCTE35 tags.
         """
+##        if "#EXT-X-SCTE35" not in self.prof.hls_tags:
+##            return self.invalid(line)
         if "CUE" in tags["#EXT-X-SCTE35"]:
             cue = Cue(tags["#EXT-X-SCTE35"]["CUE"])
             pts, new_line = self.prof.validate_cue(cue)
             if pts and new_line:
                 return self.set_cue_state(tags["#EXT-X-SCTE35"]["CUE"], new_line)
-        return self.invalid(line)
+      #  return self.invalid(line)
 
     def chk_x_daterange(self, tags, line):
         """
         chk_x_daterange handles #EXT-X-DATERANGE tags.
         """
+##        if "#EXT-X-DATERANGE" not in self.prof.hls_tags:
+##            return self.invalid(line)
         self.show_tags(tags["#EXT-X-DATERANGE"])
         for scte35_tag in ["SCTE35-OUT", "SCTE35-IN"]:
             if scte35_tag in tags["#EXT-X-DATERANGE"]:
@@ -611,7 +622,7 @@ class HlsParser:
                     return self.set_cue_state(
                         tags["#EXT-X-DATERANGE"][scte35_tag], new_line
                     )
-        return self.invalid(line)
+       # return self.invalid(line)
 
     def chk_x_oatcls(self, tags, line):
         """
@@ -619,13 +630,16 @@ class HlsParser:
         #EXT-OATCLS-SCTE35
         HLS tags.
         """
+##    if "#EXT-X-OATCLS-SCTE35" not in self.prof.hls_tags:
+##        return self.invalid(line)
         cue = Cue(tags["#EXT-OATCLS-SCTE35"])
         pts, new_line = self.prof.validate_cue(cue)
         if pts and new_line:
             if abs(pts - self.pts) > 5:  # Handle Cues out of sync with video PTS
                 pts = self.pts
-            return self.set_cue_state(tags["#EXT-OATCLS-SCTE35"], new_line)
-        return self.invalid(line)
+        return self.set_cue_state(tags["#EXT-OATCLS-SCTE35"], new_line)
+     #   return self.invalid(line)
+        return line
 
     def scte35(self, line):
         """
@@ -647,7 +661,7 @@ class HlsParser:
             for que, vee in scte35_map.items():
                 if que in line:
                     if que not in self.prof.hls_tags:
-                        return None
+                        return self.invalid(line)
                     return vee(tags, line)
         return line
 
@@ -711,13 +725,16 @@ class HlsParser:
         """
         print_time prints wall clock and pts.
         """
-        gonzo = ""
         if self.break_timer:
-            gonzo = f"\t{REV} Break {NORM} {round(self.break_timer,3)}"
+            gonzo = f" {REV} Break {NORM} {round(self.break_timer,3)}"
             if self.break_duration:
                 gonzo = f"{gonzo} / {round(self.break_duration,3)}"
+        else:
+            gonzo =f' {REV} Media {NORM} {self.media[-1].rsplit("/", 1)[1].split("?", 1)[0]}\r'
+
+            
         print(
-            f"\r\r\t{REV} Clock {NORM} {iso8601()}{REV} {self.hls_pts} {NORM} {self.pts} {gonzo}",
+            f"\r\r{REV}  Clock {NORM} {iso8601()}{REV} {self.hls_pts} {NORM} {self.pts:.6f} {gonzo}",
             end="\r",
             file=sys.stderr,
             flush=True,
@@ -817,7 +834,7 @@ class HlsParser:
             if self.sleep_duration == 0:
                 target_duration = atohif(line.split(":")[1])
                 self.sleep_duration = round(target_duration * 0.5, 3)
-                print(f"\t{REV} Target Duration {NORM} {target_duration}\n ")
+                print(f"    {REV} Target Duration {NORM} {target_duration}\n ")
 
     def _mk_window_size(self, lines):
         return len([line for line in lines if "#EXTINF:" in line])
@@ -832,7 +849,7 @@ class HlsParser:
         if not self.window_size:
             self.window_size = self._mk_window_size(lines)
             self.sliding_window.size = self.window_size
-            print(f"\t{REV} Window Size {NORM} {self.window_size}\n")
+            print(f"    {REV} Window Size {NORM} {self.window_size}\n")
 
     def update_cue_state(self):
         """
@@ -958,9 +975,9 @@ class HlsParser:
         """
         pull m3u8 and parse it.
         """
-        print(f"{REV} Parsing Started  {NORM} {iso8601()}\n")
+        print(f"{REV} Parsing Started {NORM} {iso8601()}\n")
 
-        print(f"\t{REV}Rendition Selected {NORM} {self.rendition} ")
+        print(f"    {REV} Rendition Selected {NORM} {self.rendition}\n ")
         self.base_uri = self.rendition.rsplit("/", 1)[0]
         self.sliding_window = SlidingWindow()
         while self.reload:
@@ -978,7 +995,7 @@ class HlsParser:
         for line in lines:
             if line.startswith(b"#EXT-X-STREAM-INF"):
                 idx = lines.index(line) + 1
-                nline = lines[idx].decode("utf-8")
+                nline = lines[idx].decode("utf-8").strip().strip('\n')
                 base_url = uri.rsplit("/", 1)[0]
                 uri = base_url + "/" + nline
                 uri.replace("\n", "")
