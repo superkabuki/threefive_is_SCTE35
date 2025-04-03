@@ -1,7 +1,7 @@
 # threefive3 commonly used classes and inheritance.
 
 ## Most SCTE-35 objects are subclassed from SCTE35Base
-* class SCTE35Base
+* SCTE35Base
     * Cue
     * SpliceCommand
          *  BandwidthReservation
@@ -18,7 +18,7 @@
    * SpliceInfoSection
 
 ## All upids are either Upid instances or a subclass of Upid.
-* class Upid
+* Upid
     * AirId
     * Atsc
     *  Mid
@@ -29,23 +29,23 @@
     * Umid
 
 ## Most MPEGTS parsers are either a Stream instance or subclass of Stream.
-* class Stream
+* Stream
     * Segment
     * SixFix
     * SuperKabuki
 
 ## Other MPEGTS classes.
-* class GumS
-* class IFramer
-* class Socked(socket.socket)
+* GumS
+* IFramer
+* Socked(socket.socket)
 
 ## HLS related classes
-* class AacParser
-* class HlsParser
-* class TagParser
+* AacParser
+* HlsParser
+* TagParser
 
 ## Bitwise decoder and encoder classes
-* class Bitn
-* class NBin
+* Bitn
+* NBin
 
 
