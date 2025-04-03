@@ -31,6 +31,7 @@ setuptools.setup(
         "Operating System :: POSIX :: BSD :: NetBSD",
         "Operating System :: POSIX :: Linux",
         "Topic :: Multimedia :: Video",
+        "Topic :: SCTE35",
         "Programming Language :: Python :: 3.6",
         "Programming Language :: Python :: Implementation :: PyPy",
         "Programming Language :: Python :: Implementation :: CPython",
