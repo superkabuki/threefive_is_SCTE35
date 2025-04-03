@@ -2,6 +2,7 @@
 aac.py
 home of the AacParser for audio only hls renditions
 """
+
 from .new_reader import reader
 
 
@@ -59,4 +60,3 @@ class AacParser:
                 except:
                     pts = self.syncsafe5(data.split(self.applehead)[1][:9])
         return round((pts % ROLLOVER), 6)
-
