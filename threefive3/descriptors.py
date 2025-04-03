@@ -6,7 +6,7 @@ from .bitn import Bitn
 from .base import SCTE35Base
 from .segmentation import table20, table22, dvb_table2
 from .upids import upid_map
-from .stuff import red,blue
+from .stuff import red, blue
 
 
 def k_by_v(adict, avalue):
@@ -313,26 +313,13 @@ class SegmentationDescriptor(SpliceDescriptor):
             self.segmentation_message = table22[self.segmentation_type_id]
         self._decode_segments(bitbin)
 
-    def _chk_sub_segments(self):
-        """
-        chk_sub_segments sets sub_segment vars if not present
-        """
-        if self.segmentation_type_id in self.SUB_SEG_TYPES:
-            if not self.sub_segment_num:
-                self.sub_segment_num = 0
-                self.sub_segments_expected = 0
-
     def _decode_segments(self, bitbin):
         self.segment_num = bitbin.as_int(8)
         self.segments_expected = bitbin.as_int(8)
         if self.segmentation_type_id in self.SUB_SEG_TYPES:
-            # if sub_segment_num and sub_segments_expected
-            # are not available set both of them to zero
-            try:
+            if bitbin.idx > 15:  # need 16 bits
                 self.sub_segment_num = bitbin.as_int(8)
                 self.sub_segments_expected = bitbin.as_int(8)
-            finally:
-                self._chk_sub_segments()
 
     def encode(self, nbin=None):
         """
@@ -347,7 +334,6 @@ class SegmentationDescriptor(SpliceDescriptor):
         nbin.forward(6)
         if not self.segmentation_event_cancel_indicator:
             self._encode_flags(nbin)
-
             self._encode_segmentation(nbin)
         return nbin.bites
 
@@ -398,26 +384,11 @@ class SegmentationDescriptor(SpliceDescriptor):
     def _encode_segments(self, nbin):
         self._chk_var(int, nbin.add_int, "segment_num", 8)
         self._chk_var(int, nbin.add_int, "segments_expected", 8)
-        if self.segmentation_type_id in [
-            0x30,
-            0x32,
-            0x34,
-            0x36,
-            0x38,
-            0x3A,
-            0x44,
-            0x46,
-        ]:
-            try:
+        if self.segmentation_type_id in self.SUB_SEG_TYPES:
+            if self.sub_segment_num and self.sub_segments_expected:
+                # Both are required, encode if they exist.
                 self._chk_var(int, nbin.add_int, "sub_segment_num", 8)
                 self._chk_var(int, nbin.add_int, "sub_segments_expected", 8)
-            except:
-                blue(
-                    "Adding sub_segment_num and sub_segments_expected. setting to 0, 0"
-                )
-                nbin.add_int(0, 8)
-                nbin.add_int(0, 8)
-
 
 
 # map of known descriptors and associated classes
