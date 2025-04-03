@@ -28,8 +28,6 @@ _Released Thursday April 3rd, 2025 4am EDT_
 
 # Checkout the Super Cool SCTE-35 [__Examples__](https://github.com/superkabuki/threefive3/tree/main/examples)
 
-
-
 ## MPEGTS streams can be parsed for SCTE-35 with three lines of code.
 
 ```py3
