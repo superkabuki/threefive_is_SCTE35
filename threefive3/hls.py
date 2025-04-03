@@ -728,15 +728,15 @@ class HlsParser:
         print_time prints wall clock and pts.
         """
         if self.break_timer:
-            gonzo = f" {REV} Break {NORM} {round(self.break_timer,3)}"
+            gonzo = f"{REV} Break {NORM} {round(self.break_timer,3)}"
             if self.break_duration:
-                gonzo = f"{gonzo} / {round(self.break_duration,3)}"
+                gonzo = f"{gonzo}/{round(self.break_duration,3)}"
         else:
-            gonzo = f' {REV} Media {NORM} {self.media[-1].rsplit("/", 1)[1].split("?", 1)[0]}\r'
+            gonzo = f'{REV} Media {NORM} {self.media[-1].rsplit("/", 1)[1].split("?", 1)[0]}\r'
 
         print(
-            f"\r\r{REV}  Clock {NORM} {iso8601()}{REV} {self.hls_pts} {NORM} {self.pts:.6f} {gonzo}",
-            end="\r",
+            f"\r\r{NORM}{iso8601()}{REV} {self.hls_pts}{NORM} {self.pts:.6f} {gonzo}",
+            end="\r\r",
             file=sys.stderr,
             flush=True,
         )
