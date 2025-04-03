@@ -495,7 +495,7 @@ class HlsParser:
         if cue.encode() == self.last_cue:
             return ""
         self.last_cue = cue.encode()
-        if line and  "CONT" not in line:
+        if line and "CONT" not in line:
             head = f"\n{iso8601()}{REV}{line}{NORM}{self.pts_stuff()} {REV} Splice Point {NORM}"
             line = self._chk_cue_in(line, head)
             line = self._chk_cue_out(line, head)
@@ -563,10 +563,10 @@ class HlsParser:
         chk_x_cue_out_const processes
         #EXT-X-CUE-OUT-CONT tags
         """
-##        if "#EXT-X-CUE-OUT-CONT" not in self.prof.hls_tags:
-##            return ""
+        ##        if "#EXT-X-CUE-OUT-CONT" not in self.prof.hls_tags:
+        ##            return ""
         cont_tags = tags["#EXT-X-CUE-OUT-CONT"]
-        
+
         if self.cue_state not in ["OUT", "CONT"] and not self.first_segment:
             return None
         if self.first_segment:
@@ -581,8 +581,8 @@ class HlsParser:
         chk_x_cue_in processes
         #EXT-X-CUE-IN tags.
         """
-##        if "#EXT-X-CUE-IN" not in self.prof.hls_tags:
-##            return self.invalid(line)
+        ##        if "#EXT-X-CUE-IN" not in self.prof.hls_tags:
+        ##            return self.invalid(line)
         return self.set_cue_state(line, line)
 
     def chk_x_cue_out(self, tags, line):
@@ -590,29 +590,30 @@ class HlsParser:
         chk_x_cue_out processes
         #EXT-X-CUE-OUT tags
         """
-##        if "#EXT-X-CUE-OUT" not in self.prof.hls_tags:
-##            return self.invalid(line)
+        ##        if "#EXT-X-CUE-OUT" not in self.prof.hls_tags:
+        ##            return self.invalid(line)
         return self.set_cue_state(line, line)
 
     def chk_x_scte35(self, tags, line):
         """
         chk_x_scte35 handles #EXT-X-SCTE35 tags.
         """
-##        if "#EXT-X-SCTE35" not in self.prof.hls_tags:
-##            return self.invalid(line)
+        ##        if "#EXT-X-SCTE35" not in self.prof.hls_tags:
+        ##            return self.invalid(line)
         if "CUE" in tags["#EXT-X-SCTE35"]:
             cue = Cue(tags["#EXT-X-SCTE35"]["CUE"])
             pts, new_line = self.prof.validate_cue(cue)
             if pts and new_line:
                 return self.set_cue_state(tags["#EXT-X-SCTE35"]["CUE"], new_line)
-      #  return self.invalid(line)
+
+    #  return self.invalid(line)
 
     def chk_x_daterange(self, tags, line):
         """
         chk_x_daterange handles #EXT-X-DATERANGE tags.
         """
-##        if "#EXT-X-DATERANGE" not in self.prof.hls_tags:
-##            return self.invalid(line)
+        ##        if "#EXT-X-DATERANGE" not in self.prof.hls_tags:
+        ##            return self.invalid(line)
         self.show_tags(tags["#EXT-X-DATERANGE"])
         for scte35_tag in ["SCTE35-OUT", "SCTE35-IN"]:
             if scte35_tag in tags["#EXT-X-DATERANGE"]:
@@ -622,7 +623,8 @@ class HlsParser:
                     return self.set_cue_state(
                         tags["#EXT-X-DATERANGE"][scte35_tag], new_line
                     )
-       # return self.invalid(line)
+
+    # return self.invalid(line)
 
     def chk_x_oatcls(self, tags, line):
         """
@@ -630,15 +632,15 @@ class HlsParser:
         #EXT-OATCLS-SCTE35
         HLS tags.
         """
-##    if "#EXT-X-OATCLS-SCTE35" not in self.prof.hls_tags:
-##        return self.invalid(line)
+        ##    if "#EXT-X-OATCLS-SCTE35" not in self.prof.hls_tags:
+        ##        return self.invalid(line)
         cue = Cue(tags["#EXT-OATCLS-SCTE35"])
         pts, new_line = self.prof.validate_cue(cue)
         if pts and new_line:
             if abs(pts - self.pts) > 5:  # Handle Cues out of sync with video PTS
                 pts = self.pts
         return self.set_cue_state(tags["#EXT-OATCLS-SCTE35"], new_line)
-     #   return self.invalid(line)
+        #   return self.invalid(line)
         return line
 
     def scte35(self, line):
@@ -730,9 +732,8 @@ class HlsParser:
             if self.break_duration:
                 gonzo = f"{gonzo} / {round(self.break_duration,3)}"
         else:
-            gonzo =f' {REV} Media {NORM} {self.media[-1].rsplit("/", 1)[1].split("?", 1)[0]}\r'
+            gonzo = f' {REV} Media {NORM} {self.media[-1].rsplit("/", 1)[1].split("?", 1)[0]}\r'
 
-            
         print(
             f"\r\r{REV}  Clock {NORM} {iso8601()}{REV} {self.hls_pts} {NORM} {self.pts:.6f} {gonzo}",
             end="\r",
@@ -995,7 +996,7 @@ class HlsParser:
         for line in lines:
             if line.startswith(b"#EXT-X-STREAM-INF"):
                 idx = lines.index(line) + 1
-                nline = lines[idx].decode("utf-8").strip().strip('\n')
+                nline = lines[idx].decode("utf-8").strip().strip("\n")
                 base_url = uri.rsplit("/", 1)[0]
                 uri = base_url + "/" + nline
                 uri.replace("\n", "")
