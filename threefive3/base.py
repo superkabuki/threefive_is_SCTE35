@@ -111,7 +111,7 @@ class SCTE35Base:
         """
         idxsplit is like split but you keep
         the sep.
-        
+
         example:
                 >>> idxsplit('123456789',4)
                 >>>'456789'
@@ -133,7 +133,7 @@ class SCTE35Base:
         """
 
         def b2l(val):
-            if isinstance(val, (SCTE35Base)):
+            if isinstance(val, SCTE35Base):
                 val.kv_clean()
             if isinstance(val, (list)):
                 val = [b2l(v) for v in val]
