@@ -92,11 +92,6 @@ class Cue(SCTE35Base):
             del spliced.bites
             self.descriptors.append(spliced)
 
-    def _get_dash_data(self, scte35_dict):
-        if self.dash_data:
-            scte35_dict["dash_data"] = self.dash_data
-        return scte35_dict
-
     def _get_packet_data(self, scte35_dict):
         if self.packet_data:
             scte35_dict["packet_data"] = self.packet_data.get()
@@ -113,9 +108,7 @@ class Cue(SCTE35Base):
                 "command": self.command.get(),
                 "descriptors": self.get_descriptors(),
             }
-            scte35_data = self._get_dash_data(scte35_data)
             scte35_data = self._get_packet_data(scte35_data)
-
             return scte35_data
         return False
 
