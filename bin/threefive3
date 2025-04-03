@@ -1,4 +1,4 @@
-#!/usr/bin/env pypy3
+#!/usr/bin/env python3
 
 """
 scte35 command line SCTE35 decoder.
@@ -15,6 +15,7 @@ from threefive3.new_reader import reader
 from threefive3 import Cue, Stream, print2, blue, version, red
 from threefive3.hls import cli as hlscli
 from threefive3.sixfix import sixfix
+
 # import cProfile
 # from sideways import cli as sidecli
 
@@ -32,12 +33,13 @@ class SupaStream(Stream):
     SupaStream is subclass of Stream used
     to print raw SCTE-35 packets.
     """
+
     def _parse_scte35(self, pkt, pid):
         print2(pkt)
         print2("")
         super()._parse_scte35(pkt, pid)
 
-        
+
 def mk_sidecar(cue):
     """
     mk_sidecar generates a sidecar file with the SCTE-35 Cues
@@ -74,8 +76,12 @@ HELP = f"""
 
     threefive3 hls https://example.com/master.m3u8{U}
 
-    {B} iframes     {U}{BLUE} show MPEGTS iframes{NORM} threefive3 iframes video.ts
+    {B} iframes     {U}{BLUE} Show MPEGTS iframes{NORM} threefive3 iframes video.ts
+    
+    {B} mcast       {U}{NORM}{BLUE} Multicast sender(server) help: {U} threefive3 mcast help
 
+    threefive3 mcast video.ts
+     
     {B}  packets    {U}{NORM}{BLUE} Print raw SCTE-35 packets:{NORM} threefive3 packets udp://@235.35.3.5:3535
 
     {B}  proxy      {U}{NORM}{BLUE} Parse a stream and copy it to stdout:{NORM} threefive3 proxy video.ts
@@ -311,12 +317,9 @@ def to_funk(this):
         strm.decode(func=funk())  # funk() works here
     except:  # try to load json or xml
         cue = Cue()
-##        try:
+        ##        try:
         cue.bites = cue._mk_bits(this)
         cue.decode()
-##        except:
-##            print2("Bad Data:\n")
-##            sys.exit()
     if cue:
         funk()(cue)  #   func works here too.
 
@@ -337,7 +340,7 @@ def chk_stdin(args):
             strm = Stream(sys.stdin.buffer)
             strm._parse(one + two)  # dont drop first packet
             strm.decode(func=funk())
-            sys.exit() # I keep forgetting why I do
+            sys.exit()  # I keep forgetting why I do
     return args
 
 
@@ -352,6 +355,7 @@ def chk_funk_map():
         _ = [to_funk(arg) for arg in args]  # multiple file input
     sys.exit()
 
+
 # cli map
 
 cli_map = {"mcast": gumscli, "superkabuki": skcli}
@@ -362,12 +366,12 @@ def dashdashhelp():
     dashdashhelp swaps out "help" with "--help"
     for keys in cli_map. Pure bureaucracy.
     I still can't believe I can just edit sys.argv at will,
-    it kind of makes sense, since I wrote it in the first place,
+    it kind of makes sense, since I wrote sys.argv in the first place,
     but it just feels so wrong.
     """
     if "help" in sys.argv:
         idx = sys.argv.index("help")
-        sys.argv[idx]= "--help"    
+        sys.argv[idx] = "--help"
 
 
 def chk_cli_map():
@@ -396,3 +400,4 @@ def go():
 
 if __name__ == "__main__":
     go()
+
