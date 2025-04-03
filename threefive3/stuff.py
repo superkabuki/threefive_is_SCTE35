@@ -21,8 +21,8 @@ def print2(gonzo=b""):
 
 
 def _isfloat(value):
-    return "." in value and value.replace('.','').isdigit()
-   
+    return "." in value and value.replace(".", "").isdigit()
+
 
 def atohif(value):
     """
@@ -67,10 +67,10 @@ def blue(message):
     mesg = f"\033[;107m\033[44m{message} \033[0m"
     print2(mesg)
 
+
 def reblue(message):
     """
     reblue overwrites the last line in place
     """
     mesg = f"\033[;107m\033[44m{message} \033[0m"
-    print(mesg, end='\r' ,file=stderr, flush=True)
-    
+    print(mesg, end="\r", file=stderr, flush=True)
