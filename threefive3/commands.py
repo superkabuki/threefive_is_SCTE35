@@ -5,6 +5,7 @@ SCTE35 Splice Commands
 from .bitn import Bitn
 from .base import SCTE35Base
 from .stuff import red
+from .xml import Node
 
 
 class SpliceCommand(SCTE35Base):
@@ -48,10 +49,11 @@ class BandwidthReservation(SpliceCommand):
         self.command_type = 7
         self.name = "Bandwidth Reservation"
 
-    def decode(self):
+    def xml(self, ns="scte35"):
         """
-        BandwidthReservation.decode method
+        create XML Node of type BandwidthReservation
         """
+        return Node("BandwidthReservation", ns=ns)
 
 
 class PrivateCommand(SpliceCommand):
@@ -84,6 +86,15 @@ class PrivateCommand(SpliceCommand):
         nbin.add_bites(self.private_bytes)
         return nbin.bites
 
+    def xml(self, ns="scte35"):
+        """
+        create XML Node of type PrivateCommand
+        """
+        attrs = {"identifier": self.identifier}
+        pc = Node("PrivateCommand", attrs=attrs)
+        pc.add_child(Node("PrivateBytes", value=self.private_bytes.hex(), ns=ns))
+        return pc
+
 
 class SpliceNull(SpliceCommand):
     """
@@ -94,6 +105,9 @@ class SpliceNull(SpliceCommand):
         super().__init__(bites)
         self.command_type = 0
         self.name = "Splice Null"
+
+    def xml(self, ns="scte35"):
+        return Node("SpliceNull", ns=ns)
 
 
 class TimeSignal(SpliceCommand):
@@ -151,6 +165,22 @@ class TimeSignal(SpliceCommand):
             nbin.add_int(int(self.as_ticks(self.pts_time)), 33)
         else:
             nbin.reserve(7)
+
+    def xml(self, ns="scte35"):
+        """
+        xml return TimeSignal as an xml node
+        """
+        ts = Node("TimeSignal", ns=ns)
+        if self.has("pts_time"):
+            if self.pts_time:
+                self.pts_time = round(self.pts_time, 6)
+                st = Node(
+                    "SpliceTime",
+                    attrs={"pts_time": self.as_ticks(self.pts_time)},
+                    ns=ns,
+                )
+                ts.add_child(st)
+        return ts
 
 
 class SpliceInsert(TimeSignal):
@@ -243,6 +273,40 @@ class SpliceInsert(TimeSignal):
         self._chk_var(bool, nbin.add_flag, "break_auto_return", 1)
         nbin.forward(6)
         nbin.add_int(self.as_ticks(self.break_duration), 33)
+
+    def xml(self, ns="scte35"):
+        """
+        xml return the SpliceInsert instance as an xml node.
+        """
+        si_attrs = {
+            "splice_event_id": self.splice_event_id,
+            "splice_event_cancel_Indicator": self.splice_event_cancel_indicator,
+            "splice_immediate_flag": self.splice_immediate_flag,
+            "event_id_compliance_flag": self.event_id_compliance_flag,
+            "avail_num": self.avail_num,
+            "avails_expected": self.avails_expected,
+            "out_of_network_indicator": self.out_of_network_indicator,
+            "unique_program_id": self.unique_program_id,
+        }
+        for k, v in si_attrs.items():
+            if v is None:
+                self.errors.append(f"SpliceInsert.{k} needs to be set")
+        si = Node("SpliceInsert", attrs=si_attrs, ns=ns)
+        if self.pts_time:
+            prgm = Node("Program", ns=ns)
+            st = Node(
+                "SpliceTime", attrs={"ptsTime": self.as_ticks(self.pts_time)}, ns=ns
+            )
+            prgm.add_child(st)
+            si.add_child(prgm)
+        if self.break_duration:
+            bd_attrs = {
+                "auto_return": self.break_auto_return,
+                "duration": self.as_ticks(self.break_duration),
+            }
+            bd = Node("BreakDuration", attrs=bd_attrs, ns=ns)
+            si.add_child(bd)
+        return si
 
 
 # table 7
