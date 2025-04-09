@@ -5,8 +5,8 @@ classy Upids
 
 """
 
-from .bitn import Bitn
-
+from .bitn import Bitn, NBin
+from .xml import Node
 
 charset = "ascii"  #  pylint, this isn't a constant.
 
@@ -19,7 +19,6 @@ class Upid:
     """
     Upid base class handles URI UPIDS
     """
-
     def __init__(self, bitbin=None, upid_type=0, upid_length=0):
         self.bitbin = bitbin
         self.upid_type = upid_type
@@ -56,24 +55,59 @@ class Upid:
         self.upid_value = seg_upid
         return self.upid_name, self.upid_value
 
+    def _xml_format_attr(self):
+        """
+        _xml_format_attr sets segmentation_upid_format
+        """
+        if self.upid_type in [0x03, 0x07, 0x09, 0x0E]:
+            return "text"
+        return "hexbinary"
+
+    def _extra_xml_attrs(self, ud):
+        if "format_identifier" in self.upid_value:
+            ud["format_identifier"] = int.from_bytes(
+                self.upid_value["format_identifier"].encode(), byteorder="big"
+            )
+        if "private_data" in self.upid_value:
+            ud["private_data"] = self.upid_value["private_data"]
+        return ud
+
+    def xml(self, ns="scte35"):
+        """
+        xml return a upid xml node for simple and  complex upids
+        """
+        ud_attrs = {
+            "segmentation_upid_type": self.upid_type,
+            "segmentation_upid_format": self._xml_format_attr(),
+        }
+        if isinstance(self.upid_value, dict):
+            ud_attrs = self._extra_xml_attrs(ud_attrs)
+        nbin = NBin()
+        self.encode(nbin, self.upid_value)
+        return Node("SegmentationUpid", attrs=ud_attrs, value=nbin.bites.hex(), ns=ns)
+
 
 class NoUpid(Upid):
     """
     NoUpid class
     """
-
     def decode(self):
         """
         decode for no upid
         """
         return self.upid_name, "No UPID"
 
+    def encode(self, nbin, seg_upid):
+        """
+        encode for no upid
+        """
+        nbin.forward(0)
+
 
 class AirId(Upid):
     """
     Air Id Upid
     """
-
     def decode(self):
         """
         decode AirId
@@ -92,7 +126,6 @@ class Atsc(Upid):
     """
     ATSC Upid
     """
-
     def decode(self):
         """
         decode Atsc Upid
@@ -123,7 +156,6 @@ class Eidr(Upid):
     """
     Eidr Upid
     """
-
     def decode(self):
         """
         decode Eidr Upid
@@ -155,7 +187,6 @@ class Isan(Upid):
     """
     Isan Upid
     """
-
     def decode(self):
         """
         decode Isan Upid
@@ -175,7 +206,6 @@ class Mid(Upid):
     """
     Mid Upid
     """
-
     def decode(self):
         """
         decode Mid Upid
@@ -212,12 +242,26 @@ class Mid(Upid):
             )
             the_upid.encode(nbin, mid_upid["segmentation_upid"])
 
+    def xml(self, ns="scte35"):
+        """
+        xml return a upid xml node
+        """
+        mid_nodes = []
+        for u in self.upid_value:
+            u_attrs = {
+                "segmentation_upid_type": u["upid_type"],
+                "name": u["upid_type_name"],
+            }
+            value = u["segmentation_upid"]
+            node = Node("SegmentationUpid", attrs=u_attrs, value=value, ns=ns)
+            mid_nodes.append(node)
+        return mid_nodes
+
 
 class Mpu(Upid):
     """
     Mpu Upid
     """
-
     def _decode_adfr(self):
         """
         decode_adfr handles Addressabkle TV MPU Upids
@@ -235,7 +279,6 @@ class Mpu(Upid):
         """
         decode MPU Upids
         """
-
         self.upid_value = {
             "format_identifier": self.bitbin.as_charset(32),
             "private_data": self.bitbin.as_hex(self.bit_length - 32),
@@ -259,7 +302,6 @@ class Umid(Upid):
     """
     Umid Upid
     """
-
     def decode(self):
         """
         decode Umid Upids
@@ -282,7 +324,6 @@ class Umid(Upid):
             nbin.add_hex(chunk, 32)
 
 
-# segmentation_upid_type : [name, class, length]
 upid_map = {
     0x00: ["No UPID", NoUpid, 0],
     0x01: ["Type 0x01 is deprecated, use MPU type 0x0C", Upid, False],
