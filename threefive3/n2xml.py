@@ -1,5 +1,7 @@
 
-from threefive3.xml import Node, iter_attrs
+from .xml import Node, iter_attrs
+from .segmentation import table20, table22
+from .upids import upid_map
 
 exemel= '''<scte35:SpliceInfoSection xmlns:scte35="https://scte.org/schemas/35"  ptsAdjustment="207000" protocolVersion="0" sapType="3" tier="4095">
    <scte35:SpliceInsert scte35:spliceEventId="1" spliceEventCancelIndicator="false" spliceImmediateFlag="true" eventIdComplianceFlag="true" availNum="1" availsExpected="1" outOfNetworkIndicator="false" uniqueProgramId="39321"/>
@@ -105,14 +107,7 @@ def parsexml(exemel):
             else:
                 final = endtag(openlist)
     return final
-        
-
-
-bignode = parsexml(exemel)
-print(bignode.children)
-
-from threefive3.segmentation import table20, table22
-from threefive3.upids import upid_map
+ 
 
 
 def xmlspliceinfosection(node):
