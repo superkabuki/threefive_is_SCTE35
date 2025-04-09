@@ -13,6 +13,7 @@ from .descriptors import splice_descriptor, descriptor_map
 from .crc import crc32
 from .segmentation import table22
 from .words import *
+from .uxp import xml2cue
 
 
 class Cue(SCTE35Base):
@@ -423,9 +424,36 @@ class Cue(SCTE35Base):
                 self.bites = self._mk_bits(dat)
                 self.decode()
             else:
-                blue("Only xml+binary format supported ")
+                self.load(xml2cue(gonzo))
         else:
             blue("xmlbin data needs to be str instance")
+
+    def _xml_mk_descriptor(self, sis, ns):
+        """
+        _mk_descriptor_xml make xml nodes for descriptors.
+        """
+        for d in self.descriptors:
+            if d.has("segmentation_type_id"):
+                if d.segmentation_type_id in table22:
+                    comment = f"{table22[d.segmentation_type_id]}"
+                    sis.add_comment(comment)
+                else:
+                    d.errors.append("Segmentation type id not in table 22")
+            sis.add_child(d.xml(ns=ns))
+        return sis
+
+    def xml(self, ns="scte35"):
+        """
+        xml returns a threefive3.Node instance
+        which can be edited as needed or printed.
+        xmlbin
+        """
+        sis = self.info_section.xml(ns=ns)
+        cmd = self.command.xml(ns=ns)
+        sis.add_child(cmd)
+        sis = self._xml_mk_descriptor(sis, ns)
+        sis.mk()
+        return sis
 
     def xmlbin(self, ns="scte35"):
         """
