@@ -7,6 +7,7 @@ SCTE35 Splice Info Section
 from .bitn import Bitn
 from .base import SCTE35Base
 from .stuff import red
+from .xml import Node
 
 
 sap_map = {
@@ -177,3 +178,17 @@ class SpliceInfoSection(SCTE35Base):
         self._encode_tier(nbin)
         self._encode_splice_command(nbin)
         return nbin.bites
+
+    def xml(self, ns="scte35"):
+        """
+        xml create xml node for splice info section
+        """
+        sis_attrs = {
+            "xmlns": "https://scte.org/schemas/35",
+            "pts_adjustment": self.as_ticks(self.pts_adjustment),
+            "protocol_version": self.protocol_version,
+            "sap_type": self.sap_type,
+            "tier": int(self.tier,base=16),
+        }
+        sis = Node("SpliceInfoSection", attrs=sis_attrs, ns=ns)
+        return sis
