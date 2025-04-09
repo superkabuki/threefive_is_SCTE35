@@ -1,4 +1,6 @@
 
+from .segmentation import table20, table22
+from .upids import upid_map
 from .xml import Node, iter_attrs
 
 def mk_attrs(line):
@@ -95,12 +97,6 @@ def parsexml(exemel):
                 final = endtag(openlist)
     return final
         
-
-
-
-from threefive3.segmentation import table20, table22
-from threefive3.upids import upid_map
-
 
 def xmlspliceinfosection(node):
     """
