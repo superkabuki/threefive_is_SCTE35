@@ -643,6 +643,11 @@ class HlsParser:
         #   return self.invalid(line)
         return line
 
+    def _dump_by_key(self,pts,line,keys):
+        for key in keys:
+            if key in line:
+                self.to_dump(self.pts, line)
+                
     def scte35(self, line):
         """
         threefive3 processes SCTE-35 related tags.
@@ -656,9 +661,8 @@ class HlsParser:
             "#EXT-X-CUE-OUT": self.chk_x_cue_out,
         }
         tags = TagParser([line]).tags
-        for key in scte35_map.keys():
-            if key in line:
-                self.to_dump(self.pts, line)
+        keys = list(scte35_map.keys())
+        self._dump_by_key(self.pts,line,keys)
         if self.prof.parse_manifests:
             for que, vee in scte35_map.items():
                 if que in line:
