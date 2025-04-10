@@ -33,14 +33,9 @@ _Released Thursday April 3rd, 2025 4am EDT_
 
 ```py3
 a@fu:~/build5/scte35/scte35$ pypy3
-Python 3.9.16 (7.3.11+dfsg-2+deb12u3, Dec 30 2024, 22:36:23)
-[PyPy 7.3.11 with GCC 12.2.0] on linux
-Type "help", "copyright", "credits" or "license" for more information.
 
 >>>> from threefive3 import Stream
-
 >>>> strm=Stream('https://futzu.com/xaa.ts')
-
 >>>> strm.decode()
 ```
 ## Heads Up! Xml is coming back.
@@ -76,20 +71,18 @@ It was time to rethink xml.
 
 
 ### `Classes`
-
-* [Class Structure](https://github.com/superkabuki/threefive3/blob/main/classes.md)
-* 
 * The python built in help is always the most up to date docs for the library.
 
-```rebol
+```py3
+
 a@fu:~/build7/threefive3$ pypy3
-Python 3.9.16 (7.3.11+dfsg-2+deb12u3, Dec 30 2024, 22:36:23)
-[PyPy 7.3.11 with GCC 12.2.0] on linux
-Type "help", "copyright", "credits" or "license" for more information.
+
 >>>> from threefive import Stream
 >>>> help(Stream)
+
 ```
 
+* [Class Structure](https://github.com/superkabuki/threefive3/blob/main/classes.md)
 * [Cue Class](https://github.com/superkabuki/threefive3/blob/main/cue.md)  Cue is the main SCTE-35 class to use. 
 * [Stream Class](https://github.com/superkabuki/threefive3/blob/main/stream.md)  The Stream class handles MPEGTS SCTE-35 streams local, Http(s), UDP, and Multicast.
 ___
@@ -295,7 +288,6 @@ a@fu:~$
 
 
 ### [iodisco.com/scte35](https://iodisco.com/scte35)
-![image](https://github.com/user-attachments/assets/e07af2ad-29fe-4dae-8568-b168c3d5a591)
 
 
 ___
