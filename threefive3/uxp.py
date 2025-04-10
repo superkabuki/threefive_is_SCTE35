@@ -1,3 +1,6 @@
+"""
+Ultra Xml Parser.... Supreme
+"""
 
 from .segmentation import table20, table22
 from .upids import upid_map
@@ -24,7 +27,7 @@ def mk_line(exemel):
     """
     mk_line grabs the next '<' to '>' section of xml
     """
-    line = exemel.split(">",1)[0]+">"        
+    line = exemel.split(">",1)[0]+">"
     exemel=exemel.replace(line,'',1).strip()
     return line,exemel
 
@@ -33,7 +36,7 @@ def mk_node(tag,line,exemel):
     """
     mk_node marshal xml data
     into a  threefive3.xml.Node instance.
-    
+
     """
     ns =None
     attrs = mk_attrs(line)
@@ -43,7 +46,7 @@ def mk_node(tag,line,exemel):
     if not exemel.startswith("<"):
         node.value = exemel.split('<',1)[0]
         exemel=exemel.replace(node.value,'',1).strip()
-    return node,exemel    
+    return node,exemel
 
 
 def starttag(line,node,openlist):
@@ -52,7 +55,7 @@ def starttag(line,node,openlist):
     are added as children to the last
     node in openlist.
     open nodes (nodes that aren't self-terminating)
-    are appended to openlist 
+    are appended to openlist
     """
     if line.endswith("/>"):
         openlist[-1].add_child(node)
@@ -77,7 +80,7 @@ def endtag(openlist):
         final= closed
     return final
 
-            
+
 def parsexml(exemel):
     """
     parsexml parse xml into a node instance and
@@ -92,11 +95,11 @@ def parsexml(exemel):
             tag =mk_tag(line)
             if "/" not in tag:
                 node, exemel=mk_node(tag,line,exemel)
-                openlist=starttag(line,node,openlist) 
+                openlist=starttag(line,node,openlist)
             else:
                 final = endtag(openlist)
     return final
-        
+
 
 def xmlspliceinfosection(node):
     """
@@ -121,7 +124,6 @@ def xmlcommand(node):
     for child  in node.children:
         if child.name in cmap:
             out= cmap[child.name](child)
-            print(out)
             return out
     return {}
 
@@ -316,22 +318,9 @@ def xmldescriptors(node):
     return dscripts
 
 
-def xml2cue(ex):    
+def xml2cue(ex):
     bignode = parsexml(ex)
     return {
     "info_section":xmlspliceinfosection(bignode),
     "command":xmlcommand(bignode),
     "descriptors":xmldescriptors(bignode),}
- 
-
-
-
-
-
-
-
-
-
-
-
-    
