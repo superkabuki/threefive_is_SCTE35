@@ -19,6 +19,8 @@ from threefive3.sixfix import sixfix
 # import cProfile
 # from sideways import cli as sidecli
 
+write2 = False
+
 REV = "\033[7;1m"
 NORM = "\033[27m\033[0m"
 NORM = "\033[0m"
@@ -77,11 +79,11 @@ HELP = f"""
     threefive3 hls https://example.com/master.m3u8{U}
 
     {B} iframes     {U}{BLUE} Show MPEGTS iframes{NORM} threefive3 iframes video.ts
-    
+
     {B} mcast       {U}{NORM}{BLUE} Multicast sender(server) help: {U} threefive3 mcast help
 
     threefive3 mcast video.ts
-     
+
     {B}  packets    {U}{NORM}{BLUE} Print raw SCTE-35 packets:{NORM} threefive3 packets udp://@235.35.3.5:3535
 
     {B}  proxy      {U}{NORM}{BLUE} Parse a stream and copy it to stdout:{NORM} threefive3 proxy video.ts
@@ -276,9 +278,16 @@ def json_out(cue):
 
 def xmlbin_out(cue):
     """
-    xml_out prints cue as xml
+    xml_out prints cue as xml+binary
     """
     print2(cue.xmlbin())
+
+
+def xml_out(cue):
+    """
+    xml_out prints cue as xml
+    """
+    print2(cue.xml())
 
 
 funk_map = {
@@ -287,6 +296,7 @@ funk_map = {
     "hex": hex_out,
     "int": int_out,
     "json": json_out,
+    "xml": xml_out,
     "xmlbin": xmlbin_out,
 }
 
@@ -315,9 +325,8 @@ def to_funk(this):
         # mpegts streams handled here.
         strm = Stream(this)
         strm.decode(func=funk())  # funk() works here
-    except:  # try to load json or xml
-        cue = Cue()
-        ##        try:
+    except:  
+        cue = Cue()  # This is the 
         cue.bites = cue._mk_bits(this)
         cue.decode()
     if cue:
@@ -400,4 +409,3 @@ def go():
 
 if __name__ == "__main__":
     go()
-
