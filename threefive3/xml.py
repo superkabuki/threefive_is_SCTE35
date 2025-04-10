@@ -5,7 +5,10 @@ xml.py  The Node class for converting to xml,
 """
 
 from xml.sax.saxutils import escape, unescape
+from .stuff import red 
 
+MAXCHILREN=128
+MAXDEPTH= 64
 
 def t2s(v):
     """
@@ -221,6 +224,9 @@ class Node:
         tabs in output
         """
         for child in self.children:
+            while self.depth > MAXDEPTH:
+                red(f'{self.depth} is too deep for SCTE-35 nodes.')
+                return False
             child.depth = self.depth + 1
 
     def get_indent(self):
@@ -296,6 +302,9 @@ class Node:
         add_child adds a child node
         set slot to insert at index slot.
         """
+        while len(self.children) > MAXCHILDREN:
+            red(f'{len(self.children)} is too many children')
+            return False
         if not slot:
             slot = len(self.children)
         self.children = self.children[:slot] + [child] + self.children[slot:]
