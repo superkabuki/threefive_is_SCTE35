@@ -29,10 +29,6 @@ _Released Thursday April 3rd, 2025 4am EDT_
 # Checkout the Super Cool SCTE-35 [__Examples__](https://github.com/superkabuki/threefive3/tree/main/examples)
 <br>
 
-# Need to parse MPEGTS for SCTE-35?
-
-![image](https://github.com/user-attachments/assets/d4de34f6-61dd-4a52-b449-64ba11fc0ca9)
-
 ## MPEGTS streams can be parsed for SCTE-35 with three lines of code.
 
 ```py3
@@ -47,7 +43,22 @@ Type "help", "copyright", "credits" or "license" for more information.
 
 >>>> strm.decode()
 ```
-
+## Heads Up! Xml is coming back.
+<pre>
+ 
+    I pulled xml support a few months ago, I wasn't happy with the implementation. 
+One out of every seven lines of code was xml specific, there was xml code everywhere.
+It was all way too clunky. Everytime I touched one part of the code, something else would break.
+It was time to rethink xml. 
+ 
+   Some of the code worked well, like the Node class, 
+ but the xml parser worked completely different from the xml generator.
+ Now, generating and parsing xml both use the Node class, it's much cleaner.
+  
+  The new code is already in the repo, 
+ expect the new xml implementation in the next release 3.0.37, later this week.
+ 
+</pre>
 
 
 # `Documentation`
@@ -259,7 +270,7 @@ ___
 
 * The threefive3 cli has long been a Multicast Receiver( client )
 * The cli now comes with a builtin Multicast Sender( server).
-* It's optimized for MPEGTS (1316 Datagrams) but you can send any video or file.
+* It's optimized for MPEGTS (1316 byte Datagrams) but you can send any video or file.
 * The defaults will work in most situations, you don't even have to set the address.
 * threefive3 cli also supports UDP Unicast Streaming.
   
@@ -281,8 +292,6 @@ optional arguments:
   -t TTL, --ttl TTL     Multicast TTL (1 - 255) [default:32]
 a@fu:~$ 
 ```
-
-
 
 
 ### [iodisco.com/scte35](https://iodisco.com/scte35)
