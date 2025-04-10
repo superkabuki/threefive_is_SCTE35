@@ -438,7 +438,7 @@ class Cue(SCTE35Base):
                     comment = f"{table22[d.segmentation_type_id]}"
                     sis.add_comment(comment)
                 else:
-                    d.errors.append("Segmentation type id not in table 22")
+                    red("Segmentation type id not in table 22")
             sis.add_child(d.xml(ns=ns))
         return sis
 
