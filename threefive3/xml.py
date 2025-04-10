@@ -7,7 +7,7 @@ xml.py  The Node class for converting to xml,
 from xml.sax.saxutils import escape, unescape
 from .stuff import red 
 
-MAXCHILREN=128
+MAXCHILDREN=128
 MAXDEPTH= 64
 
 def t2s(v):
