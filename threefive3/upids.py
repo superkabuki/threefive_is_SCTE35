@@ -59,7 +59,7 @@ class Upid:
         """
         _xml_format_attr sets segmentation_upid_format
         """
-        if self.upid_type in [0x03, 0x07, 0x09, 0x0E]:
+        if self.upid_type in [0x01,0x02,0x03, 0x07, 0x09, 0x0E]:
             return "text"
         return "hexbinary"
 
@@ -84,7 +84,12 @@ class Upid:
             ud_attrs = self._extra_xml_attrs(ud_attrs)
         nbin = NBin()
         self.encode(nbin, self.upid_value)
-        return Node("SegmentationUpid", attrs=ud_attrs, value=nbin.bites.hex(), ns=ns)
+        if self._xml_format_attr() =="text":
+            value = self.upid_value.decode()
+        else:
+            value=nbin.bites.hex()
+            
+        return Node("SegmentationUpid", attrs=ud_attrs, value=value, ns=ns)
 
 
 class NoUpid(Upid):
