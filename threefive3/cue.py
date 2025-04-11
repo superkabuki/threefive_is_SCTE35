@@ -4,7 +4,7 @@ threefive3.Cue Class
 
 from base64 import b64decode, b64encode
 import json
-from .stuff import red, blue
+from .stuff import red, blue, ishex
 from .bitn import NBin
 from .base import SCTE35Base
 from .section import SpliceInfoSection
@@ -86,8 +86,6 @@ class Cue(SCTE35Base):
         tag_n_len = two
         while len(loop_bites) > tag_n_len:
             spliced = splice_descriptor(loop_bites)
-            if not spliced:
-                return
             sd_size = tag_n_len + spliced.descriptor_length
             loop_bites = loop_bites[sd_size:]
             del spliced.bites
@@ -103,6 +101,7 @@ class Cue(SCTE35Base):
         Cue.get returns the SCTE-35 Cue
         data as a dict of dicts.
         """
+        scte35_data = False
         if self.command and self.info_section:
             scte35_data = {
                 "info_section": self.info_section.get(),
@@ -110,8 +109,7 @@ class Cue(SCTE35Base):
                 "descriptors": self.get_descriptors(),
             }
             scte35_data = self._get_packet_data(scte35_data)
-            return scte35_data
-        return False
+        return scte35_data
 
     def get_descriptors(self):
         """
@@ -130,9 +128,8 @@ class Cue(SCTE35Base):
         """
         fix_bad_b64 fixes bad padding on Base64
         """
-        while len(data) % four != zero:
-            data = data + equalsign
-        return data
+        mdl = 4 - (len(data) % four)
+        return data + equalsign * mdl
 
     def _int_bits(self, data):
         """
@@ -146,17 +143,8 @@ class Cue(SCTE35Base):
         """
         _hex_bits convert a SCTE-35 Cue from hex to bytes.
         """
-        try:
-            i = int(data, sixteen)
-            i_len = i.bit_length() >> three
-            bites = int.to_bytes(i, i_len, byteorder="big")
-            return bites
-        except (LookupError, TypeError, ValueError):
-            if data[:two].lower() == "0x":
-                data = data[two:]
-            if data[:two].lower() == "fc":
-                return bytes.fromhex(data)
-        return b""
+        i = int(data, sixteen)
+        return self._int_bits(i)
 
     def _b64_bits(self, data):
         """
@@ -165,16 +153,14 @@ class Cue(SCTE35Base):
         try:
             return b64decode(self.fix_bad_b64(data))
         except (LookupError, TypeError, ValueError):
-            return data
+            return red("Bad Base64")
 
     def _str_bits(self, data):
         try:
-            self.load(data)
-            return self.bites
+            return self.load(data)
         except (LookupError, TypeError, ValueError):
-            hex_bits = self._hex_bits(data)
-            if hex_bits:
-                return hex_bits
+            if ishex(data):
+                return self._hex_bits(data)
         return self._b64_bits(data)
 
     def _pkt_bits(self, data):
@@ -209,8 +195,6 @@ class Cue(SCTE35Base):
         Cue.info_section.descriptor_loop_length,
         then call Cue._descriptor_loop
         """
-        ##        if len(bites) < 2:
-        ##            return False
         while bites:
             dll = (bites[zero] << eight) | bites[one]
             self.info_section.descriptor_loop_length = dll
@@ -236,8 +220,7 @@ class Cue(SCTE35Base):
         """
         sct = self.info_section.splice_command_type
         if sct not in command_map:
-            red(f"Splice Command type {sct} not recognized")
-            return False
+            return red(f"Splice Command type {sct} not recognized")
         iscl = self.info_section.splice_command_length
         cmd_bites = bites[:iscl]
         self.command = command_map[sct](cmd_bites)
@@ -351,8 +334,7 @@ class Cue(SCTE35Base):
         the command instance will be created.
         """
         if "command" not in gonzo:
-            self._no_cmd()
-            return False
+            return self._no_cmd()
         cmd = gonzo["command"]
         if "command_type" in cmd:
             self.command = command_map[cmd["command_type"]]()
@@ -376,7 +358,7 @@ class Cue(SCTE35Base):
         """
         _no_cmd raises an exception if no splice command.
         """
-        red("A splice command is required")
+        return red("A splice command is required")
 
     def load(self, gonzo):
         """
@@ -428,18 +410,23 @@ class Cue(SCTE35Base):
         else:
             blue("xmlbin data needs to be str instance")
 
+    def _xml_segmentation_comment(self, dscptr, sis):
+        if dscptr.segmentation_type_id in table22:
+            comment = f"{table22[dscptr.segmentation_type_id]}"
+        else:
+            comment = (
+                f"Segmentation type id {dscptr.segmentation_type_id} is not in table 22"
+            )
+        sis.add_comment(comment)
+
     def _xml_mk_descriptor(self, sis, ns):
         """
         _mk_descriptor_xml make xml nodes for descriptors.
         """
-        for d in self.descriptors:
-            if d.has("segmentation_type_id"):
-                if d.segmentation_type_id in table22:
-                    comment = f"{table22[d.segmentation_type_id]}"
-                    sis.add_comment(comment)
-                else:
-                    red("Segmentation type id not in table 22")
-            sis.add_child(d.xml(ns=ns))
+        for dscptr in self.descriptors:
+            if dscptr.has("segmentation_type_id"):
+                self._xml_segmentation_comment(dscptr, sis)
+            sis.add_child(dscptr.xml(ns=ns))
         return sis
 
     def xml(self, ns="scte35"):
