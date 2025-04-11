@@ -40,6 +40,15 @@ def atohif(value):
     return value
 
 
+def ishex(data):
+    """
+    ishex determine if a string is a hex value.
+    """
+    hexed = "0123456789abcdef"
+    data = data.lower().strip("0x")
+    return all([c in hexed for c in data])
+
+
 def iso8601():
     """
     return UTC time in iso8601 format.
@@ -57,6 +66,7 @@ def red(message):
     """
     mesg = f" \033[107;31m {message} \033[0m "
     print2(mesg)
+    return False
 
 
 def blue(message):
