@@ -1,7 +1,5 @@
 """
-upids.py
-
-classy Upids
+upids.py classy Upids
 
 """
 
@@ -19,6 +17,7 @@ class Upid:
     """
     Upid base class handles URI UPIDS
     """
+
     def __init__(self, bitbin=None, upid_type=0, upid_length=0):
         self.bitbin = bitbin
         self.upid_type = upid_type
@@ -59,7 +58,7 @@ class Upid:
         """
         _xml_format_attr sets segmentation_upid_format
         """
-        if self.upid_type in [0x01,0x02,0x03, 0x07, 0x09, 0x0E]:
+        if self.upid_type in [0x01, 0x02, 0x03, 0x07, 0x09, 0x0E]:
             return "text"
         return "hexbinary"
 
@@ -84,11 +83,11 @@ class Upid:
             ud_attrs = self._extra_xml_attrs(ud_attrs)
         nbin = NBin()
         self.encode(nbin, self.upid_value)
-        if self._xml_format_attr() =="text":
+        if self._xml_format_attr() == "text":
             value = self.upid_value.decode()
         else:
-            value=nbin.bites.hex()
-            
+            value = nbin.bites.hex()
+
         return Node("SegmentationUpid", attrs=ud_attrs, value=value, ns=ns)
 
 
@@ -96,6 +95,7 @@ class NoUpid(Upid):
     """
     NoUpid class
     """
+
     def decode(self):
         """
         decode for no upid
@@ -113,6 +113,7 @@ class AirId(Upid):
     """
     Air Id Upid
     """
+
     def decode(self):
         """
         decode AirId
@@ -131,6 +132,7 @@ class Atsc(Upid):
     """
     ATSC Upid
     """
+
     def decode(self):
         """
         decode Atsc Upid
@@ -161,6 +163,7 @@ class Eidr(Upid):
     """
     Eidr Upid
     """
+
     def decode(self):
         """
         decode Eidr Upid
@@ -192,6 +195,7 @@ class Isan(Upid):
     """
     Isan Upid
     """
+
     def decode(self):
         """
         decode Isan Upid
@@ -211,6 +215,7 @@ class Mid(Upid):
     """
     Mid Upid
     """
+
     def decode(self):
         """
         decode Mid Upid
@@ -267,6 +272,7 @@ class Mpu(Upid):
     """
     Mpu Upid
     """
+
     def _decode_adfr(self):
         """
         decode_adfr handles Addressabkle TV MPU Upids
@@ -307,6 +313,7 @@ class Umid(Upid):
     """
     Umid Upid
     """
+
     def decode(self):
         """
         decode Umid Upids
