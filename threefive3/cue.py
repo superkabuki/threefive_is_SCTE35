@@ -8,7 +8,7 @@ from .stuff import red, blue, ishex
 from .bitn import NBin
 from .base import SCTE35Base
 from .section import SpliceInfoSection
-from .commands import command_map, SpliceCommand
+from .commands import command_map
 from .descriptors import splice_descriptor, descriptor_map
 from .crc import crc32
 from .segmentation import table22
@@ -176,7 +176,6 @@ class Cue(SCTE35Base):
         cue._mk_bits Converts
         Hex and Base64 strings into bytes.
         """
-        bites = data
         if isinstance(data, dict):
             self.load(data)
             return self.bites
@@ -188,6 +187,7 @@ class Cue(SCTE35Base):
             return self._int_bits(data)
         if isinstance(data, str):
             return self._str_bits(data)
+        return data
 
     def _mk_descriptors(self, bites):
         """
@@ -201,6 +201,8 @@ class Cue(SCTE35Base):
             bites = bites[two:]
             self._descriptor_loop(bites[:dll])
             return bites[dll:]
+        return False
+
 
     def mk_info_section(self, bites):
         """
@@ -339,6 +341,7 @@ class Cue(SCTE35Base):
         if "command_type" in cmd:
             self.command = command_map[cmd["command_type"]]()
             self.command.load(cmd)
+        return "command_type" in cmd
 
     def _load_descriptors(self, dlist):
         """
@@ -449,6 +452,6 @@ class Cue(SCTE35Base):
         xmlbin
 
         """
-        return f"""<scte35:Signal xmlns:scte35="https://scte.org/schemas/35">
-    <scte35:Binary>{self.base64()}</scte35:Binary>
-</scte35:Signal>"""
+        return f"""<{ns}:Signal xmlns:{ns}="https://scte.org/schemas/35">
+    <{ns}:Binary>{self.base64()}</{ns}:Binary>
+</{ns}:Signal>"""
