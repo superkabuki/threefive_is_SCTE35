@@ -130,7 +130,6 @@ class TagParser:
         _split_value does a right split
         off tail for the value in a key=value pair.
         """
-        dblquote = '"'
         if tail[minusone:] == dblquote:
             tail, value = self._quoted(tag, tail)
         else:
@@ -146,7 +145,7 @@ class TagParser:
             tail, value = tail[:minusone].rsplit(equalsign + dblquote, one)
         except:
             self.tags[tag]
-            value = tail.replace(doublequote, nothing)
+            value = tail.replace(dblquote, nothing)
             tail = None
         return tail, value
 
