@@ -441,10 +441,6 @@ class Stream:
         if pid == self.pids.PAT_PID:
             self._parse_pat(pay)
 
-    def _sdt_pid(self, pay, pid):
-        if pid == self.pids.SDT_PID:
-            self._parse_sdt(pay)
-
     def _parse_tables(self, pkt, pid):
         """
         _parse_tables parse for
@@ -457,7 +453,6 @@ class Stream:
             return
         if not self._same_as_last(pay, pid):
             self._pat_pid(pay, pid)
-            self._sdt_pid(pay, pid)
 
     def _parse_info(self, pkt):
         """
@@ -568,42 +563,6 @@ class Stream:
         pinfo.provider = pn
         pinfo.service = sn
 
-    def _parse_sdt(self, pay):
-        """
-        _parse_sdt parses the SDT for program metadata
-        """
-        pay = self._chk_partial(pay, self.pids.SDT_PID, self.SDT_TID)
-        if not pay:
-            return False
-        seclen = self._parse_length(pay[one], pay[two])
-        if self._section_incomplete(pay, self.pids.SDT_PID, seclen):
-            return False
-        idx = eleven
-        while idx < seclen + three:
-            service_id = self._parse_program(pay[idx], pay[idx + one])
-            blue(service_id)
-            idx += three
-            dloop_len = self._parse_length(pay[idx], pay[idx + one])
-            idx += two
-            i = zero
-            while i < dloop_len:
-                if pay[idx] == 0x48:
-                    i += three
-                    spnl = pay[idx + i]
-                    i += one
-                    provider_name = pay[idx + i : idx + i + spnl]
-                    i += spnl
-                    snl = pay[idx + i]
-                    i += one
-                    service_name = pay[idx + i : idx + i + snl]
-                    i += snl
-                    blue(f"{provider_name} {len(provider_name)}")
-                    self._mk_pinfo(service_id, provider_name, service_name)
-                i = dloop_len
-                idx += i
-                return True
-        return False
-
     def _parse_pat(self, pay):
         """
         parse program association table
@@ -635,7 +594,7 @@ class Stream:
             return False
         seclen = self._parse_length(pay[one], pay[two])
         if self._section_incomplete(pay, pid, seclen):
-            return False
+            return  False
         program_number = self._parse_program(pay[three], pay[four])
         if not program_number:
             return False
