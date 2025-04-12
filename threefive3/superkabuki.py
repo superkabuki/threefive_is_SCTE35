@@ -253,6 +253,26 @@ class SuperKabuki(Stream):
         self._bump_cc()
         return nbin.bites
 
+
+    def _chk_sidecar_pts(self,pts, line):
+        insert_pts, cue = line.split(",", 1)
+        insert_pts = float(insert_pts)
+        if insert_pts == 0.0:
+            insert_pts = pts
+        if insert_pts >= pts:
+            if [insert_pts, cue] not in self.sidecar:
+                self.sidecar.append([insert_pts, cue])
+        self.sidecar = deque(
+            sorted(self.sidecar, key=itemgetter(0))
+                )
+
+    def _read_sidecar_file(self,pts):
+        with reader(self.sidecar_file) as sidefile:
+            for line in sidefile:
+                line = line.decode().strip().split("#", 1)[0]
+                if line:
+                    self._chk_sidecar_pts(pts, line)
+
     def load_sidecar(self, pts):
         """
         _load_sidecar reads (pts, cue) pairs from
@@ -260,20 +280,7 @@ class SuperKabuki(Stream):
         if live, blank out the sidecar file after cues are loaded.
         """
         if self.sidecar_file:
-            with reader(self.sidecar_file) as sidefile:
-                for line in sidefile:
-                    line = line.decode().strip().split("#", 1)[0]
-                    if line:
-                        insert_pts, cue = line.split(",", 1)
-                        insert_pts = float(insert_pts)
-                        if insert_pts == 0.0:
-                            insert_pts = pts
-                        if insert_pts >= pts:
-                            if [insert_pts, cue] not in self.sidecar:
-                                self.sidecar.append([insert_pts, cue])
-                                self.sidecar = deque(
-                                    sorted(self.sidecar, key=itemgetter(0))
-                                )
+            self._read_sidecar_file(pts)
 
     def chk_sidecar_cues(self, pts):
         """
