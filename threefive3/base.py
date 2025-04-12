@@ -1,5 +1,5 @@
 """
-scte35.base contains
+threefive3.base contains
 the class SCTE35Base.
 """
 
@@ -27,7 +27,8 @@ class SCTE35Base:
 
     def _err2(self, var_name, var_value, bit_count, var_type):
         var_type = str(var_type).split("'")[1]
-        err_mesg = f"{var_name} is {var_value} , it should be type {var_type}, {bit_count} bit(s) long."
+        mesg = f"{var_name} is {var_value},"
+        err_mesg = f"{mesg} it should be type {var_type}, {bit_count} bit(s) long."
         red(err_mesg)
 
     def _bool_int(self, var_name, var_value, bit_count, var_type):
@@ -35,16 +36,19 @@ class SCTE35Base:
             if isinstance(var_value, bool):
                 self._err2(var_name, var_value, bit_count, var_type)
                 return True
+        return False
 
     def _wrong_type(self, var_name, var_value, bit_count, var_type):
         if not isinstance(var_value, var_type):
             self._err2(var_name, var_value, bit_count, var_type)
             return True
+        return False
 
     def _is_none(self, var_name, var_value, bit_count, var_type):
         if var_value is None:
             self._err2(var_name, var_value, bit_count, var_type)
             return True
+        return False
 
     def _chk_var(self, var_type, nbin_method, var_name, bit_count):
         """
