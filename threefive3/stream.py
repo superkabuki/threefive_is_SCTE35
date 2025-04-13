@@ -1,7 +1,6 @@
 """
 Mpeg-TS Stream parsing class Stream
 """
-
 import sys
 from functools import partial
 from .new_reader import reader
