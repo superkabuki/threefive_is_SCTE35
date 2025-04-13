@@ -128,8 +128,10 @@ class Cue(SCTE35Base):
         """
         fix_bad_b64 fixes bad padding on Base64
         """
-        mdl = 4 - (len(data) % four)
-        return data + equalsign * mdl
+        while len(data) %four != zero:
+            data = data+equalsign
+        return data
+
 
     def _int_bits(self, data):
         """
@@ -150,14 +152,15 @@ class Cue(SCTE35Base):
         """
         _b64_bits decode base64 to bytes
         """
-        try:
-            return b64decode(self.fix_bad_b64(data))
-        except (LookupError, TypeError, ValueError):
-            return red("Bad Base64")
+        #try:
+        return b64decode(self.fix_bad_b64(data))
+       # except (LookupError, TypeError, ValueError):
+         #   return red("Bad Base64")
 
     def _str_bits(self, data):
         try:
-            return self.load(data)
+            self.load(data)
+            return self.bites
         except (LookupError, TypeError, ValueError):
             if ishex(data):
                 return self._hex_bits(data)
@@ -187,7 +190,7 @@ class Cue(SCTE35Base):
             return self._int_bits(data)
         if isinstance(data, str):
             return self._str_bits(data)
-        return data
+        return False
 
     def _mk_descriptors(self, bites):
         """
@@ -202,7 +205,6 @@ class Cue(SCTE35Base):
             self._descriptor_loop(bites[:dll])
             return bites[dll:]
         return False
-
 
     def mk_info_section(self, bites):
         """
@@ -442,8 +444,7 @@ class Cue(SCTE35Base):
         cmd = self.command.xml(ns=ns)
         sis.add_child(cmd)
         sis = self._xml_mk_descriptor(sis, ns)
-        sis.mk()
-        return sis
+        return sis.mk() # xml returns a string NOT a Node instance.
 
     def xmlbin(self, ns="scte35"):
         """
