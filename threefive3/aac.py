@@ -13,7 +13,6 @@ class AacParser:
     """
     AacParser parses aac segments.
     """
-
     applehead = b"com.apple.streaming.transportStreamTimestamp"
 
     @staticmethod
