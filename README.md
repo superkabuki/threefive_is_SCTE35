@@ -7,7 +7,7 @@
                       Adrian  
 </pre>
 
-# threefive3 is the #1 Super Happy Funtime SCTE-35 parser 4U2NV.
+# threefive3 is the #1 Super Happy Funtime SCTE-35 parser.
 
 ✅ SCTE-35 __Parser__  ✅ SCTE-35 __Encoder__    ✅ SCTE-35 __HLS__     ✅ SCTE-35 __Xml+binary__     ✅ SCTE-35 __Cli__     ✅  SCTE-35 __library__
 
@@ -53,7 +53,6 @@ It was time to rethink xml.
 
 
 # `Documentation`
-* I just heard the term mebibyte, that's what MiB means. I thought all byte measurement was binary, but megabyte is now 1,000,000 and mebibyte is 2 << 19 or 1,048,576. I had no idea.
 
 * [Install](#install)
 
