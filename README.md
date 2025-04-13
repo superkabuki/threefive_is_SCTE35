@@ -1,10 +1,20 @@
 [__Install__](#install) |[__SCTE-35 Cli__](#the-cli-tool) | [__SCTE-35 HLS__](https://github.com/superkabuki/threefive3/blob/main/hls.md) | [__Cue__ Class](https://github.com/superkabuki/threefive3/blob/main/cue.md) | [__Stream__ Class](https://github.com/superkabuki/threefive3/blob/main/stream.md) | [__Online SCTE-35 Parser__](https://iodisco.com/scte35) | [__Encode SCTE-35__](https://github.com/superkabuki/threefive3/blob/main/encode.md) | [__SCTE-35 Examples__](https://github.com/superkabuki/threefive3/tree/main/examples)
  <pre> 
- threefive was the best SCTE-35 parser, 
- threefive3 is even better.
+We are super close to threefive3 v3.0.37, 
+I have been combing through the code for the last two weeks looking for obscure bugs and any potential problems.
+I'm profiling and linting everything. All pylint scores are 9.75/10 or higher.
+
+The highest cyclomatic complexity on a method or function is 5. 
+Average cyclomatic complexity for threefive3 is 2.01. 
+For comparision, the cyclomatic complexity for the python standard library is 3.077 ( lower cyclomtic complexity is better ).
+
+SCTE-35 Xml support is back and working really well. The Super Xml Parser has been replaceed by the Ultra Xml Parser, and it's working very well.
+
+The Cue class is verified to decode and encode SCTE-35 in Base64,Bytes, Hex, Int, JSON, Xml, and xml+bin.
+
+  
+threefive3 v3.0.37 will be production ready.
  
-  Welcome to the show.  
-                      Adrian  
 </pre>
 
 # threefive3 is the #1 Super Happy Funtime SCTE-35 parser.
