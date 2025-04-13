@@ -7,7 +7,7 @@
                       Adrian  
 </pre>
 
-# threefive3 is the #1 SCTE-35 parser in Lawrenceville Georgia.
+# threefive3 is the #1 Super Happy Funtime SCTE-35 parser 4 U 2 N V.
 
 ✅ SCTE-35 __Parser__  ✅ SCTE-35 __Encoder__    ✅ SCTE-35 __HLS__     ✅ SCTE-35 __Xml+binary__     ✅ SCTE-35 __Cli__     ✅  SCTE-35 __library__
 
