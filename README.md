@@ -53,7 +53,7 @@ It was time to rethink xml.
 
 
 # `Documentation`
-
+* I just heard the term mebibyte, that's what MiB means. I thought all byte measurement was binary, but megabyte is now 1,000,000 and mebibyte is 2 << 19 or 1,048,576. I had no idea.
 
 * [Install](#install)
 
