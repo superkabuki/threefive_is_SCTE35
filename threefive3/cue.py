@@ -3,6 +3,7 @@ threefive3.Cue Class
 """
 
 from base64 import b64decode, b64encode
+import binascii
 import json
 from .stuff import red, blue, ishex
 from .bitn import NBin
@@ -153,7 +154,8 @@ class Cue(SCTE35Base):
         _b64_bits decode base64 to bytes
         """
         #try:
-        return b64decode(self.fix_bad_b64(data))
+        return binascii.a2b_base64(data, strict_mode=False)
+    #    return b64decode(self.fix_bad_b64(data))
        # except (LookupError, TypeError, ValueError):
          #   return red("Bad Base64")
 
@@ -161,7 +163,10 @@ class Cue(SCTE35Base):
         try:
             self.load(data)
             return self.bites
-        except (LookupError, TypeError, ValueError):
+        except (OSError, LookupError, TypeError, ValueError):
+
+
+
             if ishex(data):
                 return self._hex_bits(data)
         return self._b64_bits(data)
@@ -410,10 +415,12 @@ class Cue(SCTE35Base):
                 dat = gonzo.split("<scte35:Binary>")[1].split("</scte35:Binary>")[0]
                 self.bites = self._mk_bits(dat)
                 self.decode()
-            else:
+            elif "SpliceInfoSection" in gonzo:
                 self.load(xml2cue(gonzo))
         else:
-            blue("xmlbin data needs to be str instance")
+                self.bites= b''
+                return self.bites
+            #blue("xmlbin data needs to be str instance")
 
     def _xml_segmentation_comment(self, dscptr, sis):
         if dscptr.segmentation_type_id in table22:
