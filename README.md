@@ -2,13 +2,7 @@
  <pre> 
 We are super close to threefive3 v3.0.37, 
 I have been combing through the code for the last two weeks looking for obscure bugs and any potential problems.
-I'm profiling and linting everything. All pylint scores are 9.75/10 or higher.
-
-The highest cyclomatic complexity on a method or function is 5. 
-Average cyclomatic complexity for threefive3 is 2.01. 
-For comparision, the cyclomatic complexity for the python standard library is 3.077 ( lower cyclomtic complexity is better ).
-
-SCTE-35 Xml support is back and working really well. The Super Xml Parser has been replaceed by the Ultra Xml Parser, and it's working very well.
+I'm profiling and linting everything.
 
 The Cue class is verified to decode and encode SCTE-35 in Base64,Bytes, Hex, Int, JSON, Xml, and xml+bin.
 
@@ -16,8 +10,18 @@ The Cue class is verified to decode and encode SCTE-35 in Base64,Bytes, Hex, Int
 threefive3 v3.0.37 will be production ready.
  
 </pre>
+### SCTE-35 Xml support is back and working really well. 
+The Super Xml Parser has been replaceed by the __Ultra Xml Parser__.
+  
+### `Q.` Why write an xml parser? 
+ 
+### `A`  __quadratic blowup__ and __billion laughs__
+* __builtin python xml parsers__ are __vunerable__ to  __quadratic blowup__ and __billion laughs__
+*  __Ultra XML Parser is not__ __vunerable__ to either one.
+![image](https://github.com/user-attachments/assets/f838509a-ce2e-4120-8d08-7c6263ae5d5a)
 
-# threefive3 is the #1 Super Happy Funtime SCTE-35 parser.
+
+# threefive3 is the coolest SCTE-35 parser.
 
 ✅ SCTE-35 __Parser__  ✅ SCTE-35 __Encoder__    ✅ SCTE-35 __HLS__     ✅ SCTE-35 __Xml+binary__     ✅ SCTE-35 __Cli__     ✅  SCTE-35 __library__
 
