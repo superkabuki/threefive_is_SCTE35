@@ -68,7 +68,6 @@ HELP = f"""
 
     Input {U}    Output {U}
    {U}{BLUE} mpegts {U}  {U}{BLUE} base64 {NORM} threefive3 https://example.com/video.ts  base64
-   {U}{BLUE} xml    {U}  {U}{BLUE} bytes  {NORM} threefive3 bytes  < xml.xml
    {U}{BLUE} base64 {U}  {U}{BLUE} hex    {NORM} threefive3 '/DAWAAAAAAAAAP/wBQb+AKmKxwAACzuu2Q==' hex
    {U}{BLUE} xmlbin {U}  {U}{BLUE} int    {NORM} threefive3  int  < xml.xml
    {U}{BLUE} mpegts {U}  {U}{BLUE} json   {NORM} threefive3 video.ts
@@ -322,11 +321,14 @@ def to_funk(this):
     cue = None
     if this in ["", b""]:
         return
-    try:
-        # mpegts streams handled here.
-        strm = Stream(this)
-        strm.decode(func=funk())  # funk() works here
-    except:  
+    if not this.strip().startswith('<'): 
+        try:
+            # mpegts streams handled here.
+            strm = Stream(this)
+            strm.decode(func=funk())  # funk() works here
+        except OSError:
+            pass
+    else:
         cue = Cue()  # This is the 
         cue.bites = cue._mk_bits(this)
         cue.decode()
