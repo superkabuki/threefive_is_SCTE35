@@ -106,8 +106,10 @@ def xmlspliceinfosection(node):
     spliceinfosection parses exemel for info section data
     and returns a loadable dict
     """
-    node.attrs["tier"]=hex(node.attrs["tier"])
-    return node.attrs
+    if 'SpliceInfoSection' in node.name:
+        node.attrs["tier"]=hex(node.attrs["tier"])
+        return node.attrs
+    return {}
 
 
 def xmlcommand(node):
@@ -320,7 +322,9 @@ def xmldescriptors(node):
 
 def xml2cue(ex):
     bignode = parsexml(ex)
-    return {
-    "info_section":xmlspliceinfosection(bignode),
-    "command":xmlcommand(bignode),
-    "descriptors":xmldescriptors(bignode),}
+    if isinstance(bignode,Node):
+        return {
+        "info_section":xmlspliceinfosection(bignode),
+        "command":xmlcommand(bignode),
+        "descriptors":xmldescriptors(bignode),}
+    return False
