@@ -6,10 +6,11 @@ import os
 from .new_reader import reader
 from .stream import Stream
 
+
 AES = True
 try:
     import pyaes
-except:
+except ImportError:
     AES = False
 
 
