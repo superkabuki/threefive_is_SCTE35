@@ -1,5 +1,6 @@
 """
-new_reader.py
+threefive3.new_reader
+
 Home of the reader function
 """
 
@@ -7,7 +8,7 @@ import socket
 import struct
 import sys
 import urllib.request
-from .stuff import blue
+from .stuff import blue, ERR
 
 TIMEOUT = 60
 
@@ -77,9 +78,9 @@ def lshiftbuf(socked):
     try:
         rcvbuf_size = rcvbuf_size << shift
         socked.setsockopt(socket.SOL_SOCKET, socket.SO_RCVBUF, rcvbuf_size)
-        blue(f" socket.SO_RCVBUF set to {rcvbuf_size}")
-    except:
-        blue(" Unable to left shift socket.SO_RCVBUF")
+        blue(f"socket.SO_RCVBUF set to {rcvbuf_size}")
+    except ERR:
+        blue("Unable to left shift socket.SO_RCVBUF")
 
 
 def _mk_socked():
@@ -119,7 +120,7 @@ def _open_mcast(uri):
     udp://@227.1.3.10:4310
     """
     blue(" Opening Multicast socket")
-    TTL=32
+    TTL = 32
     interface_ip = "0.0.0.0"
     multicast_group, port = (uri.split("udp://@")[1]).rsplit(":", 1)
     multicast_port = int(port)
