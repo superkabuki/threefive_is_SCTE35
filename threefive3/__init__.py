@@ -12,7 +12,7 @@ from .new_reader import reader
 from .section import SpliceInfoSection
 from .segment import Segment
 from .stream import Stream
-from .stuff import print2, iso8601, atohif, red, blue
+from .stuff import print2, iso8601, atohif, red, blue, ERR
 from .version import version
 
 from .commands import (
