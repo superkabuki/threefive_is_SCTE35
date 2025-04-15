@@ -3,6 +3,7 @@ Ultra Xml Parser.... Supreme
 """
 
 from .segmentation import table20, table22
+from .stuff import ERR
 from .upids import upid_map
 from .xml import Node, iter_attrs
 
@@ -240,7 +241,7 @@ def xmlupid(node):
     if node.name == "SegmentationUpid":
         try:
             seg_upid = bytes.fromhex(node.value.lower().replace("0x", ""))
-        except ValueError:
+        except ERR:
             seg_upid = node.value
         seg_upid_type = node.attrs["segmentation_upid_type"]
         return {
