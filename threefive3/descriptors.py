@@ -6,7 +6,7 @@ from .bitn import Bitn
 from .base import SCTE35Base
 from .segmentation import table20, table22, dvb_table2
 from .upids import upid_map
-from .stuff import red, blue
+from .stuff import red, blue, ERR
 from .xml import Node
 
 
@@ -173,7 +173,6 @@ class AvailDescriptor(SpliceDescriptor):
         return ad
 
 
-
 class DtmfDescriptor(SpliceDescriptor):
     """
     Table 18 -  DTMF_descriptor()
@@ -223,6 +222,7 @@ class DtmfDescriptor(SpliceDescriptor):
             ns=ns,
         )
         return dd
+
 
 class TimeDescriptor(SpliceDescriptor):
     """
@@ -429,9 +429,8 @@ class SegmentationDescriptor(SpliceDescriptor):
                 self._chk_var(int, nbin.add_int, "sub_segment_num", 8)
                 self._chk_var(int, nbin.add_int, "sub_segments_expected", 8)
 
-
     def _xml_sub_segs(self, sd_attrs):
-#        if self.segmentation_type_id in self.SUB_SEG_TYPES:
+        #        if self.segmentation_type_id in self.SUB_SEG_TYPES:
         if self.sub_segment_num:
             sd_attrs["sub_segment_num"] = self.sub_segment_num
             sd_attrs["sub_segments_expected"] = self.sub_segments_expected
@@ -491,7 +490,7 @@ class SegmentationDescriptor(SpliceDescriptor):
             bitbin = None
             try:
                 bites = bytes.fromhex(seg_upid)
-            except ValueError:
+            except ERR:
                 bites = seg_upid.encode()
             bitbin = Bitn(bites)
             self.segmentation_upid_length = len(bites)
