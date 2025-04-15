@@ -1,5 +1,5 @@
 [__Install__](#install) |[__SCTE-35 Cli__](#the-cli-tool) | [__SCTE-35 HLS__](https://github.com/superkabuki/threefive3/blob/main/hls.md) | [__Cue__ Class](https://github.com/superkabuki/threefive3/blob/main/cue.md) | [__Stream__ Class](https://github.com/superkabuki/threefive3/blob/main/stream.md) | [__Online SCTE-35 Parser__](https://iodisco.com/scte35) | [__Encode SCTE-35__](https://github.com/superkabuki/threefive3/blob/main/encode.md) | [__SCTE-35 Examples__](https://github.com/superkabuki/threefive3/tree/main/examples)
-
+ | [__SCTE-35 XML__](#xml)
 
 # threefive3 is the coolest SCTE-35 parser.
 
@@ -40,17 +40,17 @@ a@fu:~/build5/scte35/scte35$ pypy3
 * Xml is back and better than ever. __The new Ultra Xml Parser__ replaces the Super Xml Parser.
 * __threefive3 v3.0.37 will be production ready__
 
+# Xml
 ## Heads Up! Xml is coming back.
 
+# `Q.` Why write an xml parser? 
  
-### `Q.` Why write an xml parser? 
- 
-### `A`  __quadratic blowup__ and __billion laughs__
+# `A`  __quadratic blowup__ and __billion laughs__
 * Both very old attacks, __over ten years old__,  and the __python xml parsers are all vunerable__ to both attacks.
   
 *  threefive3's __Ultra XML Parser is NOT__ __vunerable__ to either one.
 
-* __I'd fix the parsers__ for them, but __I've been banned from python's github repo__ for __critizing PEP 668__ and trying to __start a mutiny__. 
+* __I'd fix the parsers__ for them, but __I've been banned from python's github repo__ for __criticizing PEP 668__ and trying to __start a mutiny__. 
 
  
 * [Code stolen from here](https://gist.github.com/jordanpotti/04c54f7de46f2f0f0b4e6b8e5f5b01b0)
