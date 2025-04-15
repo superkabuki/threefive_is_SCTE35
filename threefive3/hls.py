@@ -14,7 +14,7 @@ from .hlstags import TagParser, HEADER_TAGS
 from .segment import Segment
 from .cue import Cue
 from .new_reader import reader
-from .stuff import atohif, iso8601, red, blue
+from .stuff import atohif, iso8601, red, blue, ERR
 
 
 REV = "\033[7m"
@@ -533,7 +533,7 @@ class HlsParser:
         else:
             try:
                 self.break_timer = round(float(line.split(":", 1)[1].split("/")[0]), 3)
-            except:
+            except ERR:
                 self.break_timer = 0.0
         print(f"{iso8601()}{REV} Break Timer {NORM} {self.break_timer}\n")
         time.sleep(0.1)
@@ -552,7 +552,7 @@ class HlsParser:
                 self.break_duration = round(
                     float(line.split(":", 1)[1].split("/")[1]), 3
                 )
-            except:
+            except ERR:
                 self.break_duration = None
         if self.break_duration:
             print(f"{iso8601()}{REV} Break Duration {NORM} {self.break_duration}\n")
@@ -643,11 +643,11 @@ class HlsParser:
         #   return self.invalid(line)
         return line
 
-    def _dump_by_key(self,pts,line,keys):
+    def _dump_by_key(self, pts, line, keys):
         for key in keys:
             if key in line:
                 self.to_dump(self.pts, line)
-                
+
     def scte35(self, line):
         """
         threefive3 processes SCTE-35 related tags.
@@ -662,7 +662,7 @@ class HlsParser:
         }
         tags = TagParser([line]).tags
         keys = list(scte35_map.keys())
-        self._dump_by_key(self.pts,line,keys)
+        self._dump_by_key(self.pts, line, keys)
         if self.prof.parse_manifests:
             for que, vee in scte35_map.items():
                 if que in line:
