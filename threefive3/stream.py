@@ -1,10 +1,11 @@
 """
 Mpeg-TS Stream parsing class Stream
 """
+
 import sys
 from functools import partial
 from .new_reader import reader
-from .stuff import print2, blue
+from .stuff import print2, blue, ERR
 from .cue import Cue
 from .packetdata import PacketData
 from .streamtypes import streamtype_map
@@ -212,7 +213,7 @@ class Stream:
     def _split_by_idx(pay, marker):
         try:
             return pay[pay.index(marker) :]
-        except (LookupError, TypeError, ValueError):
+        except ERR:
             return False
 
     def _find_start(self):
@@ -593,7 +594,7 @@ class Stream:
             return False
         seclen = self._parse_length(pay[one], pay[two])
         if self._section_incomplete(pay, pid, seclen):
-            return  False
+            return False
         program_number = self._parse_program(pay[three], pay[four])
         if not program_number:
             return False
