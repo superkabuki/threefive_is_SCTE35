@@ -49,7 +49,7 @@ a@fu:~/build5/scte35/scte35$ pypy3
 > “If an attacker defines the entity “&x;” as 55,000 characters long, and refers to that entity 55,000 times inside the “DoS” element, the parser ends up with an XML Quadratic > Blowup attack payload slightly over 200 KB in size that expands to 2.5 GB when parsed. This expansion is enough to take down the parsing process.”
 * __builtin python xml parsers__ are __vunerable__ to  __quadratic blowup__ and __billion laughs__
 * Both very old attacks, __over ten years old__,  and the builtin python xml parsers are all vunerable to them. __Wtf is that about__?
-* __I'd fix the parsers__ for them, but __I've been banned from python's github repo__ and website for __critizing PEP 668__ and trying to __start a mutiny__. 
+* __I'd fix the parsers__ for them, but __I've been banned from python's github repo__ for __critizing PEP 668__ and trying to __start a mutiny__. 
 *  threefive3's __Ultra XML Parser is not__ __vunerable__ to either one.
 ![image](https://github.com/user-attachments/assets/f838509a-ce2e-4120-8d08-7c6263ae5d5a)
 
