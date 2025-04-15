@@ -7,7 +7,7 @@ print2, atohif, iso8601, red, blue
 import datetime
 from sys import stderr
 
-ERR = (ValueError,OSError,TypeError,IndexError,
+ERR = (LookupError,ValueError,OSError,TypeError,IndexError,
          NameError,AttributeError,KeyError)
 
 write2 = True
