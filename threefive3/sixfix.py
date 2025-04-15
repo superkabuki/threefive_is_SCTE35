@@ -9,6 +9,7 @@ from .bitn import NBin
 from .stuff import red
 from .stream import Stream
 
+global fixme
 fixme = []
 
 
@@ -17,7 +18,7 @@ def passed(cue):
     passed a no-op function
     """
     global fixme
-    fixme.append(int(cue.packet_data.pid, base=16))
+    fixme.append(cue.packet_data.pid)
     return cue
 
 
@@ -114,22 +115,17 @@ class SixFix(Stream):
             n_payload = n_payload + (b"\xff" * pad)
         self.pmt_pays[prgm] = n_payload
 
-    def _chk_payload(self, pay, pid):
-        pay = self._chk_partial(pay, pid, self._PMT_TID)
-        if not pay:
-            return False
-        return pay
-
     def _parse_pmt(self, pay, pid):
         """
         parse program maps for streams
         """
-        pay = self._chk_payload(pay, pid)
-        if pay:
-            seclen = self._parse_length(pay[1], pay[2])
-            n_seclen = seclen + 6
-            if self._section_incomplete(pay, pid, seclen):
-                return False
+        pay = self._chk_partial(pay, pid, self._PMT_TID)
+        if not pay:
+            return False
+        seclen = self._parse_length(pay[1], pay[2])
+        n_seclen = seclen + 6
+        if self._section_incomplete(pay, pid, seclen):
+            return False
         program_number = self._parse_program(pay[3], pay[4])
         pcr_pid = self._parse_pid(pay[8], pay[9])
         self.pids.pcr.add(pcr_pid)
@@ -192,19 +188,22 @@ def sixfix(arg):
     sixfix converts 0x6 bin data mpegts streams
     that contain SCTE-35 data to stream type 0x86
     """
+    global fixme
+    fixme=[]
     s1 = PreFix(arg)
     sixed = s1.decode(func=passed)
-    global fixme
-    fixme = []
     if not sixed:
         red("No bin data SCTE-35 streams were found.")
         return
     s2 = SixFix(arg)
     s2.con_pids = sixed
     s2.convert_pids()
-    red(f'Wrote: sixfixed-{arg.rsplit("/")[-1]}\n')
+    red(f'Wrote: sixfixed-{arg.rsplit("/")[-1]}')
+
     return
 
 
 if __name__ == "__main__":
-    sixfix(sys.argv[1])
+    for arg in sys.argv[1:]:
+        sixfix(arg)
+
