@@ -4,7 +4,7 @@ home of the AacParser for audio only hls renditions
 """
 
 from .new_reader import reader
-
+from .stuff import ERR
 
 ROLLOVER = 95443.717678
 
@@ -13,6 +13,7 @@ class AacParser:
     """
     AacParser parses aac segments.
     """
+
     applehead = b"com.apple.streaming.transportStreamTimestamp"
 
     @staticmethod
@@ -43,7 +44,7 @@ class AacParser:
             syncd += bite << ((lsb - idx) << 3)
         return round(syncd / 90000.0, 6)
 
-    def has_applehead(self,data):
+    def has_applehead(self, data):
         """
         has_applehead check for
         apple's ID3  Timestamp header
@@ -52,11 +53,11 @@ class AacParser:
             return data
         return False
 
-    def read_id3(self,media):
+    def read_id3(self, media):
         """
-         read_id3 check aac for id3 header.
+        read_id3 check aac for id3 header.
         """
-        data=b''
+        data = b""
         aac = reader(media)
         header = aac.read(10)
         if self.is_header(header):
@@ -64,13 +65,13 @@ class AacParser:
             data = aac.read(id3len)
         return self.has_applehead(data)
 
-    def parse_timestamp(self,data,pts):
+    def parse_timestamp(self, data, pts):
         """
         parse_timestamp parse timestamp for pts from header.
         """
         try:
             pts = float(data.split(self.applehead)[1].split(b"\x00", 2)[1])
-        except Exception:
+        except ERR:
             pts = self.syncsafe5(data.split(self.applehead)[1][:9])
         return round((pts % ROLLOVER), 6)
 
@@ -79,7 +80,7 @@ class AacParser:
         aac_pts parses the ID3 header tags in aac and ac3 audio files
         """
         pts = 0.0
-        data= self.read_id3(media)
+        data = self.read_id3(media)
         if data:
-            pts = self.parse_timestamp(data,pts)
+            pts = self.parse_timestamp(data, pts)
         return pts
