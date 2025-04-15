@@ -4,6 +4,7 @@ upids.py classy Upids
 """
 
 from .bitn import Bitn, NBin
+from .stuff import ERR
 from .xml import Node
 
 charset = "ascii"  #  pylint, this isn't a constant.
@@ -48,7 +49,7 @@ class Upid:
         if isinstance(seg_upid, str):
             try:
                 self.bitbin = Bitn(bytes.fromhex(seg_upid))
-            except ValueError:
+            except ERR:
                 self.bitbin = Bitn(seg_upid.encode())
             return self.decode()
         self.upid_value = seg_upid
