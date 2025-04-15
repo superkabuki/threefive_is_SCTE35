@@ -5,7 +5,7 @@ threefive3.Cue Class
 from base64 import b64decode, b64encode
 import binascii
 import json
-from .stuff import red, blue, ishex
+from .stuff import red, blue, ishex, ERR
 from .bitn import NBin
 from .base import SCTE35Base
 from .section import SpliceInfoSection
@@ -129,10 +129,9 @@ class Cue(SCTE35Base):
         """
         fix_bad_b64 fixes bad padding on Base64
         """
-        while len(data) %four != zero:
-            data = data+equalsign
+        while len(data) % four != zero:
+            data = data + equalsign
         return data
-
 
     def _int_bits(self, data):
         """
@@ -153,20 +152,18 @@ class Cue(SCTE35Base):
         """
         _b64_bits decode base64 to bytes
         """
-        #try:
+        # try:
         return binascii.a2b_base64(data, strict_mode=False)
+
     #    return b64decode(self.fix_bad_b64(data))
-       # except (LookupError, TypeError, ValueError):
-         #   return red("Bad Base64")
+    # except (LookupError, TypeError, ValueError):
+    #   return red("Bad Base64")
 
     def _str_bits(self, data):
         try:
             self.load(data)
             return self.bites
-        except (OSError, LookupError, TypeError, ValueError):
-
-
-
+        except ERR:
             if ishex(data):
                 return self._hex_bits(data)
         return self._b64_bits(data)
@@ -418,9 +415,9 @@ class Cue(SCTE35Base):
             elif "SpliceInfoSection" in gonzo:
                 self.load(xml2cue(gonzo))
         else:
-                self.bites= b''
-                return self.bites
-            #blue("xmlbin data needs to be str instance")
+            self.bites = b""
+            return self.bites
+        # blue("xmlbin data needs to be str instance")
 
     def _xml_segmentation_comment(self, dscptr, sis):
         if dscptr.segmentation_type_id in table22:
@@ -451,7 +448,7 @@ class Cue(SCTE35Base):
         cmd = self.command.xml(ns=ns)
         sis.add_child(cmd)
         sis = self._xml_mk_descriptor(sis, ns)
-        return sis.mk() # xml returns a string NOT a Node instance.
+        return sis.mk()  # xml returns a string NOT a Node instance.
 
     def xmlbin(self, ns="scte35"):
         """
