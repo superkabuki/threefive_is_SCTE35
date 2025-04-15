@@ -3,8 +3,8 @@ hlstags.py
 
 """
 
-from .stuff import atohif
-from .words import *
+from .stuff import atohif, ERR
+from .words import minusone, zero, one, two, colon, comma, equalsign, dblquote, octothorpe, space, nothing
 
 BASIC_TAGS = (
     "#EXTM3U",
@@ -46,7 +46,8 @@ class TagParser:
 
     Example 1:
 
-      #EXT-X-STREAM-INF:AVERAGE-BANDWIDTH=2030321,BANDWIDTH=2127786,CODECS="avc1.4D401F,mp4a.40.2",RESOLUTION=768x432,CLOSED-CAPTIONS="text"
+      #EXT-X-STREAM-INF:AVERAGE-BANDWIDTH=2030321,BANDWIDTH=2127786,
+      CODECS="avc1.4D401F,mp4a.40.2",RESOLUTION=768x432,CLOSED-CAPTIONS="text"
 
       TagParser.tags["#EXT-X-STREAM-INF"]= { "CLOSED-CAPTIONS": "text",
                                              "RESOLUTION": "768x432",
@@ -55,17 +56,19 @@ class TagParser:
                                              "AVERAGE-BANDWIDTH": 2030321}
     Example 2:
 
-      #EXT-X-CUE-OUT-CONT:ElapsedTime=21.000,Duration=30,SCTE35=/DAnAAAAAAAAAP/wBQb+AGb/MAARAg9DVUVJAAAAAn+HCQA0AALMua1L
+      #EXT-X-CUE-OUT-CONT:ElapsedTime=21.000,Duration=30,
+      SCTE35=/DAnAAAAAAAAAP/wBQb+AGb/MAARAg9DVUVJAAAAAn+HCQA0AALMua1L
 
-      TagParser.tags["#EXT-X-CUE-OUT-CONT"] = { "SCTE35": "/DAnAAAAAAAAAP/wBQb+AGb/MAARAg9DVUVJAAAAAn+HCQA0AALMua1L",
-                                                "Duration": 30,
-                                                "ElapsedTime": 21.0}
+      TagParser.tags["#EXT-X-CUE-OUT-CONT"] = {
+              "SCTE35": "/DAnAAAAAAAAAP/wBQb+AGb/MAARAg9DVUVJAAAAAn+HCQA0AALMua1L",
+            "Duration": 30,
+            "ElapsedTime": 21.0}
     """
 
     def __init__(self, lines=None):
         self.tags = {}
         for line in lines:
-            self._parse_tags(line)
+            self.parse_tags(line)
 
     @staticmethod
     def _strip_last_comma(tail):
@@ -75,18 +78,35 @@ class TagParser:
         vee = line.split(comma, one)[zero]
         self.tags[tag] = vee
 
-    def _parse_tags(self, line):
+    @staticmethod
+    def _starts_with_octothorpe(line):
+        return line[zero] == octothorpe
+
+    @staticmethod
+    def _colon_in_line(line):
+        return colon in line
+
+    def precheck(self,line):
+        """
+        precheck precheck that a line has tags
+        """
+        line = line.replace(space, nothing)
+        if not line:
+            return False
+        if not self._starts_with_octothorpe(line):
+            return False
+        if not self._colon_in_line(line):
+            self.tags[line] = None
+            return False
+        return line
+
+    def parse_tags(self, line):
         """
         _parse_tags parses tags and
         associated attributes
         """
-        line = line.replace(space, nothing)
+        line = self.precheck(line)
         if not line:
-            return
-        if line[zero] != octothorpe:
-            return
-        if colon not in line:
-            self.tags[line] = None
             return
         tag, tail = line.split(colon, one)
         self.tags[tag] = {}
@@ -112,17 +132,16 @@ class TagParser:
         """
         _split_key splits off the last attribute key
         """
-        if not tail:
-            return
-        splitup = tail.rsplit(comma, one)
-        if len(splitup) == two:
-            tail, key = splitup
-        else:
-            key = splitup[zero]
-            tail = None
-        if equalsign in key:
-            key, value = key.split(equalsign, one)
-        self.tags[tag][key] = value
+        if tail:
+            splitup = tail.rsplit(comma, one)
+            if len(splitup) == two:
+                tail, key = splitup
+            else:
+                key = splitup[zero]
+                tail = None
+            if equalsign in key:
+                key, value = key.split(equalsign, one)
+            self.tags[tag][key] = value
         return tail
 
     def _split_value(self, tag, tail):
@@ -143,7 +162,7 @@ class TagParser:
         value = None
         try:
             tail, value = tail[:minusone].rsplit(equalsign + dblquote, one)
-        except:
+        except ERR:
             self.tags[tag]
             value = tail.replace(dblquote, nothing)
             tail = None
@@ -163,6 +182,6 @@ class TagParser:
             tail, value = tail.rsplit(equalsign, one)
             value += hold
             value = atohif(value)
-        except:
+        except ERR:
             tail = None
         return tail, value
