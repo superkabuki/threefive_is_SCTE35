@@ -11,7 +11,7 @@ from .new_reader import reader
 from .iframes import IFramer
 from .stream import Stream
 from .cue import Cue
-from .stuff import print2
+from .stuff import print2, ERR
 from .crc import crc32
 from .bitn import NBin
 from .commands import TimeSignal
@@ -125,10 +125,10 @@ class SuperKabuki(Stream):
         """
         try:
             self.scte35_pid = int(pid)
-        except:
+        except ERR:
             try:
                 self.scte35_pid = int(pid, 16)
-            except:
+            except ERR:
                 self.scte35_pid = 0x86
 
     def _bump_cc(self):
@@ -253,8 +253,7 @@ class SuperKabuki(Stream):
         self._bump_cc()
         return nbin.bites
 
-
-    def _chk_sidecar_pts(self,pts, line):
+    def _chk_sidecar_pts(self, pts, line):
         insert_pts, cue = line.split(",", 1)
         insert_pts = float(insert_pts)
         if insert_pts == 0.0:
@@ -262,11 +261,9 @@ class SuperKabuki(Stream):
         if insert_pts >= pts:
             if [insert_pts, cue] not in self.sidecar:
                 self.sidecar.append([insert_pts, cue])
-        self.sidecar = deque(
-            sorted(self.sidecar, key=itemgetter(0))
-                )
+        self.sidecar = deque(sorted(self.sidecar, key=itemgetter(0)))
 
-    def _read_sidecar_file(self,pts):
+    def _read_sidecar_file(self, pts):
         with reader(self.sidecar_file) as sidefile:
             for line in sidefile:
                 line = line.decode().strip().split("#", 1)[0]
