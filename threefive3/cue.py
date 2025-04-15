@@ -3,7 +3,6 @@ threefive3.Cue Class
 """
 
 from base64 import b64decode, b64encode
-import binascii
 import json
 from .stuff import red, blue, ishex, ERR
 from .bitn import NBin
@@ -152,12 +151,10 @@ class Cue(SCTE35Base):
         """
         _b64_bits decode base64 to bytes
         """
-        # try:
-        return binascii.a2b_base64(data, strict_mode=False)
-
-    #    return b64decode(self.fix_bad_b64(data))
-    # except (LookupError, TypeError, ValueError):
-    #   return red("Bad Base64")
+        try:
+            return b64decode(self.fix_bad_b64(data))
+        except ERR:
+           return red("Bad Base64")
 
     def _str_bits(self, data):
         try:
