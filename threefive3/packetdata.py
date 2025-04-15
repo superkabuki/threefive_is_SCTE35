@@ -3,6 +3,7 @@ packetdata.py
 """
 
 from .base import SCTE35Base
+from .stuff import ERR
 
 
 class PacketData(SCTE35Base):
@@ -25,7 +26,7 @@ class PacketData(SCTE35Base):
         try:
             pcr_ticks = table[self.program]
             self.pcr = self.as_90k(pcr_ticks)
-        except:
+        except ERR:
             pass
 
     def mk_pts(self, table):
@@ -35,5 +36,5 @@ class PacketData(SCTE35Base):
         try:
             pts_ticks = table[self.program]
             self.pts = self.as_90k(pts_ticks)
-        except:
+        except ERR:
             pass
