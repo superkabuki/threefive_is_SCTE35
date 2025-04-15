@@ -20,6 +20,10 @@ The Super Xml Parser has been replaceed by the __Ultra Xml Parser__.
 *  __Ultra XML Parser is not__ __vunerable__ to either one.
 ![image](https://github.com/user-attachments/assets/f838509a-ce2e-4120-8d08-7c6263ae5d5a)
 
+* __Quadradic blowup does even slow threefive3 down__, here's a __55,000 char long entity with 55,000 references__ parsed in 0.136 seconds..
+* [Code stolen from here](https://gist.github.com/jordanpotti/04c54f7de46f2f0f0b4e6b8e5f5b01b0)
+![image](https://github.com/user-attachments/assets/121edabe-947f-47b9-a5ad-ed7b0b393474)
+
 
 # threefive3 is the coolest SCTE-35 parser.
 
