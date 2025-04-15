@@ -1,28 +1,4 @@
 [__Install__](#install) |[__SCTE-35 Cli__](#the-cli-tool) | [__SCTE-35 HLS__](https://github.com/superkabuki/threefive3/blob/main/hls.md) | [__Cue__ Class](https://github.com/superkabuki/threefive3/blob/main/cue.md) | [__Stream__ Class](https://github.com/superkabuki/threefive3/blob/main/stream.md) | [__Online SCTE-35 Parser__](https://iodisco.com/scte35) | [__Encode SCTE-35__](https://github.com/superkabuki/threefive3/blob/main/encode.md) | [__SCTE-35 Examples__](https://github.com/superkabuki/threefive3/tree/main/examples)
- <pre> 
-We are super close to threefive3 v3.0.37, 
-I have been combing through the code for the last two weeks looking for obscure bugs and any potential problems.
-I'm profiling and linting everything.
-
-The Cue class is verified to decode and encode SCTE-35 in Base64,Bytes, Hex, Int, JSON, Xml, and xml+bin.
-
-  
-threefive3 v3.0.37 will be production ready.
- 
-</pre>
-### SCTE-35 Xml support is back and working really well. 
-The Super Xml Parser has been replaceed by the __Ultra Xml Parser__.
-  
-### `Q.` Why write an xml parser? 
- 
-### `A`  __quadratic blowup__ and __billion laughs__
-* __builtin python xml parsers__ are __vunerable__ to  __quadratic blowup__ and __billion laughs__
-*  __Ultra XML Parser is not__ __vunerable__ to either one.
-![image](https://github.com/user-attachments/assets/f838509a-ce2e-4120-8d08-7c6263ae5d5a)
-
-* __Quadradic blowup does even slow threefive3 down__, here's a __55,000 char long entity with 55,000 references__ parsed in 0.136 seconds..
-* [Code stolen from here](https://gist.github.com/jordanpotti/04c54f7de46f2f0f0b4e6b8e5f5b01b0)
-![image](https://github.com/user-attachments/assets/121edabe-947f-47b9-a5ad-ed7b0b393474)
 
 
 # threefive3 is the coolest SCTE-35 parser.
@@ -40,9 +16,6 @@ The Super Xml Parser has been replaceed by the __Ultra Xml Parser__.
 _Released Thursday April 3rd, 2025 4am EDT_
 > Stay up to date, only the latest release is supported.
 
-# Checkout the Super Cool SCTE-35 [__Examples__](https://github.com/superkabuki/threefive3/tree/main/examples)
-<br>
-
 ## MPEGTS streams can be parsed for SCTE-35 with three lines of code.
 
 ```py3
@@ -52,7 +25,37 @@ a@fu:~/build5/scte35/scte35$ pypy3
 >>>> strm=Stream('https://futzu.com/xaa.ts')
 >>>> strm.decode()
 ```
+
+# Checkout the Super Cool SCTE-35 [__Examples__](https://github.com/superkabuki/threefive3/tree/main/examples)
+<br>
+
+ # threefive3 v3.0.37 is almost ready
+ 
+* We are super close to __threefive3 v3.0.37__, 
+* I have been __combing through the code__ for the last two weeks __looking for obscure bugs__ and any potential problems.
+* I'm __profiling and linting__ everything.
+ * __File any bug reports now__,  I'm going to be __playing a lot of golf__ soon trying to get on the tour and won't be around as much.
+* I've __fixed every bug I 've found in the last two weeks__, and I've spend all day looking and I can't find any new ones.
+* The __Cue__ class is verified to __decode and encode SCTE-35 in Base64, Bytes, Dicts, Hex, Int, JSON, Xml, and Xml+bin__.
+* Xml is back and better than ever. __The new Ultra Xml Parser__ replaces the Super Xml Parser.
+* __threefive3 v3.0.37 will be production ready__
+
 ## Heads Up! Xml is coming back.
+
+ 
+### `Q.` Why write an xml parser? 
+ 
+### `A`  __quadratic blowup__ and __billion laughs__
+* __builtin python xml parsers__ are __vunerable__ to  __quadratic blowup__ and __billion laughs__
+*  __Ultra XML Parser is not__ __vunerable__ to either one.
+![image](https://github.com/user-attachments/assets/f838509a-ce2e-4120-8d08-7c6263ae5d5a)
+
+* __Quadradic blowup does even slow threefive3 down__, here's a __55,000 char long entity with 55,000 references__ parsed in 0.136 seconds..
+* [Code stolen from here](https://gist.github.com/jordanpotti/04c54f7de46f2f0f0b4e6b8e5f5b01b0)
+![image](https://github.com/user-attachments/assets/121edabe-947f-47b9-a5ad-ed7b0b393474)
+
+
+
 <pre>
  
     I pulled xml support a few months ago, I wasn't happy with the implementation. 
@@ -68,6 +71,8 @@ It was time to rethink xml.
  expect the new xml implementation in the next release 3.0.37, later this week.
  
 </pre>
+
+
 
 
 # `Documentation`
