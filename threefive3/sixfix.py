@@ -4,12 +4,13 @@ sixfix.py
 
 import io
 import sys
+from functools import partial
 from .crc import crc32
 from .bitn import NBin
-from .stuff import red
-from .stream import Stream
+from .stuff import print2
+from .stream import Stream, ProgramInfo
+from .pmt import PMT
 
-global fixme
 fixme = []
 
 
@@ -46,20 +47,35 @@ class SixFix(Stream):
 
     def __init__(self, tsdata=None):
         super().__init__(tsdata)
-        self.pmt_pays = {}
+        self.pmt_payloads = {}
+        self.pmt_headers = set()
+        self.pmt_inputs = []
         self.pid_prog = {}
         self.con_pids = set()
         self.out_file = "sixfixed-" + tsdata.rsplit("/")[-1]
         self.in_file = sys.stdin.buffer
 
+    def iter_pkts(self, num_pkts=1):
+        """
+        iter_pkts iterates a mpegts stream into packets
+        """
+        return iter(partial(self._tsdata.read, self.PACKET_SIZE * num_pkts), b"")
+
     def _parse_by_pid(self, pkt, pid):
-        if pid in self.pids.tables:
-            self._parse_tables(pkt, pid)
+        ##        if b'\x00\x00\x01' in pkt:
+        ##            if b'\x00\x00\x01\xc0' not in pkt:
+        ##                print("pid", pid, '  : ', pkt)
+
         if pid in self.pids.pmt:
+            self.pmt_headers.add(pkt[:4])
+            self._parse_pmt(pkt[4:], pid)
             prgm = self.pid2prgm(pid)
-            if prgm in self.pmt_pays:
-                pkt = pkt[:4] + self.pmt_pays[prgm]
-        return pkt
+            if prgm in self.pmt_payloads:
+                return self.pmt_payloads[prgm]
+        else:
+            if pid in self.pids.tables:
+                self._parse_tables(pkt, pid)
+            return pkt
 
     def _parse_pkts(self, out_file):
         active = io.BytesIO()
@@ -68,11 +84,12 @@ class SixFix(Stream):
         for pkt in self.iter_pkts():
             pid = self._parse_pid(pkt[1], pkt[2])
             pkt = self._parse_by_pid(pkt, pid)
-            active.write(pkt)
-            pkt_count = (pkt_count + 1) % chunk_size
-            if not pkt_count:
-                out_file.write(active.getbuffer())
-                active = io.BytesIO()
+            if pkt:
+                active.write(pkt)
+                pkt_count = (pkt_count + 1) % chunk_size
+                if not pkt_count:
+                    out_file.write(active.getbuffer())
+                    active = io.BytesIO()
 
     def convert_pids(self):
         """
@@ -85,49 +102,42 @@ class SixFix(Stream):
         with open(self.out_file, "wb") as out_file:
             self._parse_pkts(out_file)
 
-    def _regen_pmt(
-        self, prgm, n_seclen, pcr_pid, n_proginfolen, n_info_bites, n_streams
-    ):
-        nbin = NBin()
-        nbin.add_int(2, 8)  # 0x02
-        nbin.add_int(1, 1)  # section Syntax indicator
-        nbin.add_int(0, 1)  # 0
-        nbin.add_int(3, 2)  # reserved
-        nbin.add_int(n_seclen, 12)  # section length
-        nbin.add_int(prgm, 16)  # program number
-        nbin.add_int(3, 2)  # reserved
-        nbin.add_int(0, 5)  # version
-        nbin.add_int(1, 1)  # current_next_indicator
-        nbin.add_int(0, 8)  # section number
-        nbin.add_int(0, 8)  # last section number
-        nbin.add_int(7, 3)  # res
-        nbin.add_int(pcr_pid, 13)
-        nbin.add_int(15, 4)  # res
-        nbin.add_int(n_proginfolen, 12)
-        nbin.add_bites(n_info_bites)
-        nbin.add_bites(n_streams)
-        a_crc = crc32(nbin.bites)
-        nbin.add_int(a_crc, 32)
-        pointer_field = b"\x00"
-        n_payload = pointer_field + nbin.bites
-        pad = 184 - len(n_payload)
-        if pad > 0:
-            n_payload = n_payload + (b"\xff" * pad)
-        self.pmt_pays[prgm] = n_payload
+    def _chk_payload(self, pay, pid):
+        pay = self._chk_partial(pay, pid, self._PMT_TID)
+        if not pay:
+            return False
+        return pay
+
+    def _unpad_pmt(self, pay):
+        while pay[-1] == 255:
+            pay = pay[:-1]
+        return pay
 
     def _parse_pmt(self, pay, pid):
         """
         parse program maps for streams
         """
-        pay = self._chk_partial(pay, pid, self._PMT_TID)
+        pay = self._unpad_pmt(pay)
+        pay = self._chk_payload(pay, pid)
         if not pay:
             return False
+        if pay in self.pmt_inputs:
+            return False
+        self.pmt_inputs.append(pay)
+        pmt = PMT(pay, self.con_pids)
         seclen = self._parse_length(pay[1], pay[2])
         n_seclen = seclen + 6
         if self._section_incomplete(pay, pid, seclen):
             return False
         program_number = self._parse_program(pay[3], pay[4])
+        if not program_number:
+            return False
         pcr_pid = self._parse_pid(pay[8], pay[9])
+        if program_number not in self.maps.prgm:
+            self.maps.prgm[program_number] = ProgramInfo()
+        pinfo = self.maps.prgm[program_number]
+        pinfo.pid = pid
+        pinfo.pcr_pid = pcr_pid
         self.pids.pcr.add(pcr_pid)
         self.maps.pid_prgm[pcr_pid] = program_number
         self.maps.pid_prgm[pid] = program_number
@@ -136,20 +146,34 @@ class SixFix(Stream):
         n_proginfolen = proginfolen + len(self.CUEI_DESCRIPTOR)
         end = idx + proginfolen
         info_bites = pay[idx:end]
-        n_info_bites = info_bites + self.CUEI_DESCRIPTOR
-        while idx < end:
-            # d_type = pay[idx]
-            idx += 1
-            d_len = pay[idx]
-            idx += 1
-            # d_bytes = pay[idx - 2 : idx + d_len]
-            idx += d_len
-        si_len = seclen - 9
-        si_len -= proginfolen
+        n_info_bites = self.CUEI_DESCRIPTOR + info_bites
+        idx = 12 + proginfolen
+        si_len = seclen - (9 + proginfolen)  #  ???
         n_streams = self._parse_program_streams(si_len, pay, idx, program_number)
-        self._regen_pmt(
-            program_number, n_seclen, pcr_pid, n_proginfolen, n_info_bites, n_streams
-        )
+        # self._regen_pmt(program_number,n_seclen, pcr_pid, n_proginfolen, n_info_bites, n_streams)
+        pmt = list(self.pmt_headers)[0] + b"\x00" + pmt.mk()
+        if len(pmt) < 188:
+            pad = (188 - len(pmt)) * b"\xff"
+            self.pmt_payloads[program_number] = pmt + pad
+        else:
+            one = pmt[:188]
+            two=b""
+            pointer = len(pmt[188:])
+            three = b""
+            pad2 = b""
+            pad3 = b""
+            #   pointer =pointer.to_bytes(1,byteorder="big")
+            if len(self.pmt_headers) >  1:
+                two = list(self.pmt_headers)[1] + pmt[188:]
+                if len(self.pmt_headers) >  2:
+                    three = list(self.pmt_headers)[2] + two[188:]
+                    two = two[:188]
+                    if len(three) < 188:
+                        pad3 = (188 - len(three)) * b"\xff"
+                elif len(two) < 188:
+                    pad2 = (188 - len(two)) * b"\xff"
+
+            self.pmt_payloads[program_number] = one + two + pad2 + three + pad3
         return True
 
     def _parse_program_streams(self, si_len, pay, idx, program_number):
@@ -176,10 +200,12 @@ class SixFix(Stream):
         npay = pay
         stream_type = pay[idx]
         el_pid = self._parse_pid(pay[idx + 1], pay[idx + 2])
-        if el_pid in self.con_pids:
-            if stream_type == 6:
-                npay = pay[:idx] + b"\x86" + pay[idx + 1 :]
+ #       if el_pid in self.con_pids:
+        if stream_type == 6:
+            stream_type = 0x86
+            npay = pay[:idx] + b"\x86" + pay[idx + 1 :]
         ei_len = self._parse_length(pay[idx + 3], pay[idx + 4])
+        self._set_scte35_pids(el_pid, stream_type)
         return npay, stream_type, el_pid, ei_len
 
 
@@ -189,21 +215,19 @@ def sixfix(arg):
     that contain SCTE-35 data to stream type 0x86
     """
     global fixme
-    fixme=[]
+    fixme = []
     s1 = PreFix(arg)
     sixed = s1.decode(func=passed)
+
     if not sixed:
-        red("No bin data SCTE-35 streams were found.")
+        print2("No bin data streams containing SCTE-35 data were found.")
         return
     s2 = SixFix(arg)
     s2.con_pids = sixed
     s2.convert_pids()
-    red(f'Wrote: sixfixed-{arg.rsplit("/")[-1]}')
-
+    print2(f'Wrote: sixfixed-{arg.rsplit("/")[-1]}\n')
     return
 
 
 if __name__ == "__main__":
-    for arg in sys.argv[1:]:
-        sixfix(arg)
-
+    sixfix(sys.argv[1])
