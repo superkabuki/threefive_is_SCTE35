@@ -6,7 +6,7 @@ import sys
 
 from functools import partial
 from .new_reader import reader
-from .stuff import print2
+from .stuff import print2,blue,ERR
 from .cue import Cue
 from .packetdata import PacketData
 from .streamtypes import streamtype_map
@@ -160,7 +160,7 @@ class Stream:
         self.the_scte35_pids = []
         self.pids = Pids()
         self.maps = Maps()
-        self.iframer = IFramer(shush=True)
+       # self.iframer = IFramer(shush=True)
         self.pmt_payloads=set()
         self.pmt_count=0
 
@@ -263,7 +263,7 @@ class Stream:
         func can be set to a custom function that accepts
         a threefive3.Cue instance as it's only argument.
         """
-        num_pkts = 2800
+        num_pkts = 1400
         for chunk in self.iter_pkts(num_pkts=num_pkts):
             self._decode2cues(chunk, func)
         return False
@@ -318,14 +318,14 @@ class Stream:
         self.info = True
         for pkt in self.iter_pkts():
             self._parse(pkt)
-            if self.pmt_count > 20:
-                if self.maps.prgm.keys():
-                    sopro = sorted(self.maps.prgm.items())
-                    for k, vee in sopro:
-                #  if len(vee.streams.items()) > 0:
-                        print2(f"\nProgram: {k}")
-                        vee.show()
-                        return True
+            if self.pmt_count > len(self.pmt_payloads) <<1:
+                blue(f"PMT Count: {self.pmt_count}")
+                break
+        if self.maps.prgm.keys():
+            sopro = sorted(self.maps.prgm.items())
+            for k, vee in sopro:
+                print2(f"\nProgram: {k}")
+                vee.show()
 
     def show_pts(self):
         """
@@ -383,21 +383,23 @@ class Stream:
     #    if self._afc_flag(pkt[3]):
         return  pkt[:4] + self._unpad(pkt[4:])
 
+    def _unpad(self, bites=b""):
+        return bites.strip(b"\xff")
 
-    def _unpad(self, bites):
-        pad = 255
-        one = 1
-        if not bites:
-            return b""
-        while bites[0] == pad:
-            bites = bites[1:]
-        return self._unpad2(bites)
-
-    def _unpad2(self, bites):
-        pad = 255
-        while bites[-1] == pad:
-            bites = bites[:-1]
-        return bites
+##    def _unpad(self, bites):
+##        pad = 255
+##        one = 1
+##        if not bites:
+##            return b""
+##        while bites[0] == pad:
+##            bites = bites[1:]
+##        return self._unpad2(bites)
+##
+##    def _unpad2(self, bites):
+##        pad = 255
+##        while bites[-1] == pad:
+##            bites = bites[:-1]
+##        return bites
 
     def _mk_packet_data(self, pid):
         prgm = self.maps.pid_prgm[pid]
@@ -449,9 +451,6 @@ class Stream:
         return pkt[3] & 32
 
 
-    def _unpad(self, bites=b""):
-        return bites.strip(b"\xff")
-            
     def _parse_payload(self, pkt):
         """
         _parse_payload returns the packet payload
@@ -463,18 +462,16 @@ class Stream:
             head_size += afl + 1  # +one for afl byte
         return pkt[head_size:]
 
-    def _pmt_pid(self, pay, pid):
-        if pid in self.pids.pmt:
-            self.pmt_count+=1
-            if self.pmt_count > 10:
-                if pay in self.pmt_payloads:
-                    return
-            self.pmt_payloads.add(pay)
-            self._parse_pmt(pay, pid)
+##    def _pmt_pid(self, pay, pid):
+##        if pid in self.pids.pmt:
+##            self.pmt_count+=1
+##            if self.pmt_count > 10:
+##                if pay in self.pmt_payloads:
+##                    return
+##            self.pmt_payloads.add(pay)
+##            self._parse_pmt(pay, pid)
 
     def _pmt_pid(self, pay, pid):
-        if pid not in self.pids.pmt:
-            return
         self.pmt_count += 1
         if pay in self.pmt_payloads:
             if self.pmt_count > len(self.pmt_payloads) << 1:
@@ -497,7 +494,9 @@ class Stream:
         based on pid of the pkt
         """
         pay = self._parse_payload(pkt)
-        self._pmt_pid(pay,pid)
+        if pid in self.pids.pmt:
+            self._pmt_pid(pay, pid)
+            return
         if not self._same_as_last(pay, pid):
             self._pat_pid(pay, pid)
             self._sdt_pid(pay, pid)
@@ -517,7 +516,7 @@ class Stream:
             self._parse_pcr(pkt, pid)
 
     def _chk_pts(self, pkt, pid):
-        if self._pusi_flag(pkt):
+        if pid in self.pids.pcr:
             self._parse_pts(pkt, pid)
 
     def _chk_scte35(self, pkt, pid):
@@ -527,11 +526,13 @@ class Stream:
         return cue
 
     def _parse(self, pkt):
+        cue = False
         pid = self._parse_info(pkt)
-     #   if pid in self.pids.pcr:
-       #     self._chk_pcr(pkt, pid)
-        self._chk_pts(pkt, pid)
-        return self._chk_scte35(pkt, pid)
+        if self._pusi_flag(pkt):
+            self._chk_pts(pkt, pid)
+        if self._pid_has_scte35(pid):
+            cue = self._parse_scte35(pkt, pid)
+        return cue
 
     def _pid_has_scte35(self, pid):
         #  return pid in self.pids.scte35.union(self.pids.maybe_scte35) #   union sucks. 4.47 secs
