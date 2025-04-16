@@ -104,8 +104,8 @@ class SixFix(Stream):
 
     def _chk_payload(self, pay, pid):
         pay = self._chk_partial(pay, pid, self._PMT_TID)
-        if not pay:
-            return False
+##        if not pay:
+##            return False
         return pay
 
     def _unpad_pmt(self, pay):
@@ -113,10 +113,36 @@ class SixFix(Stream):
             pay = pay[:-1]
         return pay
 
-    def _parse_pmt(self, pay, pid):
+    def pmt2packets(self,pmt,program_number):
         """
-        parse program maps for streams
+        pmt2packets split the new pmt table into 188 byte packets
         """
+        pmt = list(self.pmt_headers)[0] + b"\x00" + pmt.mk()
+        if len(pmt) < 188:
+            pad = (188 - len(pmt)) * b"\xff"
+            self.pmt_payloads[program_number] = pmt + pad
+        else:
+            one = pmt[:188]
+            two=b""
+            pointer = len(pmt[188:])
+            three = b""
+            pad2 = b""
+            pad3 = b""
+            #   pointer =pointer.to_bytes(1,byteorder="big")
+            if len(self.pmt_headers) >  1:
+                two = list(self.pmt_headers)[1] + pmt[188:]
+                if len(self.pmt_headers) >  2:
+                    three = list(self.pmt_headers)[2] + two[188:]
+                    two = two[:188]
+                    if len(three) < 188:
+                        pad3 = (188 - len(three)) * b"\xff"
+                elif len(two) < 188:
+                    pad2 = (188 - len(two)) * b"\xff"
+
+            self.pmt_payloads[program_number] = one + two + pad2 + three + pad3
+        return True
+
+    def _pmt_precheck(self,pay,pid):
         pay = self._unpad_pmt(pay)
         pay = self._chk_payload(pay, pid)
         if not pay:
@@ -124,6 +150,15 @@ class SixFix(Stream):
         if pay in self.pmt_inputs:
             return False
         self.pmt_inputs.append(pay)
+        return pay
+
+    def _parse_pmt(self, pay, pid):
+        """
+        parse program maps for streams
+        """
+        pay =self._pmt_precheck(pay,pid)
+        if not pay:
+            return False
         pmt = PMT(pay, self.con_pids)
         seclen = self._parse_length(pay[1], pay[2])
         n_seclen = seclen + 6
@@ -151,30 +186,8 @@ class SixFix(Stream):
         si_len = seclen - (9 + proginfolen)  #  ???
         n_streams = self._parse_program_streams(si_len, pay, idx, program_number)
         # self._regen_pmt(program_number,n_seclen, pcr_pid, n_proginfolen, n_info_bites, n_streams)
-        pmt = list(self.pmt_headers)[0] + b"\x00" + pmt.mk()
-        if len(pmt) < 188:
-            pad = (188 - len(pmt)) * b"\xff"
-            self.pmt_payloads[program_number] = pmt + pad
-        else:
-            one = pmt[:188]
-            two=b""
-            pointer = len(pmt[188:])
-            three = b""
-            pad2 = b""
-            pad3 = b""
-            #   pointer =pointer.to_bytes(1,byteorder="big")
-            if len(self.pmt_headers) >  1:
-                two = list(self.pmt_headers)[1] + pmt[188:]
-                if len(self.pmt_headers) >  2:
-                    three = list(self.pmt_headers)[2] + two[188:]
-                    two = two[:188]
-                    if len(three) < 188:
-                        pad3 = (188 - len(three)) * b"\xff"
-                elif len(two) < 188:
-                    pad2 = (188 - len(two)) * b"\xff"
+        return self.pmt2packets(pmt,program_number)
 
-            self.pmt_payloads[program_number] = one + two + pad2 + three + pad3
-        return True
 
     def _parse_program_streams(self, si_len, pay, idx, program_number):
         """
@@ -201,7 +214,7 @@ class SixFix(Stream):
         stream_type = pay[idx]
         el_pid = self._parse_pid(pay[idx + 1], pay[idx + 2])
  #       if el_pid in self.con_pids:
-        if stream_type == 6:
+        if stream_type == 0x6:
             stream_type = 0x86
             npay = pay[:idx] + b"\x86" + pay[idx + 1 :]
         ei_len = self._parse_length(pay[idx + 3], pay[idx + 4])
