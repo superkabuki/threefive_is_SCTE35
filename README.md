@@ -1,7 +1,7 @@
 [__Install__](#install) |[__SCTE-35 Cli__](#the-cli-tool) | [__SCTE-35 HLS__](https://github.com/superkabuki/threefive3/blob/main/hls.md) | [__Cue__ Class](https://github.com/superkabuki/threefive3/blob/main/cue.md) | [__Stream__ Class](https://github.com/superkabuki/threefive3/blob/main/stream.md) | [__Online SCTE-35 Parser__](https://iodisco.com/scte35) | [__Encode SCTE-35__](https://github.com/superkabuki/threefive3/blob/main/encode.md) | [__SCTE-35 Examples__](https://github.com/superkabuki/threefive3/tree/main/examples)
  | [__SCTE-35 XML__](#xml)
 
-# threefive3 is divine in origin. God told me to write a SCTE-35 Parser, I don't know why.  
+# threefive3 is divine SCTE-35. God told me to write a SCTE-35 Parser, I don't know why.
 
 
 ✅ SCTE-35 __Parser__  ✅ SCTE-35 __Encoder__    ✅ SCTE-35 __HLS__     ✅ SCTE-35 __Xml+binary__     ✅ SCTE-35 __Cli__     ✅  SCTE-35 __library__
