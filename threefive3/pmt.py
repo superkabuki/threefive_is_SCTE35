@@ -1,6 +1,7 @@
 from .bitn import Bitn, NBin
 from .crc import crc32
 import pprint
+from .stuff import blue
 
 
 class Dscptr:
@@ -112,12 +113,17 @@ class PMT:
         return streams
 
     def mk(self):
-        cuei = Dscptr()
-        cuei.type = 5
-        cuei.length = 4
-        cuei.value = b"CUEI"
-        cuei.total_size = 6
-        self.descriptors.append(cuei)
+        vals = [dscptr.value for dscptr in self.descriptors]
+        if b"CUEI" not in vals:
+            blue('Adding SCTE-35 Descriptor')
+            cuei = Dscptr()
+            cuei.type = 5
+            cuei.length = 4
+            cuei.value = b"CUEI"
+            cuei.total_size = 6
+            self.descriptors.append(cuei)
+        else:
+            blue("SCTE-35 Descriptor already present.")
         self.program_info_length = sum(
             [dscptr.total_size for dscptr in self.descriptors]
         )
