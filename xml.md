@@ -14,10 +14,10 @@ It was all way too clunky. Everytime I touched one part of the code, something e
 # `A.` quadratic blowup and billion laughs for starters. 
 
 *  These are very old attacks, __over ten years old__,  and the [__python xml parsers are all vunerable__](https://docs.python.org/3/library/xml.html#xml-vulnerabilities) to both attacks.
- That's not good. That causes me a lot of concern. __If you know it's vumerable, don't document that it's broke, fix it__.
 
-* __I'd fix the parsers__ for them, but __I've been banned from python's github repo__ for __criticizing PEP 668__ ( --break-system-packages), and trying to __start a mutiny__, but that's a story for another time.
+*  __If you know it's broke, don't document that it's broke, fix it__.
 
+* __I'd fix the parsers__  but __I've been banned from python__ for __criticizing PEP 668__ , and trying to __start a mutiny__.
 
 # Meet the new xml parser, Ultra Xml Parser Supreme.
 
@@ -287,8 +287,10 @@ threefive3 video.ts xml
    <scte35:AvailDescriptor providerAvailId="1234"/>
 </scte35:SpliceInfoSection>
 ```
+## threefive3 vs. Quadradic Blowup
+* Spoiler alert, threefive3 wins. 
  
 * [Code stolen from here](https://gist.github.com/jordanpotti/04c54f7de46f2f0f0b4e6b8e5f5b01b0)
-* 
+ 
 ![image](https://github.com/user-attachments/assets/121edabe-947f-47b9-a5ad-ed7b0b393474)
 
