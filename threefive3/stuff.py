@@ -52,7 +52,7 @@ def clean(data):
         return data
     data=data.strip()
     if isinstance(data,bytes):
-        data=data.decode("utf-8")
+        data=data.decode()
     return  data
 
 
@@ -60,10 +60,11 @@ def ishex(data):
     """
     ishex determine if a string is a hex value.
     """
-    data=clean(data)
-    hexed = "0123456789abcdef"
-    data = data.lower().strip("0x")
-    return all([c in hexed for c in data])
+    if isinstance(data,str):
+        hexed = "0123456789abcdef"
+        data = data.lower().strip("0x")
+        return all([c in hexed for c in data])
+    return False
 
 
 def isjson(data):
