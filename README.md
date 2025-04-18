@@ -32,11 +32,13 @@ a@fu:~/build5/scte35/scte35$ pypy3
  
 * Xml is back and better than ever. __The new Ultra Xml Parser Supreme__ replaces the Super Xml Parser.
 
-# [XML](https://github.com/superkabuki/SCTE-35/blob/main/xml.md)
 
 # `Documentation`
 
 * [Install](#install)
+
+### [XML](https://github.com/superkabuki/SCTE-35/blob/main/xml.md) New!
+
 
 ### Cli
 
