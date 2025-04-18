@@ -34,34 +34,7 @@ a@fu:~/build5/scte35/scte35$ pypy3
 * Xml is back and better than ever. __The new Ultra Xml Parser Supreme__ replaces the Super Xml Parser.
 * __threefive3 v3.0.37 is production ready__
 
-# Xml
-<pre>
-    I pulled xml support a few months ago, I wasn't happy with the implementation. 
-One out of every seven lines of code was xml specific, there was xml code everywhere.
-It was all way too clunky. Everytime I touched one part of the code, something else would break.
- 
- The xml parser worked completely different from the xml generator.
- Now, generating and parsing xml both use the Node class, it's much cleaner.
- The new Ultra Xml Parser Supreme is sweetness man. 
-</pre>
-
-
-# `Q.`Why would you write a xml parser for threefive3? 
- 
-# `A.`  __quadratic blowup__ and __billion laughs__. 
-
-* These are very old attacks, __over ten years old__,  and the [__python xml parsers are all vunerable__](https://docs.python.org/3/library/xml.html#xml-vulnerabilities) to both attacks.
-
-*  threefive3's __Ultra XML Parser Supreme is NOT__ __vunerable__ to either one.
-
-* __I'd fix the parsers__ for them, but __I've been banned from python's github repo__ for __criticizing PEP 668__ and trying to __start a mutiny__. 
-
- 
-* [Code stolen from here](https://gist.github.com/jordanpotti/04c54f7de46f2f0f0b4e6b8e5f5b01b0)
-* 
-![image](https://github.com/user-attachments/assets/121edabe-947f-47b9-a5ad-ed7b0b393474)
-
-
+# XML
 
 # `Documentation`
 
