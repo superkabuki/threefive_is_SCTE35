@@ -157,7 +157,6 @@ class Cue(SCTE35Base):
             return red("Bad Base64")
 
     def _str_bits(self, data):
-        red('string')
         if ishex(data):
             return self._hex_bits(clean(data))
         if isxml(data) or isjson(data):
