@@ -157,6 +157,11 @@ class Cue(SCTE35Base):
             return red("Bad Base64")
 
     def _str_bits(self, data):
+        if ishex(data):
+            return self._hex_bits(clean(data))
+        if isxml(data) or isjson(data):
+            self.load(data)
+            return self.bites
         data=data.strip()
         if data.isdigit():
             return self._int_bits(int(data))
@@ -171,8 +176,6 @@ class Cue(SCTE35Base):
         return data
 
     def _byte_bits(self,data):
-        if clean(data).isdigit():
-            return self._str_bits(clean(data))
         data = self._pkt_bits(data)
         self.bites = self.idxsplit(data, b"\xfc")
         return self.bites
@@ -182,12 +185,6 @@ class Cue(SCTE35Base):
         cue._mk_bits Converts
         Hex and Base64 strings into bytes.
         """
-        if isinstance(data,(str,bytes)):
-            if ishex(data):
-                return self._hex_bits(clean(data))
-            if isxml(data) or isjson(data):
-                self.load(data)
-                return self.bites
         if isinstance(data, dict):
             self.load(data)
             return self.bites
