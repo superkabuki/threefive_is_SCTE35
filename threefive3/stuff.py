@@ -43,14 +43,50 @@ def atohif(value):
     return value
 
 
+def clean(data):
+    """
+    clean strip and if it's a byte string
+    convert to a string
+    """
+    if not isinstance(data,(str,bytes)):
+        return data
+    data=data.strip()
+    if isinstance(data,bytes):
+        data=data.decode("utf-8")
+    return  data
+
+
 def ishex(data):
     """
     ishex determine if a string is a hex value.
     """
+    data=clean(data)
     hexed = "0123456789abcdef"
     data = data.lower().strip("0x")
     return all([c in hexed for c in data])
 
+
+def isjson(data):
+    """
+    isjson determine if a string or bytestring
+    is json.
+    """
+    data = clean(data)
+    if data.startswith('{'):
+        if data.endswith('}'):
+            return True
+    return  False
+
+def isxml(data):
+    """
+    isxml determine if a string or bytestring
+    is xml.
+    """
+    data = clean(data)
+    if data.startswith('<'):
+        if data.endswith('>'):
+            return True
+    return  False
 
 def iso8601():
     """
