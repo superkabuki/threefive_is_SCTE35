@@ -12,7 +12,7 @@
 * All HLS __SCTE-35__ Tags are Supported.
 
 # Latest release is v3.0.37 
-_Released Thursday April 3rd, 2025 4am EDT_
+_Released Thursday April 17th, 2025
 > Stay up to date, only the latest release is supported.
 
 ## MPEGTS streams can be parsed for SCTE-35 with three lines of code.
@@ -28,16 +28,11 @@ a@fu:~/build5/scte35/scte35$ pypy3
 # Checkout the Super Cool SCTE-35 [__Examples__](https://github.com/superkabuki/threefive3/tree/main/examples)
 <br>
 
- # threefive3 v3.0.37 is almost ready
+ # threefive3 v3.0.37 is ready
  
-* We are super close to __threefive3 v3.0.37__, 
-* I have been __combing through the code__ for the last two weeks __looking for obscure bugs__ and any potential problems.
-* I'm __profiling and linting__ everything.
- * __File any bug reports now__,  I'm going to be __playing a lot of golf__ soon trying to get on the tour and won't be around as much.
-* I've __fixed every bug I 've found in the last two weeks__, and I've spend all day looking and I can't find any new ones.
 * The __Cue__ class is verified to __decode and encode SCTE-35 in Base64, Bytes, Dicts, Hex, Int, JSON, Xml, and Xml+bin__.
-* Xml is back and better than ever. __The new Ultra Xml Parser__ replaces the Super Xml Parser.
-* __threefive3 v3.0.37 will be production ready__
+* Xml is back and better than ever. __The new Ultra Xml Parser Supreme__ replaces the Super Xml Parser.
+* __threefive3 v3.0.37 is production ready__
 
 # Xml
 <pre>
@@ -47,7 +42,7 @@ It was all way too clunky. Everytime I touched one part of the code, something e
  
  The xml parser worked completely different from the xml generator.
  Now, generating and parsing xml both use the Node class, it's much cleaner.
- The new Ultra Xml Parser  is nice code,  
+ The new Ultra Xml Parser Supreme is sweetness man. 
 </pre>
 
 
@@ -57,7 +52,7 @@ It was all way too clunky. Everytime I touched one part of the code, something e
 
 * These are very old attacks, __over ten years old__,  and the [__python xml parsers are all vunerable__](https://docs.python.org/3/library/xml.html#xml-vulnerabilities) to both attacks.
 
-*  threefive3's __Ultra XML Parser is NOT__ __vunerable__ to either one.
+*  threefive3's __Ultra XML Parser Supreme is NOT__ __vunerable__ to either one.
 
 * __I'd fix the parsers__ for them, but __I've been banned from python's github repo__ for __criticizing PEP 668__ and trying to __start a mutiny__. 
 
