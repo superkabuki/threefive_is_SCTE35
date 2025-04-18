@@ -52,7 +52,10 @@ def clean(data):
         return data
     data=data.strip()
     if isinstance(data,bytes):
-        data=data.decode()
+        try:
+            data=data.decode()
+        except ERR:
+            pass
     return  data
 
 
@@ -73,8 +76,8 @@ def isjson(data):
     is json.
     """
     data = clean(data)
-    if data.startswith('{'):
-        if data.endswith('}'):
+    if data[0] in ['{' , b'{']:
+        if data[-1] in ['}',b'}']:
             return True
     return  False
 
@@ -84,8 +87,8 @@ def isxml(data):
     is xml.
     """
     data = clean(data)
-    if data.startswith('<'):
-        if data.endswith('>'):
+    if data[0] in ['<',b'<']:
+        if data[-1] in ['>',b'>']:
             return True
     return  False
 
