@@ -62,14 +62,15 @@ HELP = f"""
 
     {BLUE}Inputs {U} mpegts, base64, hex, json,and xmlbin{U}.
 
-    {BLUE}Outputs{U} base64, bytes, hex, int, json, and xmlbin.{U}
+    {BLUE}Outputs{U} base64, bytes, hex, int, json, xml, and xmlbin.{U}
 
     {BLUE}scte35 can read from {U} strings, files, stdin, http(s), multicast, and Udp.
 
     Input {U}    Output {U}
    {U}{BLUE} mpegts {U}  {U}{BLUE} base64 {NORM} threefive3 https://example.com/video.ts  base64
    {U}{BLUE} base64 {U}  {U}{BLUE} hex    {NORM} threefive3 '/DAWAAAAAAAAAP/wBQb+AKmKxwAACzuu2Q==' hex
-   {U}{BLUE} xmlbin {U}  {U}{BLUE} int    {NORM} threefive3  int  < xml.xml
+   {U}{BLUE} xmlbin {U}  {U}{BLUE} int    {NORM} threefive3  int  < xmlbin.xml
+   {U}{BLUE} xmlbin {U}  {U}{BLUE} json    {NORM} threefive3   < xml.xml
    {U}{BLUE} mpegts {U}  {U}{BLUE} json   {NORM} threefive3 video.ts
    {U}{BLUE} json   {U}  {U}{BLUE} xml    {NORM} threefive3  < json.json  xml
    {U}{BLUE} hex    {U}  {U}{BLUE} xmlbin {NORM} threefive3 0xfc301600000000000000fff00506fe00a98ac700000b3baed9  xmlbin
@@ -327,13 +328,10 @@ def to_funk(this):
             strm = Stream(this)
             strm.decode(func=funk())  # funk() works here
         except OSError:
-            pass
-    else:
-        cue = Cue()  # This is the 
-        cue.bites = cue._mk_bits(this)
-        cue.decode()
-    if cue:
-        funk()(cue)  #   func works here too.
+            cue = Cue(this)  # This is the 
+            cue.show()
+            if cue:
+                funk()(cue)  #   funk works here too.
 
 
 def chk_stdin(args):
@@ -346,7 +344,7 @@ def chk_stdin(args):
         one = reader(sys.stdin.buffer).read(1)
         if one not in [b"G"]:  # is this a packet?
             two = reader(sys.stdin.buffer).read()
-            args.append((one + two).decode())  # no rewind on stdin
+            args.append((one + two).decode())  # no rewind on stdin?
         else:
             two = reader(sys.stdin.buffer).read(187)
             strm = Stream(sys.stdin.buffer)
