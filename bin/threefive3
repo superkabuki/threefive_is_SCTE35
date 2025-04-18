@@ -15,6 +15,7 @@ from threefive3.new_reader import reader
 from threefive3 import Cue, Stream, print2, blue, version, red
 from threefive3.hls import cli as hlscli
 from threefive3.sixfix import sixfix
+from threefive3.stuff import ERR
 
 # import cProfile
 # from sideways import cli as sidecli
@@ -322,16 +323,15 @@ def to_funk(this):
     cue = None
     if this in ["", b""]:
         return
-    if not this.strip().startswith('<'): 
-        try:
+    #if not this.strip().startswith('<'): 
+    try:
             # mpegts streams handled here.
-            strm = Stream(this)
-            strm.decode(func=funk())  # funk() works here
-        except OSError:
-            cue = Cue(this)  # This is the 
-            cue.show()
-            if cue:
-                funk()(cue)  #   funk works here too.
+        strm = Stream(this)
+        strm.decode(func=funk())  # funk() works here
+    except:
+        cue = Cue(this)  # This is the 
+        if cue:
+            funk()(cue)  #   funk works here too.
 
 
 def chk_stdin(args):
