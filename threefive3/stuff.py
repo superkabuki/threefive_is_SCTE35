@@ -87,7 +87,6 @@ def isxml(data):
     is xml.
     """
     data = clean(data)
-    print(data)
     if data[0] in ['<',b'<']:
         if data[-1] in ['>',b'>']:
             return True
