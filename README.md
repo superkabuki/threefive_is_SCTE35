@@ -1,9 +1,7 @@
 [__Install__](#install) |[__SCTE-35 Cli__](#the-cli-tool) | [__SCTE-35 HLS__](https://github.com/superkabuki/threefive3/blob/main/hls.md) | [__Cue__ Class](https://github.com/superkabuki/threefive3/blob/main/cue.md) | [__Stream__ Class](https://github.com/superkabuki/threefive3/blob/main/stream.md) | [__Online SCTE-35 Parser__](https://iodisco.com/scte35) | [__Encode SCTE-35__](https://github.com/superkabuki/threefive3/blob/main/encode.md) | [__SCTE-35 Examples__](https://github.com/superkabuki/threefive3/tree/main/examples)
  | [__SCTE-35 XML__](#xml)
 
-# threefive3 is divine SCTE-35. God told me to write a SCTE-35 parser, I don't know why.
-
-
+# threefive3 is better than you.
 ✅ SCTE-35 __Parser__  ✅ SCTE-35 __Encoder__    ✅ SCTE-35 __HLS__     ✅ SCTE-35 __Xml+binary__     ✅ SCTE-35 __Cli__     ✅  SCTE-35 __library__
 
 
@@ -13,7 +11,7 @@
 * Automatic AES decryption for HLS.
 * All HLS __SCTE-35__ Tags are Supported.
 
-# Latest release is v3.0.35 
+# Latest release is v3.0.37 
 _Released Thursday April 3rd, 2025 4am EDT_
 > Stay up to date, only the latest release is supported.
 
