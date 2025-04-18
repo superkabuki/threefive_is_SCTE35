@@ -189,6 +189,9 @@ class Cue(SCTE35Base):
             self.load(data)
             return self.bites
         if isinstance(data, bytes):
+            if isxml(data) or isjson(data):
+                self.load(data)
+                return self.bites
             return self._byte_bits(data)
         if isinstance(data, int):
             return self._int_bits(data)
