@@ -176,17 +176,18 @@ class Cue(SCTE35Base):
         data = self._pkt_bits(data)
         self.bites = self.idxsplit(data, b"\xfc")
         return self.bites
-    
+
     def _mk_bits(self, data):
         """
         cue._mk_bits Converts
         Hex and Base64 strings into bytes.
         """
-        if ishex(data):
-            return self._hex_bits(clean(data))            
-        if isxml(data) or isjson(data):
-            self.load(data)
-            return self.bites
+        if isinstance(data,(str,bytes)):
+            if ishex(data):
+                return self._hex_bits(clean(data))
+            if isxml(data) or isjson(data):
+                self.load(data)
+                return self.bites
         if isinstance(data, dict):
             self.load(data)
             return self.bites
