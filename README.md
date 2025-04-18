@@ -1,18 +1,18 @@
 [__Install__](#install) |[__SCTE-35 Cli__](#the-cli-tool) | [__SCTE-35 HLS__](https://github.com/superkabuki/threefive3/blob/main/hls.md) | [__Cue__ Class](https://github.com/superkabuki/threefive3/blob/main/cue.md) | [__Stream__ Class](https://github.com/superkabuki/threefive3/blob/main/stream.md) | [__Online SCTE-35 Parser__](https://iodisco.com/scte35) | [__Encode SCTE-35__](https://github.com/superkabuki/threefive3/blob/main/encode.md) | [__SCTE-35 Examples__](https://github.com/superkabuki/threefive3/tree/main/examples)
- | [__SCTE-35 XML__](#xml)
+ | [__SCTE-35 XML__](https://github.com/superkabuki/SCTE-35/blob/main/xml.md)
 
 # threefive3 is better than you.
 ✅ SCTE-35 __Parser__  ✅ SCTE-35 __Encoder__    ✅ SCTE-35 __HLS__     ✅ SCTE-35 __Xml+binary__     ✅ SCTE-35 __Cli__     ✅  SCTE-35 __library__
 
 
 * Parses __SCTE-35__ from MPEGTS, HLS, XML+Binary, Base64, Bytes, Hex, Integers, or JSON.
-* Encode __SCTE-35__ to Base64, Bytes, Hex, Int, JSON, or Xml+binary.
+* Encode __SCTE-35__ to Base64, Bytes, Hex, Int, JSON,XML, or Xml+binary.
 * Built-in network support for HTTP(S), UDP, and Multicast.
 * Automatic AES decryption for HLS.
 * All HLS __SCTE-35__ Tags are Supported.
 
 # Latest release is v3.0.37 
-_Released Thursday April 17th, 2025
+_Released Thursday April 18th, 2025
 > Stay up to date, only the latest release is supported.
 
 ## MPEGTS streams can be parsed for SCTE-35 with three lines of code.
@@ -30,11 +30,9 @@ a@fu:~/build5/scte35/scte35$ pypy3
 
  # threefive3 v3.0.37 is ready
  
-* The __Cue__ class is verified to __decode and encode SCTE-35 in Base64, Bytes, Dicts, Hex, Int, JSON, Xml, and Xml+bin__.
 * Xml is back and better than ever. __The new Ultra Xml Parser Supreme__ replaces the Super Xml Parser.
-* __threefive3 v3.0.37 is production ready__
 
-# XML
+# [XML](https://github.com/superkabuki/SCTE-35/blob/main/xml.md)
 
 # `Documentation`
 
