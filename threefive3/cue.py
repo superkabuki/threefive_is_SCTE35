@@ -157,6 +157,7 @@ class Cue(SCTE35Base):
             return red("Bad Base64")
 
     def _str_bits(self, data):
+        red('string')
         if ishex(data):
             return self._hex_bits(clean(data))
         if isxml(data) or isjson(data):
@@ -188,6 +189,8 @@ class Cue(SCTE35Base):
         if isinstance(data, dict):
             self.load(data)
             return self.bites
+        if isinstance(data, str):
+            return self._str_bits(data)
         if isinstance(data, bytes):
             if isxml(data) or isjson(data):
                 self.load(data)
@@ -195,8 +198,7 @@ class Cue(SCTE35Base):
             return self._byte_bits(data)
         if isinstance(data, int):
             return self._int_bits(data)
-        if isinstance(data, str):
-            return self._str_bits(data)
+
         return False
 
     def _mk_descriptors(self, bites):
