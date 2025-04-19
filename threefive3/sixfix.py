@@ -157,6 +157,7 @@ class SixFix(Stream):
 
     def mk_pmt(self,pay):
         pmt = PMT(pay, self.con_pids)
+        pmt.add_SCTE35stream(777)
         return pmt        
 
     def _parse_pmt(self, pay, pid):
@@ -247,6 +248,9 @@ def sixfix(arg):
     print2(f'Wrote: sixfixed-{arg.rsplit("/")[-1]}\n')
     return
 
+def cli():
+    sixfix(sys.argv[1])
+    
 
 if __name__ == "__main__":
-    sixfix(sys.argv[1])
+    cli()
