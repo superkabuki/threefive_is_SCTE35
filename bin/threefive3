@@ -9,12 +9,12 @@ scte35 command line SCTE35 decoder.
 import select
 import sys
 from threefive3.gums import cli as gumscli
+from threefive3.hls import cli as hlscli
+from threefive3.sixfix import cli as sixcli
 from threefive3.superkabuki import cli as skcli
 from threefive3.iframes import IFramer
 from threefive3.new_reader import reader
 from threefive3 import Cue, Stream, print2, blue, version, red
-from threefive3.hls import cli as hlscli
-from threefive3.sixfix import sixfix
 from threefive3.stuff import ERR
 
 # import cProfile
@@ -61,7 +61,7 @@ HELP = f"""
 
     {B} Default      {U} {BLUE}The default action is to read a input and write a SCTE-35 output.{U}
 
-    {BLUE}Inputs {U} mpegts, base64, hex, json,and xmlbin{U}.
+    {BLUE}Inputs {U} mpegts, base64, hex, json,and xml, and xmlbin{U}.
 
     {BLUE}Outputs{U} base64, bytes, hex, int, json, xml, and xmlbin.{U}
 
@@ -70,37 +70,58 @@ HELP = f"""
     Input {U}    Output {U}
    {U}{BLUE} mpegts {U}  {U}{BLUE} base64 {NORM} threefive3 https://example.com/video.ts  base64
    {U}{BLUE} base64 {U}  {U}{BLUE} hex    {NORM} threefive3 '/DAWAAAAAAAAAP/wBQb+AKmKxwAACzuu2Q==' hex
-   {U}{BLUE} xmlbin {U}  {U}{BLUE} int    {NORM} threefive3  int  < xmlbin.xml
-   {U}{BLUE} xmlbin {U}  {U}{BLUE} json    {NORM} threefive3   < xml.xml
+   {U}{BLUE} xmlbin  {U}  {U}{BLUE} int    {NORM} threefive3   < xmlbin.xml int
+   {U}{BLUE} xml        {U}  {U}{BLUE} json    {NORM} threefive3   < xml.xml
    {U}{BLUE} mpegts {U}  {U}{BLUE} json   {NORM} threefive3 video.ts
-   {U}{BLUE} json   {U}  {U}{BLUE} xml    {NORM} threefive3  < json.json  xml
-   {U}{BLUE} hex    {U}  {U}{BLUE} xmlbin {NORM} threefive3 0xfc301600000000000000fff00506fe00a98ac700000b3baed9  xmlbin
+   {U}{BLUE} json       {U}  {U}{BLUE} xml    {NORM} threefive3  < json.json  xml
 
-    {B}  hls        {U}{NORM}{BLUE} SCTE-35 hls decode help:{U}  threefive3 hls help
+    {B}  hls        {U}{NORM}{BLUE} SCTE-35 HLS decode{U}
 
-    threefive3 hls https://example.com/master.m3u8{U}
+    threefive3 hls help   |   threefive3 hls https://example.com/master.m3u8{U}
 
-    {B} iframes     {U}{BLUE} Show MPEGTS iframes{NORM} threefive3 iframes video.ts
+    {B} iframes     {U}{BLUE} Show MPEGTS iframes{NORM}
 
-    {B} mcast       {U}{NORM}{BLUE} Multicast sender(server) help: {U} threefive3 mcast help
+    threefive3 iframes video.ts
 
-    threefive3 mcast video.ts
+    {B} inject      {U}{NORM}{BLUE} SuperKabuki SCTE-35 MPEGTS Packet Injection Engine{U}
 
-    {B}  packets    {U}{NORM}{BLUE} Print raw SCTE-35 packets:{NORM} threefive3 packets udp://@235.35.3.5:3535
+    threefive3 inject help
 
-    {B}  proxy      {U}{NORM}{BLUE} Parse a stream and copy it to stdout:{NORM} threefive3 proxy video.ts
+    {B} mcast       {U}{NORM}{BLUE} Multicast sender(server){U}
 
-    {B}  pts        {U}{NORM}{BLUE} Print PTS from mpegts video:{NORM} threefive3 pts video.ts
+    threefive3 mcast help  |   threefive3 mcast video.ts
 
-    {B}  sidecar    {U}{NORM}{BLUE} Create a sidecar file:{NORM} threefive3 sidecar video.ts
+    {B}  packets    {U}{NORM}{BLUE} Print raw SCTE-35 packets{NORM}
 
-    {B}  sixfix     {U}{NORM}{BLUE} Fix SCTE-35 data mangled by ffmpeg:{NORM} threefive3 sixfix video.ts
+    threefive3 packets udp://@235.35.3.5:3535
 
-    {B}  show       {U}{NORM}{BLUE} Probe mpegts video:{NORM} threefive3 show video.ts
+    {B}  proxy      {U}{NORM}{BLUE} Parse a MPEGTS stream and copy it to stdout{NORM}
 
-    {B}  version    {U}{NORM}{BLUE} Show version:{NORM} threefive3 version
+    threefive3 proxy video.ts
 
-    {B}  help       {U}{NORM} {BLUE}Help:{NORM} threefive3 help
+    {B}  pts        {U}{NORM}{BLUE} Print PTS from MPEGTS video{NORM}
+
+    threefive3 pts video.ts
+
+    {B}  sidecar    {U}{NORM}{BLUE} Create a SCTE-35 sidecar file{NORM}
+
+    threefive3 sidecar video.ts
+
+    {B}  sixfix     {U}{NORM}{BLUE} Fix SCTE-35 data mangled by ffmpeg{NORM}
+
+    threefive3 sixfix video.ts
+
+    {B}  show       {U}{NORM}{BLUE} Probe MPEGTS video{NORM}
+
+    threefive3 show video.ts
+
+    {B}  version    {U}{NORM}{BLUE} Show version{NORM}
+
+    threefive3 version
+
+    {B}  help       {U}{NORM} {BLUE}Help{NORM}
+
+    threefive3 help
 
 """
 
@@ -170,6 +191,14 @@ def iframe_chk(this):
     iframer.do(this)
 
 
+def inject_chk(this):
+    """
+    inject_chk use the superkabuki
+                        packet injection engine.
+    """
+    skcli()
+
+
 def packet_chk(this):
     """
     packet_chk checks for the packet keyword
@@ -221,7 +250,7 @@ mpegts_map = {
     "pts": pts_chk,
     "show": show_chk,
     "sidecar": sidecar_chk,
-    "sixfix": sixfix,
+    "sixfix": sixcli,
     "iframes": iframe_chk,
 }
 
@@ -323,13 +352,13 @@ def to_funk(this):
     cue = None
     if this in ["", b""]:
         return
-    #if not this.strip().startswith('<'): 
+    # if not this.strip().startswith('<'):
     try:
-            # mpegts streams handled here.
+        # mpegts streams handled here.
         strm = Stream(this)
         strm.decode(func=funk())  # funk() works here
     except:
-        cue = Cue(this)  # This is the 
+        cue = Cue(this)  # This is the
         if cue:
             funk()(cue)  #   funk works here too.
 
@@ -368,7 +397,12 @@ def chk_funk_map():
 
 # cli map
 
-cli_map = {"mcast": gumscli, "superkabuki": skcli}
+cli_map = {
+    "mcast": gumscli,
+    "superkabuki": skcli,
+    "inject": skcli,
+    "sk": skcli,
+}
 
 
 def dashdashhelp():
