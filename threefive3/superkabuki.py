@@ -37,7 +37,6 @@ class SuperKabuki(SixFix):
     CUEI_DESCRIPTOR = b"\x05\x04CUEI"
 
     def __init__(self, tsdata=None):
- #       super().__init__(tsdata)
         self.infile = None
         self.outfile = "superkabuki-out.ts"
         if isinstance(tsdata, str):
@@ -206,7 +205,7 @@ class SuperKabuki(SixFix):
         self.open_output()
         active = io.BytesIO()
         pkt_count = 0
-        chunk_size = 2048
+        chunk_size = 1442
         with self.outfile as outfile:
             for pkt in self.iter_pkts():
                 pid = self._parse_pid(pkt[1], pkt[2])
