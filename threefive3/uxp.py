@@ -7,12 +7,19 @@ from .stuff import ERR
 from .upids import upid_map
 from .xml import Node, iter_attrs
 
+
 def mk_attrs(line):
     """
     mk_attrs parses the current line for attributes
     """
-    line = line.replace('"','').replace("<",'').replace("/>",'').replace('>','').strip()
-    attrs=  {y[0]:y[1] for y in [ x.split("=") for x in line.split(" ") if "=" in x]}
+    line = (
+        line.replace('"', "")
+        .replace("<", "")
+        .replace("/>", "")
+        .replace(">", "")
+        .strip()
+    )
+    attrs = {y[0]: y[1] for y in [x.split("=") for x in line.split(" ") if "=" in x]}
     return iter_attrs(attrs)
 
 
@@ -28,29 +35,30 @@ def mk_line(exemel):
     """
     mk_line grabs the next '<' to '>' section of xml
     """
-    line = exemel.split(">",1)[0]+">"
-    exemel=exemel.replace(line,'',1).strip()
-    return line,exemel
+    line = exemel.split(">", 1)[0] + ">"
+    exemel = exemel.replace(line, "", 1).strip()
+    return line, exemel
 
 
-def mk_node(tag,line,exemel):
+def mk_node(tag, line, exemel):
     """
     mk_node marshal xml data
     into a  threefive3.xml.Node instance.
 
     """
-    ns =None
+    ns = None
     attrs = mk_attrs(line)
     if ":" in tag:
-        ns,tag =tag.split(":",1)
-    node =Node(tag,attrs=attrs,ns=ns)
+        ns, tag = tag.split(":", 1)
+    tag=tag.strip('>')
+    node = Node(tag, attrs=attrs, ns=ns)
     if not exemel.startswith("<"):
-        node.value = exemel.split('<',1)[0]
-        exemel=exemel.replace(node.value,'',1).strip()
-    return node,exemel
+        node.value = exemel.split("<", 1)[0]
+        exemel = exemel.replace(node.value, "", 1).strip()
+    return node, exemel
 
 
-def starttag(line,node,openlist):
+def starttag(line, node, openlist):
     """
     starttag self-terminating nodes
     are added as children to the last
@@ -74,11 +82,11 @@ def endtag(openlist):
     openlist
     """
     final = False
-    closed =openlist.pop()
+    closed = openlist.pop()
     if openlist:
         openlist[-1].add_child(closed)
     else:
-        final= closed
+        final = closed
     return final
 
 
@@ -88,15 +96,15 @@ def parsexml(exemel):
     children.
     """
     final = False
-    openlist =[]
+    openlist = []
     exemel = exemel.replace("\n", "").strip()
     while exemel:
-        line,exemel = mk_line(exemel)
-        if not line.startswith('<!--'):
-            tag =mk_tag(line)
+        line, exemel = mk_line(exemel)
+        if not line.startswith("<!--"):
+            tag = mk_tag(line)
             if "/" not in tag:
-                node, exemel=mk_node(tag,line,exemel)
-                openlist=starttag(line,node,openlist)
+                node, exemel = mk_node(tag, line, exemel)
+                openlist = starttag(line, node, openlist)
             else:
                 final = endtag(openlist)
     return final
@@ -107,8 +115,8 @@ def xmlspliceinfosection(node):
     spliceinfosection parses exemel for info section data
     and returns a loadable dict
     """
-    if 'SpliceInfoSection' in node.name:
-        node.attrs["tier"]=hex(node.attrs["tier"])
+    if "SpliceInfoSection" in node.name:
+        node.attrs["tier"] = hex(node.attrs["tier"])
         return node.attrs
     return {}
 
@@ -124,9 +132,9 @@ def xmlcommand(node):
         "SpliceInsert": xmlspliceinsert,
         "PrivateCommand": xmlprivatecommand,
     }
-    for child  in node.children:
+    for child in node.children:
         if child.name in cmap:
-            out= cmap[child.name](child)
+            out = cmap[child.name](child)
             return out
     return {}
 
@@ -194,7 +202,6 @@ def xmlbreakduration(node):
     return {}
 
 
-
 def xmlspliceinsert_children(node):
     for child in node.children:
         splice_time = xmlsplicetime(child)
@@ -220,7 +227,6 @@ def xmlspliceinsert(node):
     node.attrs.update(setme)
     node = xmlspliceinsert_children(node)
     return node.attrs
-
 
 
 def xmldeliveryrestrictions(node):
@@ -264,9 +270,7 @@ def xmlsegmentationdescriptor_children(node):
 
 def xmlsegmentation_message(node):
     if node.attrs["segmentation_type_id"] in table22:
-        node.attrs["segmentation_message"] = table22[
-        node.attrs["segmentation_type_id"]
-        ]
+        node.attrs["segmentation_message"] = table22[node.attrs["segmentation_type_id"]]
     return node
 
 
@@ -288,6 +292,7 @@ def xmlsegmentationdescriptor(node):
     node = xmlsegmentation_message(node)
     node = xmlsegmentationdescriptor_children(node)
     return node.attrs
+
 
 def xmlavaildescriptor(node):
     setme = {
@@ -323,9 +328,10 @@ def xmldescriptors(node):
 
 def xml2cue(ex):
     bignode = parsexml(ex)
-    if isinstance(bignode,Node):
+    if isinstance(bignode, Node):
         return {
-        "info_section":xmlspliceinfosection(bignode),
-        "command":xmlcommand(bignode),
-        "descriptors":xmldescriptors(bignode),}
+            "info_section": xmlspliceinfosection(bignode),
+            "command": xmlcommand(bignode),
+            "descriptors": xmldescriptors(bignode),
+        }
     return False
