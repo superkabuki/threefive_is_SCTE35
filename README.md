@@ -13,6 +13,8 @@
 
 # Latest release is v3.0.37 
 _Released Thursday April 18th, 2025
+* just 4300 lines of code.
+* cyclomatic complexity __2.05__
 > Stay up to date, only the latest release is supported.
 
 ## MPEGTS streams can be parsed for SCTE-35 with three lines of code.
