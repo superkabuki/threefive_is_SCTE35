@@ -27,29 +27,38 @@ class Dscptr:
 
 
 class PmtStream:
-    def __init__(self, bitn, conv_pids):
+    def __init__(self, bitn=None, conv_pids=None):
+
         self.descriptors = []
-        self.stream_type = bitn.as_int(8)
-        bitn.forward(3)
-        self.elementary_PID = bitn.as_int(13)
-        bitn.forward(4)
-        self.ES_info_length = bitn.as_int(12)
-        eil = self.ES_info_length << 3
-        while eil > 0:
-            dscptr = Dscptr(bitn)
-            eil -= dscptr.total_size << 3
-            self.descriptors.append(dscptr)
-        if self.elementary_PID in conv_pids:
-            self.stream_type = 134
-            cuei = Dscptr()
-            cuei.type = 5
-            cuei.length = 4
-            cuei.value = b"CUEI"
-            cuei.total_size = 6
-            self.descriptors = [cuei] + self.descriptors
-            self.ES_info_length += cuei.total_size
+        self.stream_type =None
+        self.elementary_PID  = None
+        self.ES_info_length = 0
+        if bitn:
+            self.stream_type = bitn.as_int(8)
+            bitn.forward(3)
+            self.elementary_PID = bitn.as_int(13)
+            bitn.forward(4)
+            self.ES_info_length = bitn.as_int(12)
+            eil = self.ES_info_length << 3
+            while eil > 0:
+                dscptr = Dscptr(bitn)
+                eil -= dscptr.total_size << 3
+                self.descriptors.append(dscptr)
+        if conv_pids:
+            if self.elementary_PID in conv_pids:
+                self.add_CUEI()
         self.total_size = 5 + self.ES_info_length
 
+    def add_CUEI(self):
+        self.stream_type = 134
+        cuei = Dscptr()
+        cuei.type = 5
+        cuei.length = 4
+        cuei.value = b"CUEI"
+        cuei.total_size = 6
+        self.descriptors = [cuei] + self.descriptors
+        self.ES_info_length += cuei.total_size
+        
     def __repr__(self):
         return str(vars(self))
 
@@ -112,10 +121,17 @@ class PMT:
         pprint.pprint(streams)
         return streams
 
+    def add_SCTE35stream(self,pid):
+        pms = PmtStream()
+        pms.elementary_PID=pid
+        pms.add_CUEI()
+        pms.total_size=5 + pms.ES_info_length
+        self.streams.append(pms)
+        
     def mk(self):
         vals = [dscptr.value for dscptr in self.descriptors]
         if b"CUEI" not in vals:
-            blue('Adding SCTE-35 Descriptor')
+            blue("Adding SCTE-35 Descriptor")
             cuei = Dscptr()
             cuei.type = 5
             cuei.length = 4
