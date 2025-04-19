@@ -11,7 +11,7 @@
 * Automatic AES decryption for HLS.
 * All HLS __SCTE-35__ Tags are Supported.
 
-# Latest release is v3.0.37 
+# Latest release is v3.0.39 
 _Released Thursday April 18th, 2025
 * just 4300 lines of code.
 * cyclomatic complexity __2.05__
@@ -30,7 +30,7 @@ a@fu:~/build5/scte35/scte35$ pypy3
 # Checkout the Super Cool SCTE-35 [__Examples__](https://github.com/superkabuki/threefive3/tree/main/examples)
 <br>
 
- # threefive3 v3.0.37 is ready
+ # threefive3 v3.0.39 is ready
  
 * Xml is back and better than ever. __The new Ultra Xml Parser Supreme__ replaces the Super Xml Parser.
 
