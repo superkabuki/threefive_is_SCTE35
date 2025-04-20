@@ -211,7 +211,7 @@ class SuperKabuki(SixFix):
         self.open_output()
         active = io.BytesIO()
         pkt_count = 0
-        chunk_size = 1442
+        chunk_size = 131
         with self.outfile as outfile:
             for pkt in self.iter_pkts():
                 pid = self._parse_pid(pkt[1], pkt[2])
