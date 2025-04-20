@@ -239,7 +239,8 @@ def sixfix(arg):
     return
 
 def cli():
-    sixfix(sys.argv[1])
+    args = sys.argv[1:]
+    _= [ sixfix(arg) for arg in args]
 
 
 if __name__ == "__main__":
