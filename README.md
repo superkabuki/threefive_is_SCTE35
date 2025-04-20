@@ -11,13 +11,16 @@
 * Automatic AES decryption for HLS.
 * All HLS __SCTE-35__ Tags are Supported.
 
-# Heads up! 
+# Heads up.
 <pre>
- I've been working on the PMT module for use with SixFix. I was working on SixFix today, and realized that The Super Kabuki Packet Injection Engine and SixFix had a lot of simiiar looking code, and that the PMT module only needed one method to be SuperKabuki compatible. 
-SuperKabuki is now a subclass of SixFix, and they both now use the PMT module. I was able remove about 100 lines of pretty rendundant code too. 
- The Super Kabuki SCTE-35 packet injection Engine is working really really well. I've tested the SuperKabuki output with ffmpeg and tsduck and everything works.
- I was going to wait until I finished The Sideways HLS tag Injector, but  I'm thinking I'm going to go ahead and do a new build with Super Kabuki now, probably tomorrow.
- It's workinng perfectly for me, so I want to get it out there and see if y'all break it. :)
+ The Super Kabuki MPEGTS SCTE-35 Packet Injection Engine is working really really well.
+ I've tested the SuperKabuki output with ffmpeg and tsduck and everything works.
+ I was going to wait until I finished The Sideways HLS tag Injector,
+ but I'm thinking I'm going to go ahead and do a new build with
+ Super Kabuki, probably tomorrow.
+ 
+ It's workinng perfectly for me, 
+ so I want to get it out there and see if y'all break it. :)
  </pre>
  
 
