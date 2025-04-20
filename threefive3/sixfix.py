@@ -4,6 +4,7 @@ sixfix.py
 
 import io
 import sys
+from collections import deque
 from functools import partial
 from .crc import crc32
 from .bitn import NBin
@@ -48,7 +49,7 @@ class SixFix(Stream):
     def __init__(self, tsdata=None):
         super().__init__(tsdata)
         self.pmt_payloads = {}
-        self.pmt_headers = set()
+        self.pmt_headers = deque() # popleft()
         self.pmt_inputs = []
         self.pid_prog = {}
         self.con_pids = set()
@@ -65,12 +66,8 @@ class SixFix(Stream):
         return iter(partial(self._tsdata.read, self.PACKET_SIZE * num_pkts), b"")
 
     def _parse_by_pid(self, pkt, pid):
-        ##        if b'\x00\x00\x01' in pkt:
-        ##            if b'\x00\x00\x01\xc0' not in pkt:
-        ##                print("pid", pid, '  : ', pkt)
-
         if pid in self.pids.pmt:
-            self.pmt_headers.add(pkt[:4])
+            self.pmt_headers.append(pkt[:4])
             self._parse_pmt(pkt[4:], pid)
             prgm = self.pid2prgm(pid)
             if prgm in self.pmt_payloads:
@@ -83,7 +80,7 @@ class SixFix(Stream):
     def _parse_pkts(self, out_file):
         active = io.BytesIO()
         pkt_count = 0
-        chunk_size = 2048
+        chunk_size = 1442
         for pkt in self.iter_pkts():
             pid = self._parse_pid(pkt[1], pkt[2])
             pkt = self._parse_by_pid(pkt, pid)
@@ -100,15 +97,11 @@ class SixFix(Stream):
         changes the stream type to 0x86 and replaces
         the existing PMT as it writes packets to the outfile
         """
-        # if isinstance(self.out_file, str):
-        #    self.out_file = open(self.out_file, "wb")
         with open(self.out_file, "wb") as out_file:
             self._parse_pkts(out_file)
 
     def _chk_payload(self, pay, pid):
         pay = self._chk_partial(pay, pid, self._PMT_TID)
-        ##        if not pay:
-        ##            return False
         return pay
 
     def _unpad_pmt(self, pay):
@@ -120,7 +113,7 @@ class SixFix(Stream):
         """
         pmt2packets split the new pmt table into 188 byte packets
         """
-        pmt = list(self.pmt_headers)[0] + b"\x00" + pmt.mk()
+        pmt = self.pmt_headers.popleft() + pmt.mk()
         if len(pmt) < 188:
             pad = (188 - len(pmt)) * b"\xff"
             self.pmt_payloads[program_number] = pmt + pad
@@ -131,14 +124,12 @@ class SixFix(Stream):
             three = b""
             pad2 = b""
             pad3 = b""
-            #   pointer =pointer.to_bytes(1,byteorder="big")
-            if len(self.pmt_headers) > 1:
-                two = list(self.pmt_headers)[1] + pmt[188:]
-                if len(self.pmt_headers) > 2:
-                    three = list(self.pmt_headers)[2] + two[188:]
-                    two = two[:188]
-                    if len(three) < 188:
-                        pad3 = (188 - len(three)) * b"\xff"
+            two = self.pmt_headers.popleft() + pmt[188:]
+            if len(self.pmt_headers) > 2:
+                three = self.pmt_headers.popleft()+ two[188:]
+                two = two[:188]
+                if len(three) < 188:
+                    pad3 = (188 - len(three)) * b"\xff"
                 elif len(two) < 188:
                     pad2 = (188 - len(two)) * b"\xff"
 
@@ -150,15 +141,14 @@ class SixFix(Stream):
         pay = self._chk_payload(pay, pid)
         if not pay:
             return False
-        if pay in self.pmt_inputs:
-            return False
+##        if pay in self.pmt_inputs:        <<----  this breaks continuity counters
+##            return False
         self.pmt_inputs.append(pay)
         return pay
 
     def mk_pmt(self,pay):
         pmt = PMT(pay, self.con_pids)
-        pmt.add_SCTE35stream(777)
-        return pmt        
+        return pmt
 
     def _parse_pmt(self, pay, pid):
         """
@@ -250,7 +240,7 @@ def sixfix(arg):
 
 def cli():
     sixfix(sys.argv[1])
-    
+
 
 if __name__ == "__main__":
     cli()
