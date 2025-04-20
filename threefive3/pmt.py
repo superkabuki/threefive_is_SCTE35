@@ -44,9 +44,9 @@ class PmtStream:
                 dscptr = Dscptr(bitn)
                 eil -= dscptr.total_size << 3
                 self.descriptors.append(dscptr)
-        if conv_pids:
-            if self.elementary_PID in conv_pids:
-                self.add_CUEI()
+        #if conv_pids:
+            #if self.elementary_PID in conv_pids:
+               # self.add_CUEI()
         self.total_size = 5 + self.ES_info_length
 
     def add_CUEI(self):
@@ -124,8 +124,9 @@ class PMT:
     def add_SCTE35stream(self,pid):
         pms = PmtStream()
         pms.elementary_PID=pid
-        pms.add_CUEI()
-        pms.total_size=5 + pms.ES_info_length
+        pms.stream_type=0x86
+        #pms.add_CUEI()
+        pms.total_size=5 
         self.streams.append(pms)
         
     def mk(self):
@@ -148,8 +149,8 @@ class PMT:
         nbin.add_int(self.table_id, 8)  # 0x02
         nbin.add_int(self.section_syntax_indicator, 1)  # 9
         nbin.add_int(self.zero, 1)  # 10
-        nbin.reserve(2)  # 12
-        self.section_length = 15 + self.program_info_length + stream_len
+        nbin.add_int(3,2)  # 12
+        self.section_length = 13 + self.program_info_length + stream_len
         nbin.add_int(self.section_length, 12)  # 24
         nbin.add_int(self.program_number, 16)  # 40
         nbin.reserve(2)  # 42
@@ -167,8 +168,8 @@ class PMT:
             stream.add(nbin)
         self.crc32 = crc32(nbin.bites)
         nbin.add_int(self.crc32, 32)
-        nbin.add_int(0, 8)
-        return nbin.bites
+     #   nbin.add_int(0, 8)
+        return b'\x00'+nbin.bites
 
         self.program_info_length = None
         self.descriptors = []
