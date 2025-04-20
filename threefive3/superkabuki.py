@@ -182,6 +182,9 @@ class SuperKabuki(SixFix):
         return pkt
 
     def iframe_action(self,pkt,active):
+        """
+        iframe_action this is what we do when we find an iframe.
+        """
         pts = self.iframer.parse(pkt)  # insert on iframe
         if pts:
             self.auto_time_signals(pts, active)
@@ -189,6 +192,9 @@ class SuperKabuki(SixFix):
             self.add_scte35_pkt(pts, active)
 
     def mk_pmt(self,pay):
+        """
+        mk_pmt generate PMT with the new SCTE-35 stream.
+        """
         pmt = PMT(pay, self.con_pids)
         pmt.add_SCTE35stream(self.scte35_pid)
         return pmt
