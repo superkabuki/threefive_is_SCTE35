@@ -112,6 +112,9 @@ class NameSpace:
         self.uri = uri
         self.all = False
 
+    def __repr__(self):
+        return str(vars(self))
+    
     def prefix_all(self, abool=True):
         """
         prefix_all takes a boolean
