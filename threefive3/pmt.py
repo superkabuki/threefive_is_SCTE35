@@ -118,7 +118,7 @@ class PMT:
         while self.bitn.idx > 32:
             pms = PmtStream(self.bitn, self.conv_pids)
             streams.append(pms)
-        pprint.pprint(streams)
+      #  pprint.pprint(streams)
         return streams
 
     def add_SCTE35stream(self,pid):
@@ -132,15 +132,15 @@ class PMT:
     def mk(self):
         vals = [dscptr.value for dscptr in self.descriptors]
         if b"CUEI" not in vals:
-            blue("Adding SCTE-35 Descriptor")
+     #       blue("Adding SCTE-35 Descriptor")
             cuei = Dscptr()
             cuei.type = 5
             cuei.length = 4
             cuei.value = b"CUEI"
             cuei.total_size = 6
             self.descriptors.append(cuei)
-        else:
-            blue("SCTE-35 Descriptor already present.")
+       # else:
+         #   blue("SCTE-35 Descriptor already present.")
         self.program_info_length = sum(
             [dscptr.total_size for dscptr in self.descriptors]
         )
