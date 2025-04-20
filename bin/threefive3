@@ -250,7 +250,6 @@ mpegts_map = {
     "pts": pts_chk,
     "show": show_chk,
     "sidecar": sidecar_chk,
-    "sixfix": sixcli,
     "iframes": iframe_chk,
 }
 
@@ -401,6 +400,7 @@ cli_map = {
     "mcast": gumscli,
     "superkabuki": skcli,
     "inject": skcli,
+    "sixfix": sixcli,
     "sk": skcli,
 }
 
