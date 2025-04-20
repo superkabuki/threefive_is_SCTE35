@@ -64,7 +64,7 @@ class Cue(SCTE35Base):
         """
         Cue.decode() parses for SCTE35 data
 
-        * decode doesn't need to be called directly
+        *decode doesn't need to be called directly
            unless you initialize a Cue without data.
         """
         bites = self.bites
@@ -445,7 +445,7 @@ class Cue(SCTE35Base):
         cmd = self.command.xml(ns=ns)
         sis.add_child(cmd)
         sis = self._xml_mk_descriptor(sis, ns)
-        return sis.mk()  # xml returns a string NOT a Node instance.
+        return sis  # xml retuns a Node instance. now
 
     def xmlbin(self, ns="scte35"):
         """
@@ -457,3 +457,4 @@ class Cue(SCTE35Base):
         return f"""<{ns}:Signal xmlns:{ns}="https://scte.org/schemas/35">
     <{ns}:Binary>{self.base64()}</{ns}:Binary>
 </{ns}:Signal>"""
+
