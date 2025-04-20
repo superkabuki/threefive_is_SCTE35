@@ -80,7 +80,7 @@ class SixFix(Stream):
     def _parse_pkts(self, out_file):
         active = io.BytesIO()
         pkt_count = 0
-        chunk_size = 1442
+        chunk_size = 2884
         for pkt in self.iter_pkts():
             pid = self._parse_pid(pkt[1], pkt[2])
             pkt = self._parse_by_pid(pkt, pid)
@@ -113,27 +113,26 @@ class SixFix(Stream):
         """
         pmt2packets split the new pmt table into 188 byte packets
         """
+        pmt_parts =[]
         pmt = self.pmt_headers.popleft() + pmt.mk()
         if len(pmt) < 188:
             pad = (188 - len(pmt)) * b"\xff"
-            self.pmt_payloads[program_number] = pmt + pad
+            pmt_parts.append(pmt+pad)
         else:
-            one = pmt[:188]
-            two = b""
-            pointer = len(pmt[188:])
-            three = b""
-            pad2 = b""
-            pad3 = b""
-            two = self.pmt_headers.popleft() + pmt[188:]
-            if len(self.pmt_headers) > 2:
-                three = self.pmt_headers.popleft()+ two[188:]
-                two = two[:188]
-                if len(three) < 188:
-                    pad3 = (188 - len(three)) * b"\xff"
-                elif len(two) < 188:
-                    pad2 = (188 - len(two)) * b"\xff"
+            pmt_parts.append(pmt[:188])
+            pmt = pmt[188:]
 
-            self.pmt_payloads[program_number] = one + two + pad2 + three + pad3
+            while pmt:
+                pmtpkt =self.pmt_headers.popleft()+ pmt
+                if len(pmtpkt) < 188:
+                    pad =188-len(pmtpkt) * b"\xff"
+                    pmtpkt = pmtpkt + pad
+                else:
+                    pmt = pmtpkt[188:]
+                    pmtpkt = pmtpkt[:188]
+                pmt_parts.append(pmtpkt)
+                print(pmt)
+        self.pmt_payloads[program_number] =b''.join(pmt_parts) 
         return True
 
     def _pmt_precheck(self, pay, pid):
