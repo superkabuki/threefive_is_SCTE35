@@ -24,7 +24,7 @@
  </pre>
  
 
-# Latest release is v3.0.39 
+# Latest release is v3.0.41
 _Released Thursday April 18th, 2025
 * just 4300 lines of code.
 * cyclomatic complexity __2.05__
