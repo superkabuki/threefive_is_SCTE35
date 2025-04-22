@@ -83,7 +83,7 @@ class SixFix(Stream):
     def _parse_pkts(self, out_file):
         active = io.BytesIO()
         pkt_count = 0
-        chunk_size = 130000
+        chunk_size = 1300
         for pkt in self.iter_pkts():
             pid = self._parse_pid(pkt[1], pkt[2])
             pkt = self._parse_by_pid(pkt, pid)
