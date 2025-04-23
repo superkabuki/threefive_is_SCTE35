@@ -49,9 +49,8 @@ class SixFix(Stream):
     def __init__(self, tsdata=None):
         super().__init__(tsdata)
         self.pmt_payloads = {}
-        self.pmt_headers = deque() # popleft()
+        self.pmt_headers = deque()  # popleft()
         self.pmt_inputs = []
-        self.pmt_cc = 1
         self.pid_prog = {}
         self.con_pids = set()
         try:
@@ -68,9 +67,7 @@ class SixFix(Stream):
 
     def _parse_by_pid(self, pkt, pid):
         if pid in self.pids.pmt:
-            self.pmt_cc =pkt[3] & 0xF
-         #   print("REAL ---> ",pkt[:4])
-            #self.pmt_headers.append(pkt[:4])
+            self.pmt_headers.append(pkt[:4])
             self._parse_pmt(pkt[4:], pid)
             prgm = self.pid2prgm(pid)
             if prgm in self.pmt_payloads:
@@ -83,7 +80,7 @@ class SixFix(Stream):
     def _parse_pkts(self, out_file):
         active = io.BytesIO()
         pkt_count = 0
-        chunk_size = 1300
+        chunk_size = 2884
         for pkt in self.iter_pkts():
             pid = self._parse_pid(pkt[1], pkt[2])
             pkt = self._parse_by_pid(pkt, pid)
@@ -112,42 +109,28 @@ class SixFix(Stream):
             pay = pay[:-1]
         return pay
 
-    def _mk_pmt_head(self, pid, pusi=True):
-        bites=[0x47]
-        bits1=0
-        if pusi:
-            bits1+=64
-            bits1 += pid >> 8
-            bites.append(bits1)
-            bits2 = pid & 255
-            bites.append(bits2)
-            bits3 =16
-            bits3 +=self.pmt_cc
-            bites.append(bits3)
-      #      print(" MADE  --->>  ", bytes(bites))
-            if pusi:
-                self.pmt_cc=(self.pmt_cc +1)%16
-            return bytes(bites)
-
-    def _process_pmt(self,pmt, pmt_parts,pid,pusi=True):
-            pmt = self._mk_pmt_head(pid,pusi) + pmt.mk()
-            if len(pmt) < 188:
-                pad = (188 - len(pmt)) * b"\xff"
-                pmt_parts.append(pmt+pad)
-            else:
-                pmt_parts.append(pmt[:188])
-                pmt = pmt[188:]
-                while pmt:
-                    pmt, pmt_parts=self._process_pmt(pmt, pmt_parts,pid, pusi=False)
-            return  pmt, pmt_parts
-
-    def pmt2packets(self, pmt, program_number,pid):
+    def pmt2packets(self, pmt, program_number):
         """
         pmt2packets split the new pmt table into 188 byte packets
         """
-        pmt_parts =[]
-        pmt, pmt_parts= self._process_pmt(pmt,pmt_parts,pid)
-        self.pmt_payloads[program_number] =b''.join(pmt_parts)
+        pmt_parts = []
+        pmt = self.pmt_headers.popleft() + pmt.mk()
+        if len(pmt) < 188:
+            pad = (188 - len(pmt)) * b"\xff"
+            pmt_parts.append(pmt + pad)
+        else:
+            pmt_parts.append(pmt[:188])
+            pmt = pmt[188:]
+            while pmt:
+                pmtpkt = self.pmt_headers.popleft() + pmt
+                if len(pmtpkt) < 188:
+                    pad = 188 - len(pmtpkt) * b"\xff"
+                    pmtpkt = pmtpkt + pad
+                else:
+                    pmt = pmtpkt[188:]
+                    pmtpkt = pmtpkt[:188]
+                pmt_parts.append(pmtpkt)
+        self.pmt_payloads[program_number] = b"".join(pmt_parts)
         return True
 
     def _pmt_precheck(self, pay, pid):
@@ -155,12 +138,12 @@ class SixFix(Stream):
         pay = self._chk_payload(pay, pid)
         if not pay:
             return False
-##        if pay in self.pmt_inputs:        <<----  this breaks continuity counters
-##            return False
+        ##        if pay in self.pmt_inputs:        <<----  this breaks continuity counters
+        ##            return False
         self.pmt_inputs.append(pay)
         return pay
 
-    def mk_pmt(self,pay):
+    def mk_pmt(self, pay):
         pmt = PMT(pay, self.con_pids)
         return pmt
 
@@ -190,15 +173,11 @@ class SixFix(Stream):
         self.maps.pid_prgm[pid] = program_number
         proginfolen = self._parse_length(pay[10], pay[11])
         idx = 12
-       # n_proginfolen = proginfolen + len(self.CUEI_DESCRIPTOR)
         end = idx + proginfolen
         info_bites = pay[idx:end]
-        #n_info_bites = self.CUEI_DESCRIPTOR + info_bites
         idx = 12 + proginfolen
         si_len = seclen - (9 + proginfolen)  #  ???
-        self._parse_program_streams(si_len, pay, idx, program_number)
-        # self._regen_pmt(program_number,n_seclen, pcr_pid, n_proginfolen, n_info_bites, n_streams)
-        return self.pmt2packets(pmt, program_number,pid)
+        return self.pmt2packets(pmt, program_number)
 
     def _parse_program_streams(self, si_len, pay, idx, program_number):
         """
@@ -252,9 +231,10 @@ def sixfix(arg):
     print2(f'Wrote: sixfixed-{arg.rsplit("/")[-1]}\n')
     return
 
+
 def cli():
     args = sys.argv[1:]
-    _= [ sixfix(arg) for arg in args]
+    _ = [sixfix(arg) for arg in args]
 
 
 if __name__ == "__main__":
