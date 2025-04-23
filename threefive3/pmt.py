@@ -1,7 +1,5 @@
 from .bitn import Bitn, NBin
 from .crc import crc32
-import pprint
-from .stuff import blue
 
 
 class Dscptr:
@@ -118,7 +116,6 @@ class PMT:
         while self.bitn.idx > 32:
             pms = PmtStream(self.bitn, self.conv_pids)
             streams.append(pms)
-        #  pprint.pprint(streams)
         return streams
 
     def add_SCTE35stream(self, pid):
@@ -170,8 +167,3 @@ class PMT:
         nbin.add_int(self.crc32, 32)
         #   nbin.add_int(0, 8)
         return b"\x00" + nbin.bites
-
-        self.program_info_length = None
-        self.descriptors = []
-        self.streams = []
-        self.crc32 = None
