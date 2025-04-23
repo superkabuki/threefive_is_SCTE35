@@ -5,10 +5,11 @@ xml.py  The Node class for converting to xml,
 """
 
 from xml.sax.saxutils import escape, unescape
-from .stuff import red 
+from .stuff import red
 
-MAXCHILDREN=128
-MAXDEPTH= 64
+MAXCHILDREN = 128
+MAXDEPTH = 64
+
 
 def t2s(v):
     """
@@ -114,7 +115,7 @@ class NameSpace:
 
     def __repr__(self):
         return str(vars(self))
-    
+
     def prefix_all(self, abool=True):
         """
         prefix_all takes a boolean
@@ -228,7 +229,7 @@ class Node:
         """
         for child in self.children:
             while self.depth > MAXDEPTH:
-                red(f'{self.depth} is too deep for SCTE-35 nodes.')
+                red(f"{self.depth} is too deep for SCTE-35 nodes.")
                 return False
             child.depth = self.depth + 1
 
@@ -306,7 +307,7 @@ class Node:
         set slot to insert at index slot.
         """
         while len(self.children) > MAXCHILDREN:
-            red(f'{len(self.children)} is too many children')
+            red(f"{len(self.children)} is too many children")
             return False
         if not slot:
             slot = len(self.children)
