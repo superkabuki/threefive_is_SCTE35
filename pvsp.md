@@ -2,7 +2,26 @@
 # I was profiling some code
 # with python3.11.2 the code took 160 seconds
 # pypy3 ran the same code in 7.5 seconds
-## No smoke, no mirrors.
+
+
+### For example look ar this function call
+* python3
+```py3
+  4348672   14.630    0.000   14.630    0.000 crc.py:11(_bytecrc)
+```
+* pypy3
+
+```py3
+  4348672    1.479    0.000    1.479    0.000 crc.py:11(_bytecrc)
+```
+
+* pypy3 is __TEN TIMES Faster__ with that function.
+
+* What else do I need to say?
+
+
+# python v3.11.2
+
 ```js
 a@fu:~/threefive3$ ./353 sixfix ~/mpegts2/mpegts/3.ts
 fixing these pids [258, 266, 260, 269]
