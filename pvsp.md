@@ -1,4 +1,6 @@
-# python3 vs. pypy3
+# Shakira's hips don't lie.
+https://media4.giphy.com/media/v1.Y2lkPTc5MGI3NjExOXNqNnBnbjV5enFnb3UxMmdlZjE2Z2Y1NjNpYjgxNTB6d2F4cno1MyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/8AysFG2JVlAxvqlw4P/giphy.gif
+
 # I was profiling some code
 # with python3.11.2 the code took 160 seconds
 # pypy3 ran the same code in 7.5 seconds
@@ -25,7 +27,8 @@
 ```js
 a@fu:~/threefive3$ ./353 sixfix ~/mpegts2/mpegts/3.ts
 fixing these pids [258, 266, 260, 269]
-Wrote: sixfixed-3.ts
+Wrote: sixfixed-3.ts![shakira](https://github.com/user-attachments/assets/a00d308f-7e6c-4e17-8833-db46a73eeb4e)
+
 
          51820991 function calls in 160.138 seconds
 
