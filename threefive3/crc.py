@@ -2,7 +2,7 @@
 crc.py  crc32 function for encoding.
 """
 
-from .words import zero, one, eight, twentyfour, thirtytwo, twofiftyfive, twofiftysix
+from .words import zero, one, eight, twentyfour, twofiftyfive, twofiftysix
 
 BC_MASK=  0x80000000
 POLY = 0x104C11DB7
