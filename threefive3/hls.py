@@ -639,7 +639,7 @@ class HlsParser:
         if pts and new_line:
             if abs(pts - self.pts) > 5:  # Handle Cues out of sync with video PTS
                 pts = self.pts
-        return self.set_cue_state(tags["#EXT-OATCLS-SCTE35"], new_line)
+                return self.set_cue_state(tags["#EXT-OATCLS-SCTE35"], new_line)
         #   return self.invalid(line)
         return line
 
