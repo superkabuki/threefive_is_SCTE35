@@ -6,8 +6,6 @@ import io
 import sys
 from collections import deque
 from functools import partial
-from .crc import crc32
-from .bitn import NBin
 from .stuff import print2, ERR
 from .stream import Stream, ProgramInfo
 from .pmt import PMT
@@ -156,7 +154,6 @@ class SixFix(Stream):
             return False
         pmt = self.mk_pmt(pay)
         seclen = self._parse_length(pay[1], pay[2])
-        n_seclen = seclen + 6
         if self._section_incomplete(pay, pid, seclen):
             return False
         program_number = self._parse_program(pay[3], pay[4])
