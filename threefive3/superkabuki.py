@@ -181,7 +181,7 @@ class SuperKabuki(SixFix):
             pkt = self.pad_pkt(pkt)
         return pkt
 
-    def iframe_action(self,pkt,active):
+    def iframe_action(self, pkt, active):
         """
         iframe_action this is what we do when we find an iframe.
         """
@@ -191,14 +191,13 @@ class SuperKabuki(SixFix):
             self.load_sidecar(pts)
             self.add_scte35_pkt(pts, active)
 
-    def mk_pmt(self,pay):
+    def mk_pmt(self, pay):
         """
         mk_pmt generate PMT with the new SCTE-35 stream.
         """
-        pmt = PMT(pay, self.con_pids)
+        pmt = PMT(pay)
         pmt.add_SCTE35stream(self.scte35_pid)
         return pmt
-
 
     def encode(self):
         """
@@ -217,7 +216,7 @@ class SuperKabuki(SixFix):
                 pid = self._parse_pid(pkt[1], pkt[2])
                 pkt = self._parse_by_pid(pkt, pid)
                 if pkt:
-                    self.iframe_action(pkt,active)
+                    self.iframe_action(pkt, active)
                     active.write(pkt)
                     pkt_count = (pkt_count + 1) % chunk_size
                     if not pkt_count:
@@ -309,6 +308,7 @@ class SuperKabuki(SixFix):
         nbin.add_bites(padding)
         self._bump_cc()
         return nbin.bites
+
 
 def cli():
     """
