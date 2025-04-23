@@ -10,10 +10,8 @@ from collections import deque
 from operator import itemgetter
 from .new_reader import reader
 from .iframes import IFramer
-from .stream import Stream
 from .cue import Cue
 from .stuff import print2, ERR
-from .crc import crc32
 from .bitn import NBin
 from .commands import TimeSignal
 from .sixfix import SixFix
@@ -142,18 +140,6 @@ class SuperKabuki(SixFix):
         if isinstance(self.outfile, str):
             self.outfile = open(self.outfile, "wb")
 
-    def pad_pkt(self, pkt):
-        """
-        pad_pkt add padding to packets
-        """
-        pad = b"\xff"
-        self._parse_pmt_header(pkt)
-        if self.pmt_payload is not None:
-            pkt = self.pmt_header + self.pmt_payload
-            pad_size = 188 - len(pkt)
-            pkt = pkt + (pad * pad_size)
-        return pkt
-
     def auto_time_signals(self, pts, outfile):
         """
         auto_time_signals auto add
@@ -177,8 +163,6 @@ class SuperKabuki(SixFix):
         pid = self._parse_info(pkt)
         if self._pusi_flag(pkt):
             self._parse_pts(pkt, pid)
-        if pid in self.pids.pmt:
-            pkt = self.pad_pkt(pkt)
         return pkt
 
     def iframe_action(self, pkt, active):
