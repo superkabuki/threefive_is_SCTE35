@@ -1,337 +1,359 @@
 """
-Ultra Xml Parser.... Supreme
+xml.py  The Node class for converting to xml,
+        The NameSpace Class.
+        and several helper functions
 """
 
-from .segmentation import table20, table22
-from .stuff import ERR
-from .upids import upid_map
-from .xml import Node, iter_attrs
+from xml.sax.saxutils import escape, unescape
+from .stuff import red
+
+MAXCHILDREN = 128
+MAXDEPTH = 64
 
 
-def mk_attrs(line):
+def t2s(v):
     """
-    mk_attrs parses the current line for attributes
+    _t2s converts
+    90k ticks to seconds and
+    rounds to six decimal places
     """
-    line = (
-        line.replace('"', "")
-        .replace("<", "")
-        .replace("/>", "")
-        .replace(">", "")
-        .strip()
-    )
-    attrs = {y[0]: y[1] for y in [x.split("=") for x in line.split(" ") if "=" in x]}
-    return iter_attrs(attrs)
+    return round(v / 90000.0, 6)
 
 
-def mk_tag(data):
+def un_camel(k):
     """
-    mk_tag parse out the
-    next available xml tag from data
+    camel changes camel case xml names
+    to underscore_format names.
     """
-    return data[1:].split(" ", 1)[0].strip()
+    k = strip_ns(k)
+    k = "".join([f"_{i.lower()}" if i.isupper() else i for i in k])
+    return (k, k[1:])[k[0] == "_"]
 
 
-def mk_line(exemel):
+def un_xml(v):
     """
-    mk_line grabs the next '<' to '>' section of xml
+    un_xml converts an xml value
+    to ints, floats and booleans.
     """
-    line = exemel.split(">", 1)[0] + ">"
-    exemel = exemel.replace(line, "", 1).strip()
-    return line, exemel
-
-
-def mk_node(tag, line, exemel):
-    """
-    mk_node marshal xml data
-    into a  threefive3.xml.Node instance.
-
-    """
-    ns = None
-    attrs = mk_attrs(line)
-    if ":" in tag:
-        ns, tag = tag.split(":", 1)
-    tag = tag.strip(">")
-    node = Node(tag, attrs=attrs, ns=ns)
-    if not exemel.startswith("<"):
-        node.value = exemel.split("<", 1)[0]
-        exemel = exemel.replace(node.value, "", 1).strip()
-    return node, exemel
-
-
-def starttag(line, node, openlist):
-    """
-    starttag self-terminating nodes
-    are added as children to the last
-    node in openlist.
-    open nodes (nodes that aren't self-terminating)
-    are appended to openlist
-    """
-    if line.endswith("/>"):
-        openlist[-1].add_child(node)
-    else:
-        openlist.append(node)
-    return openlist
-
-
-def endtag(openlist):
-    """
-    endtag when a node is closed
-    pop it off openlist and then
-    add it as a child to the last node
-    in openlist, if any nodes are still in
-    openlist
-    """
-    final = False
-    closed = openlist.pop()
-    if openlist:
-        openlist[-1].add_child(closed)
-    else:
-        final = closed
-    return final
-
-
-def parsexml(exemel):
-    """
-    parsexml parse xml into a node instance and
-    children.
-    """
-    final = False
-    openlist = []
-    exemel = exemel.replace("\n", "").strip()
-    while exemel:
-        line, exemel = mk_line(exemel)
-        if not line.startswith("<!--"):
-            tag = mk_tag(line)
-            if "/" not in tag:
-                node, exemel = mk_node(tag, line, exemel)
-                openlist = starttag(line, node, openlist)
-            else:
-                final = endtag(openlist)
-    return final
-
-
-def xmlspliceinfosection(node):
-    """
-    spliceinfosection parses exemel for info section data
-    and returns a loadable dict
-    """
-    if "SpliceInfoSection" in node.name:
-        node.attrs["tier"] = hex(node.attrs["tier"])
-        return node.attrs
-    return {}
-
-
-def xmlcommand(node):
-    """
-    command parses exemel for a splice command
-    and returns a loadable dict
-
-    """
-    cmap = {
-        "TimeSignal": xmltimesignal,
-        "SpliceInsert": xmlspliceinsert,
-        "PrivateCommand": xmlprivatecommand,
+    mapped = {
+        "false": False,
+        "true": True,
     }
-    for child in node.children:
-        if child.name in cmap:
-            out = cmap[child.name](child)
-            return out
-    return {}
+    if v.isdigit():
+        return int(v)
+    if v.replace(".", "").isdigit():
+        return float(v)
+    if v in mapped:
+        return mapped[v]
+    return v
 
 
-def xmltimesignal_children(node):
-    for child in node.children:
-        splice_time = xmlsplicetime(child)
-        node.attrs.update(splice_time)
-    return node
-
-
-def xmltimesignal(node):
+def strip_ns(this):
     """
-    timesignal parses exemel for TimeSignal data
-    and creates a loadable dict for the Cue class.
+    strip_ns strip namespace off this.
     """
-    setme = {
-        "name": "Time Signal",
-        "command_type": 6,
-    }
-
-    node.attrs.update(setme)
-    node = xmltimesignal_children(node)
-    return node.attrs
+    if "xmlns:" in this:
+        return "xmlns"
+    return this.split(":")[-1]
 
 
-def xmlprivatecommand(node):
+def iter_attrs(attrs):
     """
-    privatecommand parses exemel for PrivateCommand
-    data and creates a loadable dict for the Cue class.
+    iter_attrs normalizes xml attributes
+    and adds them to the gonzo dict.
     """
-    setme = {
-        "command_type": 255,
-        "private_bytes": pc.value,
-    }
-
-    node.attrs.update(setme)
-    return node.attrs
+    conv = {un_camel(k): un_xml(v) for k, v in attrs.items()}
+    pts_vars = ["pts_time", "pts_adjustment", "duration", "segmentation_duration"]
+    return {k: (t2s(v) if k in pts_vars else v) for k, v in conv.items()}
 
 
-def xmlsplicetime(node):
+def val2xml(val):
     """
-    splicetime parses xml from a splice command
-    to get pts_time, sets time_specified_flag to True
+    val2xmlconvert val for xml
     """
-    if node.name == "SpliceTime":
-        return {
-            "pts_time": node.attrs["pts_time"],
-            "time_specified_flag": True,
-        }
-    return {}
+    if isinstance(val, (bool, int, float)):
+        return str(val).lower()
+    if isinstance(val, str):
+        if val.lower()[:2] == "0x":
+            return str(int(val, 16))
+    return val
 
 
-def xmlbreakduration(node):
+def key2xml(string):
     """
-    breakduration parses xml for break duration, break_auto_return
-    and sets duration_flag to True.
+    key2xml convert name to camel case
     """
-    if node.name == "BreakDuration":
-        return {
-            "break_duration": node.attrs["duration"],
-            "break_auto_return": node.attrs["auto_return"],
-            "duration_flag": True,
-        }
-    return {}
+    new_string = string
+    if "_" in string:
+        new_string = string.title().replace("_", "")
+    return new_string[0].lower() + new_string[1:]
 
 
-def xmlspliceinsert_children(node):
-    for child in node.children:
-        splice_time = xmlsplicetime(child)
-        node.attrs.update(splice_time)
-        if "pts_time" in node.attrs:
-            node.attrs["program_splice_flag"] = True
-        break_duration = xmlbreakduration(child)
-        node.attrs.update(break_duration)
-    return node
-
-
-def xmlspliceinsert(node):
+def mk_xml_attrs(attrs):
     """
-    spliceinsert parses exemel for SpliceInsert data
-    and creates a loadable dict for the Cue class.
+    mk_xml_attrs converts a dict into
+    a dict of xml friendly keys and values
     """
-    setme = {
-        "command_type": 5,
-        "event_id_compliance_flag": True,
-        "program_splice_flag": False,
-        "duration_flag": False,
-    }
-    node.attrs.update(setme)
-    node = xmlspliceinsert_children(node)
-    return node.attrs
+    return "".join([f' {key2xml(k)}="{val2xml(v)}"' for k, v in attrs.items()])
 
 
-def xmldeliveryrestrictions(node):
-    if node.name == "DeliveryRestrictions":
-        setme = {
-            "delivery_not_restricted_flag": False,
-            "device_restrictions": table20[node.attrs["device_restrictions"]],
-        }
-        node.attrs.update(setme)
-        return node.attrs
-    return {}
-
-
-def xmlupid(node):
+class NameSpace:
     """
-    upids parses out upids from a splice descriptors xml
+    Each Node instance has a NameSpace instance
+    to track namespace settings.
+    @ns is the name of the namespace
+    @uri is the xmlns uri
+    @all is a flag to signal that all elements and
+    attributes will have the namespace prefixed.
+    By default only  the elements are prefixed with the namespace.
     """
-    if node.name == "SegmentationUpid":
-        try:
-            seg_upid = bytes.fromhex(node.value.lower().replace("0x", ""))
-        except ERR:
-            seg_upid = node.value
-        seg_upid_type = node.attrs["segmentation_upid_type"]
-        return {
-            "segmentation_upid": node.value,
-            "segmentation_upid_type": seg_upid_type,
-            "segmentation_upid_type_name": upid_map[seg_upid_type][0],
-            "segmentation_upid_length": len(seg_upid),
-        }
-    return {}
+
+    def __init__(self, ns=None, uri=None):
+        self.ns = ns
+        self.uri = uri
+        self.all = False
+
+    def __repr__(self):
+        return str(vars(self))
+
+    def prefix_all(self, abool=True):
+        """
+        prefix_all takes a boolean
+        True turns it on, False turns it off.
+        """
+        self.all = abool
+
+    def xmlns(self):
+        """
+        xmlns return xmlns attribute
+        """
+        if not self.uri:
+            return ""
+        if not self.ns:
+            return f'xmlns="{self.uri}"'
+        return f'xmlns:{self.ns}="{self.uri}"'
+
+    def clear(self):
+        """
+        clear clear namespace info
+        """
+        self.ns = None
+        self.uri = None
+        self.all = False
 
 
-def xmlsegmentationdescriptor_children(node):
-    for child in node.children:
-        dr = xmldeliveryrestrictions(child)
-        node.attrs.update(dr)
-        the_upid = xmlupid(child)
-        node.attrs.update(the_upid)
-    return node
-
-
-def xmlsegmentation_message(node):
-    if node.attrs["segmentation_type_id"] in table22:
-        node.attrs["segmentation_message"] = table22[node.attrs["segmentation_type_id"]]
-    return node
-
-
-def xmlsegmentationdescriptor(node):
+class Node:
     """
-    segmentationdescriptor creates a dict to be loaded.
+    The Node class is to create an xml node.
+
+    An instance of Node has:
+
+        name :      <name> </name>
+        value  :    <name>value</name>
+        attrs :     <name attrs[k]="attrs[v]">
+        children :  <name><children[0]></children[0]</name>
+        depth:      tab depth for printing (automatically set)
+
+    Use like this:
+
+        from threefive3.xml import Node
+
+        ts = Node('TimeSignal')
+        st = Node('SpliceTime',attrs={'pts_time':3442857000})
+        ts.add_child(st)
+        print(ts)
     """
-    setme = {
-        "tag": 2,
-        "identifier": "CUEI",
-        "name": "Segmentation Descriptor",
-        "segmentation_event_id_compliance_indicator": True,
-        "program_segmentation_flag": True,
-        "segmentation_duration_flag": False,
-        "delivery_not_restricted_flag": True,
-        "segmentation_event_id": hex(node.attrs["segmentation_event_id"]),
-    }
-    node.attrs.update(setme)
-    node = xmlsegmentation_message(node)
-    node = xmlsegmentationdescriptor_children(node)
-    return node.attrs
+
+    def __init__(self, name, value="", attrs=None, ns=None):
+        self.name = name
+        self.value = value
+        self.depth = 0
+        self.namespace = NameSpace()
+        self.namespace.ns = ns
+        self.attrs = None
+        self._handle_attrs(attrs)
+        self.children = []
+
+    def __repr__(self):
+        return self.mk()
+
+    def _handle_attrs(self, attrs):
+        if not attrs:
+            attrs = {}
+        if "xmlns" in attrs:
+            self.namespace.uri = attrs.pop("xmlns")
+        self.attrs = attrs
+
+    def mk_ans(self, attrs):
+        """
+        mk_ans set namespace on attributes
+        """
+        new_attrs = {}
+        if self.namespace.all:
+            for k, v in attrs.items():
+                new_attrs[f"{self.namespace.ns}:{k}"] = v
+        return new_attrs
+
+    def chk_obj(self, obj):
+        """
+        chk_obj determines if
+        obj is self, or another obj
+        for self.set_ns and self.mk
+        """
+        if obj is None:
+            obj = self
+        return obj
+
+    def set_ns(self, ns=None):
+        """
+        set_ns set namespace on the Node
+        """
+        self.namespace.ns = ns
+
+    def rm_attr(self, attr):
+        """
+        rm_attr remove an attribute
+        """
+        self.attrs.pop(attr)
+
+    def add_attr(self, attr, value):
+        """
+        add_attr add an attribute
+        """
+        self.attrs[attr] = value
+
+    def set_depth(self):
+        """
+        set_depth is used to format
+        tabs in output
+        """
+        for child in self.children:
+            while self.depth > MAXDEPTH:
+                red(f"{self.depth} is too deep for SCTE-35 nodes.")
+                return False
+            child.depth = self.depth + 1
+
+    def get_indent(self):
+        """
+        get_indent returns a string of spaces the required depth for a node
+        """
+        tab = "   "
+        return tab * self.depth
+
+    def _rendrd_children(self, rendrd, ndent, name):
+        for child in self.children:
+            rendrd += self.mk(child)
+        return f"{rendrd}{ndent}</{name}>\n".replace(" >", ">")
+
+    def mk_name(self):
+        """
+        mk_name add namespace to node name
+        """
+        name = self.name
+        if self.namespace.ns:
+            name = f"{self.namespace.ns}:{name}"
+        return name
+
+    def rendr_attrs(self, ndent, name):
+        """
+        rendrd_attrs renders xml attributes
+        """
+        attrs = self.attrs
+        if self.namespace.all:
+            attrs = self.mk_ans(self.attrs)
+        new_attrs = mk_xml_attrs(attrs)
+        if self.depth == 0:
+            return f"{ndent}<{name} {self.namespace.xmlns()} {new_attrs}>"
+        return f"{ndent}<{name}{new_attrs}>"
+
+    def children_namespaces(self):
+        """
+        children_namespaces give children your namespace
+        """
+        for child in self.children:
+            child.namespace.ns = self.namespace.ns
+            child.namespace.all = self.namespace.all
+            child.namespace.uri = ""
+
+    def rendr_all(self, ndent, name):
+        """
+        rendr_all renders the Node instance and it's children in xml.
+        """
+        rendrd = self.rendr_attrs(ndent, name)
+        if self.value:
+            return f"{rendrd}{self.value}</{name}>\n"
+        rendrd = f"{rendrd}\n"
+        rendrd.replace(" >", ">")
+        if self.children:
+            return self._rendrd_children(rendrd, ndent, name)
+        return rendrd.replace(">", "/>")
+
+    def mk(self, obj=None):
+        """
+        mk make the Node as xml.
+        """
+        obj = self.chk_obj(obj)
+        obj.set_depth()
+        obj.children_namespaces()
+        name = obj.mk_name()
+        ndent = obj.get_indent()
+        if isinstance(obj, Comment):
+            return obj.mk(obj)
+        return obj.rendr_all(ndent, name)
+
+    def add_child(self, child, slot=None):
+        """
+        add_child adds a child node
+        set slot to insert at index slot.
+        """
+        while len(self.children) > MAXCHILDREN:
+            red(f"{len(self.children)} is too many children")
+            return False
+        if not slot:
+            slot = len(self.children)
+        self.children = self.children[:slot] + [child] + self.children[slot:]
+
+    def rm_child(self, child):
+        """
+        rm_child remove a child
+
+        example:
+        a_node.rm_child(a_node.children[3])
+        """
+        self.children.remove(child)
+
+    def add_comment(self, comment, slot=None):
+        """
+        add_comment add a Comment node
+        """
+        self.add_child(Comment(comment), slot)
 
 
-def xmlavaildescriptor(node):
-    setme = {
-        "tag": 0,
-        "identifier": "CUEI",
-    }
-    node.attrs.update(setme)
-    return node.attrs
+class Comment(Node):
+    """
+    The Comment class is to create a Node representing a xml comment.
 
+    An instance of Comment has:
 
-def xmltimedescriptor(node):
-    setme = {
-        "tag": 3,
-        "identifi er": "CUEI",
-    }
-    node.attrs.update(setme)
-    return node.attrs
+        name :      <!-- name -->
+        depth:      tab depth for printing (automatically set)
 
+    Since Comment is a Node, it also has attrs, value and children but
+    these are ignored. cf etree.Comment
+    Use like this:
 
-def xmldescriptors(node):
-    dmap = {
-        "AvailDescriptor": xmlavaildescriptor,
-        # "DTMFDescriptor",
-        "SegmentationDescriptor": xmlsegmentationdescriptor,
-        "TimeDescriptor": xmltimedescriptor,
-    }
-    dscripts = []
-    for child in node.children:
-        if child.name in dmap:
-            dscripts.append(dmap[child.name](child))
-    return dscripts
+        from threefive3.xml import Comment, Node
 
+        n = Node('root')
+        c = Comment('my first comment')
 
-def xml2cue(ex):
-    bignode = parsexml(ex)
-    if isinstance(bignode, Node):
-        return {
-            "info_section": xmlspliceinfosection(bignode),
-            "command": xmlcommand(bignode),
-            "descriptors": xmldescriptors(bignode),
-        }
-    return False
+        n.add_child(c)
+        print(n)
+
+    See also Node.add_comment:
+    """
+
+    def mk(self, obj=None):
+        obj = self.chk_obj(obj)
+        obj.set_depth()
+        return f"{obj.get_indent()}<!-- {obj.name} -->\n"
