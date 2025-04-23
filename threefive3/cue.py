@@ -12,7 +12,19 @@ from .commands import command_map
 from .descriptors import splice_descriptor, descriptor_map
 from .crc import crc32
 from .segmentation import table22
-from .words import minusone,zero,one,two,three,four,eight,eleven,fourteen, sixteen,equalsign
+from .words import (
+    minusone,
+    zero,
+    one,
+    two,
+    three,
+    four,
+    eight,
+    eleven,
+    fourteen,
+    sixteen,
+    equalsign,
+)
 from .uxp import xml2cue
 
 
@@ -162,7 +174,7 @@ class Cue(SCTE35Base):
         if isxml(data) or isjson(data):
             self.load(data)
             return self.bites
-        data=data.strip()
+        data = data.strip()
         if data.isdigit():
             return self._int_bits(int(data))
         return self._b64_bits(data)
@@ -175,7 +187,7 @@ class Cue(SCTE35Base):
             return data.split(b"\x00\x00\x01\xfc", one)[minusone]
         return data
 
-    def _byte_bits(self,data):
+    def _byte_bits(self, data):
         data = self._pkt_bits(data)
         self.bites = self.idxsplit(data, b"\xfc")
         return self.bites
@@ -390,7 +402,7 @@ class Cue(SCTE35Base):
         if isinstance(gonzo, bytes):
             gonzo = clean(gonzo)
         if isinstance(gonzo, str):
-            if isxml(gonzo) :
+            if isxml(gonzo):
                 self._from_xml(gonzo)
                 return self.bites
             gonzo = json.loads(gonzo)
@@ -405,7 +417,7 @@ class Cue(SCTE35Base):
         _from_xml converts xml to data that can
         be loaded by a Cue instance.
         """
-        gonzo=clean(gonzo)
+        gonzo = clean(gonzo)
         if "<scte35:Binary>" in gonzo:
             dat = gonzo.split("<scte35:Binary>")[1].split("</scte35:Binary>")[0]
             self.bites = self._mk_bits(dat)
@@ -457,4 +469,3 @@ class Cue(SCTE35Base):
         return f"""<{ns}:Signal xmlns:{ns}="https://scte.org/schemas/35">
     <{ns}:Binary>{self.base64()}</{ns}:Binary>
 </{ns}:Signal>"""
-
