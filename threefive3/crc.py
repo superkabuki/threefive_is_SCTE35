@@ -4,22 +4,21 @@ crc.py  crc32 function for encoding.
 
 from .words import zero, one, eight, twentyfour, thirtytwo, twofiftyfive, twofiftysix
 
+BC_MASK=  0x80000000
 POLY = 0x104C11DB7
 INIT_VALUE = 0xFFFFFFFF
-
+GONZO = INIT_VALUE - 0xFF
 
 def _bytecrc(crc, poly):
-    mask = one << (thirtytwo - one)
     i = eight
     while i:
-        crc = (crc << one, crc << one ^ poly)[crc & mask != zero]
+        crc = (crc << one, crc << one ^ poly)[crc & BC_MASK != zero]
         i -= one
     return crc & INIT_VALUE
 
 
 def _mk_table():
-    mask = (one << thirtytwo) - one
-    poly = POLY & mask
+    poly = POLY & INIT_VALUE
     return [_bytecrc((i << twentyfour), poly) for i in range(twofiftysix)]
 
 
@@ -32,7 +31,7 @@ def crc32(data):
     crc = INIT_VALUE
     for bite in data:
         crc = table[bite ^ ((crc >> twentyfour) & twofiftyfive)] ^ (
-            (crc << eight) & (INIT_VALUE - twofiftyfive)
+            (crc << eight) & (GONZO)
         )
     return crc
 
