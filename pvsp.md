@@ -1,5 +1,8 @@
 # Shakira's hips don't lie.
-https://media4.giphy.com/media/v1.Y2lkPTc5MGI3NjExOXNqNnBnbjV5enFnb3UxMmdlZjE2Z2Y1NjNpYjgxNTB6d2F4cno1MyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/8AysFG2JVlAxvqlw4P/giphy.gif
+
+
+![shakira](https://github.com/user-attachments/assets/1f6b51a6-b529-44ba-9831-b866648715d4)
+
 
 # I was profiling some code
 # with python3.11.2 the code took 160 seconds
