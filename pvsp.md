@@ -30,8 +30,7 @@
 ```js
 a@fu:~/threefive3$ ./353 sixfix ~/mpegts2/mpegts/3.ts
 fixing these pids [258, 266, 260, 269]
-Wrote: sixfixed-3.ts![shakira](https://github.com/user-attachments/assets/a00d308f-7e6c-4e17-8833-db46a73eeb4e)
-
+Wrote: sixfixed-3.ts
 
          51820991 function calls in 160.138 seconds
 
