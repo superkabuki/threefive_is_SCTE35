@@ -6,7 +6,7 @@ import sys
 
 from functools import partial
 from .new_reader import reader
-from .stuff import print2,blue,ERR
+from .stuff import print2, blue, ERR
 from .cue import Cue
 from .packetdata import PacketData
 from .streamtypes import streamtype_map
@@ -160,9 +160,9 @@ class Stream:
         self.the_scte35_pids = []
         self.pids = Pids()
         self.maps = Maps()
-       # self.iframer = IFramer(shush=True)
-        self.pmt_payloads=set()
-        self.pmt_count=0
+        # self.iframer = IFramer(shush=True)
+        self.pmt_payloads = {}
+        self.pmt_count = 0
 
     def __repr__(self):
         return str(self.__dict__)
@@ -318,7 +318,7 @@ class Stream:
         self.info = True
         for pkt in self.iter_pkts():
             self._parse(pkt)
-            if self.pmt_count > len(self.pmt_payloads) <<1:
+            if self.pmt_count > len(self.pmt_payloads) << 1:
                 blue(f"PMT Count: {self.pmt_count}")
                 break
         if self.maps.prgm.keys():
@@ -380,27 +380,12 @@ class Stream:
         return False
 
     def _unpad_afc(self, pkt):
-    #    if self._afc_flag(pkt[3]):
-        return  pkt[:4] + self._unpad(pkt[4:])
+        #    if self._afc_flag(pkt[3]):
+        return pkt[:4] + self._unpad(pkt[4:])
 
     def _unpad(self, bites=b""):
         return bites.strip(b"\xff")
-
-##    def _unpad(self, bites):
-##        pad = 255
-##        one = 1
-##        if not bites:
-##            return b""
-##        while bites[0] == pad:
-##            bites = bites[1:]
-##        return self._unpad2(bites)
-##
-##    def _unpad2(self, bites):
-##        pad = 255
-##        while bites[-1] == pad:
-##            bites = bites[:-1]
-##        return bites
-
+    
     def _mk_packet_data(self, pid):
         prgm = self.maps.pid_prgm[pid]
         pdata = PacketData(pid, prgm)
@@ -450,7 +435,6 @@ class Stream:
     def _afc_flag(pkt):
         return pkt[3] & 32
 
-
     def _parse_payload(self, pkt):
         """
         _parse_payload returns the packet payload
@@ -462,28 +446,19 @@ class Stream:
             head_size += afl + 1  # +one for afl byte
         return pkt[head_size:]
 
-##    def _pmt_pid(self, pay, pid):
-##        if pid in self.pids.pmt:
-##            self.pmt_count+=1
-##            if self.pmt_count > 10:
-##                if pay in self.pmt_payloads:
-##                    return
-##            self.pmt_payloads.add(pay)
-##            self._parse_pmt(pay, pid)
-
     def _pmt_pid(self, pay, pid):
         self.pmt_count += 1
         if pay in self.pmt_payloads:
             if self.pmt_count > len(self.pmt_payloads) << 1:
                 return
-        self.pmt_payloads.add(pay)
+        self.pmt_payloads[self.pid2prgm(pid)] = pay
         self._parse_pmt(pay, pid)
 
     def _pat_pid(self, pay, pid):
         if pid == self.pids.PAT_PID:
             self._parse_pat(pay)
 
-    def _sdt_pid(self,pay,pid):
+    def _sdt_pid(self, pay, pid):
         if pid == self.pids.SDT_PID:
             self._parse_sdt(pay)
 
