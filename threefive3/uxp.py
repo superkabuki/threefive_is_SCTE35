@@ -50,7 +50,7 @@ def mk_node(tag, line, exemel):
     attrs = mk_attrs(line)
     if ":" in tag:
         ns, tag = tag.split(":", 1)
-    tag=tag.strip('>')
+    tag = tag.strip(">")
     node = Node(tag, attrs=attrs, ns=ns)
     if not exemel.startswith("<"):
         node.value = exemel.split("<", 1)[0]
