@@ -1,5 +1,5 @@
 [__Install__](#install) |[__SCTE-35 Cli__](#the-cli-tool) | [__SCTE-35 HLS__](https://github.com/superkabuki/threefive3/blob/main/hls.md) | [__Cue__ Class](https://github.com/superkabuki/threefive3/blob/main/cue.md) | [__Stream__ Class](https://github.com/superkabuki/threefive3/blob/main/stream.md) | [__Online SCTE-35 Parser__](https://iodisco.com/scte35) | [__Encode SCTE-35__](https://github.com/superkabuki/threefive3/blob/main/encode.md) | [__SCTE-35 Examples__](https://github.com/superkabuki/threefive3/tree/main/examples)
- | [__SCTE-35 XML__](https://github.com/superkabuki/SCTE-35/blob/main/xml.md) 
+ | [__SCTE-35 XML__ updated 04/24/2025](https://github.com/superkabuki/SCTE-35/blob/main/xml.md) 
  
 
 
@@ -65,7 +65,7 @@ a@fu:~/build5/scte35/scte35$ pypy3
 * [Install](#install)
 
 ### XML
-* [XML](https://github.com/superkabuki/SCTE-35/blob/main/xml.md) __New__!
+* [XML](https://github.com/superkabuki/SCTE-35/blob/main/xml.md) __New__! _updated 04/24/2025_
 
 
 ### Cli
