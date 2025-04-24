@@ -14,7 +14,7 @@
 * All HLS __SCTE-35__ Tags are Supported.
 
 # Latest release is v3.0.43
-_Released Thursday April 24th, 2025
+Released Thursday April 24th, 2025
 * just 4250 lines of code.
 * Over 1892 lines of comments.
 
@@ -61,9 +61,10 @@ a@fu:~/build5/scte35/scte35$ pypy3
 
 
 # `Documentation`
-
+### Install
 * [Install](#install)
 
+### XML
 * [XML](https://github.com/superkabuki/SCTE-35/blob/main/xml.md) __New__!
 
 
