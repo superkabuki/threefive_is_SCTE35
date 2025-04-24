@@ -13,6 +13,19 @@
 * Automatic AES decryption for HLS.
 * All HLS __SCTE-35__ Tags are Supported.
 
+# Latest release is v3.0.43
+_Released Thursday April 24th, 2025
+* just 4250 lines of code.
+* Over 1892 lines of comments.
+
+* cyclomatic complexity __2.03__ ,_That's a kickass score._
+
+* pylint score is __9.59/10__, _this needs a liitle work_.
+
+> Stay up to date, only the latest release is supported.
+> 
+
+
 <pre>
  Q. 
  Why the release?
@@ -26,13 +39,6 @@
  won't even notice unless you need to make a change, and then you'll 
  be really happy.
  </pre>
-
-# Latest release is v3.0.43
-_Released Thursday April 24th, 2025
-* just 4300 lines of code.
-* cyclomatic complexity __2.03__
-> Stay up to date, only the latest release is supported.
-
 
 
 ## MPEGTS streams can be parsed for SCTE-35 with three lines of code.
