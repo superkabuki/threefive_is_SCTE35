@@ -1,4 +1,14 @@
 # Xml
+
+### [decoding](#decoding)
+
+### [encoding](#encoding)
+
+### [namespaces](namespaces)
+
+
+
+
 <pre>
     I pulled xml support a few months ago, I wasn't happy with the implementation. 
 One out of every seven lines of code was xml specific, there was xml code everywhere.
@@ -287,6 +297,233 @@ threefive3 video.ts xml
    <scte35:AvailDescriptor providerAvailId="1234"/>
 </scte35:SpliceInfoSection>
 ```
+# Namespaces
+* The SCTE-35 spec is very non-commital on namespaces. You can use the SCTE35 namespace or not use it and you can use it on attributes or not.
+* the SCTE35 schema uri is scte35="https://scte.org/schemas/35".
+* When threefive3 outputs xml it includes the namespace and uri because it applies.
+---
+#### By default the namespace is set to scte35
+```py3
+>>>> from threefive3 import Cue
+>>>> cue=Cue('/DAWAAAAAAAAAP/wBQb+ALKOoAAAJte19A==')
+>>>> cue.xml()
+<scte35:SpliceInfoSection xmlns:scte35="https://scte.org/schemas/35"  ptsAdjustment="0" protocolVersion="0" sapType="3" tier="4095">
+   <scte35:TimeSignal>
+      <scte35:SpliceTime ptsTime="11701920"/>
+   </scte35:TimeSignal>
+</scte35:SpliceInfoSection>
+```
+#### The Cue.xml method accepts an optional ns arg
+```py3
+>>>> cue.xml(ns="supercool")
+<supercool:SpliceInfoSection xmlns:supercool="https://scte.org/schemas/35"  ptsAdjustment="0" protocolVersion="0" sapType="3" tier="4095">
+   <supercool:TimeSignal>
+      <supercool:SpliceTime ptsTime="11701920"/>
+   </supercool:TimeSignal>
+</supercool:SpliceInfoSection>
+```
+#### set ns to an empty string for no namespace
+```py3
+>>>> cue.xml(ns="")
+<SpliceInfoSection xmlns="https://scte.org/schemas/35"  ptsAdjustment="0" protocolVersion="0" sapType="3" tier="4095">
+   <TimeSignal>
+      <SpliceTime ptsTime="11701920"/>
+   </TimeSignal>
+</SpliceInfoSection>
+
+```
+
+
+  
+### Q. What if I'm special and need to change the namespace uri?
+
+### A.Then you can change it. I'll explain.
+* I saw this in the mpd_inspector code
+```py3
+       
+        # force the namespace to be the standard one (required by `threefive`)
+        namespace = "https://scte.org/schemas/35"
+        change_namespace(element, namespace)
+```
+* That is not needed, let me show you how things work.
+
+```py3
+>>>> x = cue.xml()
+
+>>>> x.namespace.uri
+'https://scte.org/schemas/35'
+
+>>>> x.namespace.uri="https://iodisco.com/boom"
+
+>>>> x
+<scte35:SpliceInfoSection xmlns:scte35="https://iodisco.com/boom"  ptsAdjustment="0" protocolVersion="0" sapType="3" tier="4095">
+   <scte35:TimeSignal>
+      <scte35:SpliceTime ptsTime="11701920"/>
+   </scte35:TimeSignal>
+</scte35:SpliceInfoSection>
+```
+
+### if you pass in the above xml to a Cue instance, threefive3 will accept it, 
+### but will change it to the schema used by threefive3 in xml output, as it's should.
+```py3
+>>>> cue2=Cue(x.mk())
+>>>> cue2
+>>>> cue2.xml()
+<scte35:SpliceInfoSection xmlns:scte35="https://scte.org/schemas/35"  ptsAdjustment="0" protocolVersion="0" sapType="3" tier="4095">
+   <scte35:TimeSignal>
+      <scte35:SpliceTime ptsTime="11701920"/>
+   </scte35:TimeSignal>
+</scte35:SpliceInfoSection>
+```
+### Since Cue.xml returns a threefive3.Node instance, you can easily change the uri, namespace or anything else
+```py3
+>>>> x2 = cue2.xml()
+>>>> x2.namespace.uri="https://slo.me/adrianiscool"
+>>>> x2.namespace.ns="fu"
+>>>> x2
+<fu:SpliceInfoSection xmlns:fu="https://slo.me/adrianiscool"  ptsAdjustment="0" protocolVersion="0" sapType="3" tier="4095">
+   <fu:TimeSignal>
+      <fu:SpliceTime ptsTime="11701920"/>
+   </fu:TimeSignal>
+</fu:SpliceInfoSection>
+```
+### set namespace on everything including attributes
+```py3
+>>>> x2.namespace.all=True
+>>>> x2
+<fu:SpliceInfoSection xmlns:fu="https://slo.me/adrianiscool"  fu:PtsAdjustment="0" fu:ProtocolVersion="0" fu:SapType="3" fu:tier="4095">
+   <fu:TimeSignal>
+      <fu:SpliceTime fu:PtsTime="11701920"/>
+   </fu:TimeSignal>
+</fu:SpliceInfoSection>
+```
+# RTFM
+### help(threefive.xml.Node)
+```py3
+Help on class Node in module threefive.xml:
+
+class Node(builtins.object)
+ |  Node(name, value=None, attrs=None, ns=None)
+ |  
+ |  The Node class is to create an xml node.
+ |  
+ |  An instance of Node has:
+ |  
+ |      name :      <name> </name>
+ |      value  :    <name>value</name>
+ |      attrs :     <name attrs[k]="attrs[v]">
+ |      children :  <name><children[0]></children[0]</name>
+ |      depth:      tab depth for printing (automatically set)
+ |      namespace:  a NameSpace instance
+
+ |  Use like this:
+ |  
+ |      from threefive.xml import Node
+ |  
+ |      ts = Node('TimeSignal')
+ |      st = Node('SpliceTime',attrs={'pts_time':3442857000})
+ |      ts.add_child(st)
+ |      print(ts)
+ |  
+ |  Methods defined here:
+ |  
+ |  __init__(self, name, value=None, attrs=None, ns=None)
+ |  
+ |  __repr__(self)
+ |  
+ |  add_attr(self, attr, value)
+ |      add_attr add an attribute
+ |  
+ |  add_child(self, child, slot=None)
+ |      add_child adds a child node
+ |      set slot to insert at index slot.
+ |  
+ |  add_comment(self, comment, slot=None)
+ |      add_comment add a Comment node
+ |  
+ |  attrs2nodes(self)
+ |      attrs2nodes attributes to elements
+ |  
+ |  children_namespaces(self)
+ |      children_namespaces give children your namespace
+ |  
+ |  chk_obj(self, obj)
+ |      chk_obj determines if
+ |      obj is self, or another obj
+ |      for self.set_ns and self.mk
+ |  
+ |  get_indent(self)
+ |      get_indent returns a string of spaces the required depth for a node
+ |  
+ |  mk(self, obj=None)
+ |      mk make the Node as xml.
+ |  
+ |  mk_ans(self, attrs)
+ |      mk_ans set namespace on attributes
+ |  
+ |  mk_name(self)
+ |      mk_name add namespace to node name
+ |  
+ |  rendr_all(self, ndent, name)
+ |      rendr_all renders the Node instance and it's children in xml.
+ |  
+ |  rendr_attrs(self, ndent, name)
+ |      rendrd_attrs renders xml attributes
+ |  
+ |  rm_attr(self, attr)
+ |      rm_attr remove an attribute
+ |  
+ |  rm_child(self, child)
+ |      rm_child remove a child
+ |            
+ |      example:
+ |      a_node.rm_child(a_node.children[3])
+ |  
+ |  set_depth(self)
+ |      set_depth is used to format
+ |      tabs in output
+ |  
+ |  set_ns(self, ns=None)
+ |      set_ns set namespace on the Node
+ |  
+ |  ----------------------------------------------------------------------
+
+```
+### help(threefive.xml.Namespace)
+```py3
+
+Help on class NameSpace in module threefive.xml:
+
+class NameSpace(builtins.object)
+ |  NameSpace(ns=None, uri=None)
+ |  
+ |  Each Node instance has a NameSpace instance
+ |  to track namespace settings.
+ |  @ns is the name of the namespace
+ |  @uri is the xmlns uri
+ |  @all is a flag to signal that all elements and
+ |  attributes will have the namespace prefixed.
+ |  By default only  the elements are prefixed with the namespace.
+ |  
+ |  Methods defined here:
+ |  
+ |  __init__(self, ns=None, uri=None)
+ |  
+ |  clear(self)
+ |      clear clear namespace info
+ |  
+ |  prefix_all(self, abool=True)
+ |      prefix_all takes a boolean
+ |      True turns it on, False turns it off.
+ |  
+ |  xmlns(self)
+ |      xmlns return xmlns attribute
+ |  
+ |  ----------------------------------------------------------------------
+```
+
+
+
 ## threefive3 vs. Quadradic Blowup
 * Spoiler alert, threefive3 wins. 
  
