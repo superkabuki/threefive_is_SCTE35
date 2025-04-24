@@ -14,20 +14,36 @@
 * Automatic AES decryption for HLS.
 * All HLS __SCTE-35__ Tags are Supported.
 
-# Heads up.
+# Heads up, I'm about to push v3.0.43
 <pre>
- The Super Kabuki MPEGTS SCTE-35 Packet Injection Engine is working really really well.
- I've tested the SuperKabuki output with ffmpeg and tsduck and everything works.
- I was going to wait until I finished The Sideways HLS tag Injector,
- but I'm thinking I'm going to go ahead and do a new build with
- Super Kabuki, probably tomorrow.
+ I made a mistake with the xml method in the Cue class. I intended it to return a node instance, 
+ but instead I had it return just the xml output of a Node instance, not a big deal really, 
+ but everything returns a node instance from their xml() method, I want everythng to work the same way. 
+ I don't want people getting used to it not return a Node instance.  
+ v3.0.43 fixes Cue.xml() to return a Node instance.
+ I also added more autodetection of SCTE-35 Formats to the Cue class,
+ no other SCTE-35 software can do even half of these.
+ Base64, 
+ Bytes,
+ Dicts, 
+ MPEGTS SCTE-35 packets, 
+ Hex (literal and string),
+ Integers (literal, bytestring,and string),
+ JSON(strings and bytestrings), 
+ XML(string and bytestring)
+ XML+Binary(string and bytestring)
+
+I brought in the PMT module,that really cleans SixFix and SuperKabuki up a lot. 
+SuperKabuki is now a subclass of SixFix instead of the Stream class, that gets rid of a lot 
+of redundant code. 
  
- It's workinng perfectly for me, 
- so I want to get it out there and see if y'all break it. :)
+The Super Kabuki MPEGTS SCTE-35 Packet Injection Engine is working really really well.
+I've tested the SuperKabuki output with ffmpeg and tsduck and everything works.
+It's workinng perfectly for me, so I want to get it out there and see if y'all break it. :)
  </pre>
  
 
-# Latest release is v3.0.41
+# Latest release is v3.0.43
 _Released Thursday April 18th, 2025
 * just 4300 lines of code.
 * cyclomatic complexity __2.05__
