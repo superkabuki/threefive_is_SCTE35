@@ -16,9 +16,13 @@
 
 # Heads up, I'm about to push v3.0.43
 <pre>
+ Q. 
+ Why the release?
+
+ A.
  I made a mistake with the xml method in the Cue class. I intended it to return a node instance, 
  but instead I had it return just the xml output of a Node instance, not a big deal really, 
- but everything returns a node instance from their xml() method, I want everythng to work the same way. 
+ but everything else returns a node instance from their xml() method, Cue should too..
  I don't want people getting used to it not return a Node instance.  
  v3.0.43 fixes Cue.xml() to return a Node instance.
  I also added more autodetection of SCTE-35 Formats to the Cue class,
