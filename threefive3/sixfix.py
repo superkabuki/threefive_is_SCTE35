@@ -110,6 +110,9 @@ class SixFix(Stream):
     def pmt2packets(self, pmt, program_number):
         """
         pmt2packets split the new pmt table into 188 byte packets
+        if you have a PMT spread over multiple packets, 
+        the packets will show up in order, and back to back, 
+        even if they were not that way in the original stream.
         """
         pmt_parts = []
         pmt = self.pmt_headers.popleft() + pmt.mk()
@@ -136,7 +139,7 @@ class SixFix(Stream):
         pay = self._chk_payload(pay, pid)
         if not pay:
             return False
-        ##        if pay in self.pmt_inputs:        <<----  this breaks continuity counters
+        ##        if pay in self.pmt_inputs:   <<----  this is how I break continuity counters.
         ##            return False
         self.pmt_inputs.append(pay)
         return pay
