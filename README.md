@@ -13,43 +13,24 @@
 * Automatic AES decryption for HLS.
 * All HLS __SCTE-35__ Tags are Supported.
 
-# Heads up, I'm about to push v3.0.43
 <pre>
  Q. 
  Why the release?
 
  A.
- I made a mistake with the xml method in the Cue class. I intended it to return a node instance, 
- but instead I had it return just the xml output of a Node instance, not a big deal really, 
- but everything else returns a node instance from their xml() method, Cue should too..
- I don't want people getting used to it not return a Node instance.  
- v3.0.43 fixes Cue.xml() to return a Node instance.
- I also added more autodetection of SCTE-35 Formats to the Cue class,
- no other SCTE-35 software can do even half of these.
- Base64, 
- Bytes,
- Dicts, 
- MPEGTS SCTE-35 packets, 
- Hex (literal and string),
- Integers (literal, bytestring,and string),
- JSON(strings and bytestrings), 
- XML(string and bytestring)
- XML+Binary(string and bytestring)
-
-I brought in the PMT module,that really cleans SixFix and SuperKabuki up a lot. 
-SuperKabuki is now a subclass of SixFix instead of the Stream class, that gets rid of a lot 
-of redundant code. 
- 
-The Super Kabuki MPEGTS SCTE-35 Packet Injection Engine is working really really well.
-I've tested the SuperKabuki output with ffmpeg and tsduck and everything works.
-It's workinng perfectly for me, so I want to get it out there and see if y'all break it. :)
+ I made a mistake with the xml method in the Cue class.
+ I intended it to return a threefive3.Node instance, 
+ but had it returns just the xml string.  
+ Now returns a Node instance, so it can be modified if needed.
+ printing the Node instance returns the xml string, you most likely 
+ won't even notice unless you need to make a change, and then you'll 
+ be really happy.
  </pre>
- 
 
 # Latest release is v3.0.43
-_Released Thursday April 18th, 2025
+_Released Thursday April 24th, 2025
 * just 4300 lines of code.
-* cyclomatic complexity __2.05__
+* cyclomatic complexity __2.03__
 > Stay up to date, only the latest release is supported.
 
 
