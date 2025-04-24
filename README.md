@@ -33,11 +33,12 @@ _Released Thursday April 24th, 2025
  A.
  I made a mistake with the xml method in the Cue class.
  I intended it to return a threefive3.Node instance, 
- but had it returns just the xml string.  
- Now returns a Node instance, so it can be modified if needed.
- printing the Node instance returns the xml string, you most likely 
- won't even notice unless you need to make a change, and then you'll 
- be really happy.
+ but it was returning just the xml string.  
+ 
+ Now it returns a Node instance, so it can be modified if needed.
+ Printing a Node instance will return the xml string (__repr__), 
+ So you most likely won't even notice unless you need to make a change,
+ then you'll be really happy.
  </pre>
 
 
