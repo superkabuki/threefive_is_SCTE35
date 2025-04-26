@@ -28,7 +28,7 @@ def mk_tag(data):
     mk_tag parse out the
     next available xml tag from data
     """
-    return data[1:].split(" ", 1)[0].strip()
+    return data[1:].split(" ", 1)[0].split('>')[0].strip()
 
 
 def mk_line(exemel):
@@ -90,9 +90,9 @@ def endtag(openlist):
     return final
 
 
-def parsexml(exemel):
+def uxps(exemel):
     """
-    parsexml parse xml into a node instance and
+    Ultra Xml Parser Supreme parse xml into a node instance and
     children.
     """
     final = False
@@ -100,7 +100,7 @@ def parsexml(exemel):
     exemel = exemel.replace("\n", "").strip()
     while exemel:
         line, exemel = mk_line(exemel)
-        if not line.startswith("<!--"):
+        if not line.startswith("<!--") and not line.startswith('<?xml'):
             tag = mk_tag(line)
             if "/" not in tag:
                 node, exemel = mk_node(tag, line, exemel)
@@ -327,7 +327,7 @@ def xmldescriptors(node):
 
 
 def xml2cue(ex):
-    bignode = parsexml(ex)
+    bignode = uxps(ex)
     if isinstance(bignode, Node):
         return {
             "info_section": xmlspliceinfosection(bignode),
