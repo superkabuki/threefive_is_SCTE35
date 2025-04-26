@@ -63,7 +63,6 @@ a@fu:~/build5/scte35/scte35$ pypy3
 # Checkout the Super Cool SCTE-35 [__Examples__](https://github.com/superkabuki/threefive3/tree/main/examples)
 <br>
 
- # threefive3 v3.0.39 is ready
  
 * Xml is back and better than ever. __The new Ultra Xml Parser Supreme__ replaces the Super Xml Parser.
 
