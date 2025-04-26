@@ -1,30 +1,32 @@
 [__Install__](#install) |[__SCTE-35 Cli__](#the-cli-tool) | [__SCTE-35 HLS__](https://github.com/superkabuki/threefive3/blob/main/hls.md) | [__Cue__ Class](https://github.com/superkabuki/threefive3/blob/main/cue.md) | [__Stream__ Class](https://github.com/superkabuki/threefive3/blob/main/stream.md) | [__Online SCTE-35 Parser__](https://iodisco.com/scte35) | [__Encode SCTE-35__](https://github.com/superkabuki/threefive3/blob/main/encode.md) | [__SCTE-35 Examples__](https://github.com/superkabuki/threefive3/tree/main/examples)
- | [__SCTE-35 XML__ updated 04/24/2025](https://github.com/superkabuki/SCTE-35/blob/main/xml.md) 
+ | [__SCTE-35 XML__ updated 04/24/2025](https://github.com/superkabuki/SCTE-35/blob/main/xml.md) | [__threefive3 runs Four Times Faster on pypy3__](https://pypy.org/)
  
 
 
-# threefive3 is ready.
+# threefive3 is SCTE-35. 
+## The Most Advanced SCTE-35 Parser on the Planet. 
+### If you're working with SCTE-35, this is the tool you want.
 ✅ SCTE-35 __Parser__  ✅ SCTE-35 __Encoder__    ✅ SCTE-35 __HLS__     ✅ SCTE-35 __Xml+binary__     ✅ SCTE-35 __Cli__     ✅  SCTE-35 __library__
+ ✅ SCTE-35 __Xml__ 
 
-
-* Parses __SCTE-35__ from MPEGTS, HLS, XML+Binary, Base64, Bytes, Hex, Integers, or JSON.
+* Parses __SCTE-35__ from MPEGTS, HLS, XML, MPD, XML+Binary, Base64, Bytes, Hex, Integers, or JSON.
 * Encode __SCTE-35__ to Base64, Bytes, Hex, Int, JSON,XML, or Xml+binary.
-* Built-in network support for HTTP(S), UDP, and Multicast.
-* Automatic AES decryption for HLS.
-* All HLS __SCTE-35__ Tags are Supported.
+* __All HLS SCTE-35 Tags__ are Supported.
+* __Automatic AES decryption__ for HLS.
+* Built-in network support for __HTTP(S), UDP, and Multicast__.
+* Built-in __Multicast Sender and Receiver__ _hell yes!_
 
 # Latest release is v3.0.43
 Released Thursday April 24th, 2025
 * just 4250 lines of code.
 * Over 1892 lines of comments.
 
-* cyclomatic complexity __2.03__ ,_That's a kickass score._
+* cyclomatic complexity __2.03__ ,__That's a kickass score.__
 
 * pylint score is __9.59/10__, _this needs a liitle work_.
 
 > Stay up to date, only the latest release is supported.
 > 
-
 
 <pre>
  Q. 
@@ -41,7 +43,6 @@ Released Thursday April 24th, 2025
  then you'll be really happy.
  </pre>
 
-
 ## MPEGTS streams can be parsed for SCTE-35 with three lines of code.
 
 ```py3
@@ -52,10 +53,13 @@ a@fu:~/build5/scte35/scte35$ pypy3
 >>>> strm.decode()
 ```
 
-## `Q.` Come on man, it's a scripting language how fast can it be parsing MPEGTS?
-## `A.` Faster than you think. 3.7GB in 2.7 Seconds, it's almost as fast as tsduck in C++.
-### Here's a test of tsduck, the old threefive, threefive3, and SuperKarate DeathCar. 
-#### _Don't kid yourself, nobody can even get close to SuperKarateDeathCar ,the guy who wrote it is a freakin' genius_
+### `Q.` Come on man, python is a damn scripting language, how fast can it be parsing MPEGTS?
+
+### `A.`  3.7GB in 2.7 Seconds runnng on pypy3, it's almost as fast as tsduck written in C++
+
+## Here's a test of tsduck, the old threefive, threefive3, and SuperKarate DeathCar. 
+
+
 ![image](https://github.com/user-attachments/assets/6ce0376d-1ac3-4bbb-8c06-8d76443238de)
 
 
@@ -71,19 +75,15 @@ a@fu:~/build5/scte35/scte35$ pypy3
 ### Install
 * [Install](#install)
 
+### Examples 
+* [__Examples__](https://github.com/superkabuki/threefive3/tree/main/examples)
 ### XML
 * [XML](https://github.com/superkabuki/SCTE-35/blob/main/xml.md) __New__! _updated 04/24/2025_
-
-
 ### Cli
-
 * [SCTE-35 Cli Super Tool](#the-cli-tool) Encodes, Decodes, and Recodes. This is pretty cool, it does SCTE-35 seven different ways.
      * The cli tool comes with builtin documentation just type `threefive3 help`
-
 ### HLS
 * [Advanced Parsing of SCTE-35 in HLS with threefive3](https://github.com/superkabuki/threefive3/blob/main/hls.md) All HLS SCTE-35 tags, Sidecar Files, AAC ID3 Header Timestamps, SCTE-35 filters... Who loves you baby?
-
-
 ### `Classes`
 * The python built in help is always the most up to date docs for the library.
 
@@ -565,5 +565,6 @@ a@fu:~$
 
 
 ___
-
-[Install threefive3](#install)  | [SCTE-35 HLS](https://github.com/superkabuki/threefive3/blob/main/hls.md) | [Cue Class](https://github.com/superkabuki/threefive3/blob/main/cue.md) | [Stream Class](https://github.com/superkabuki/threefive3/blob/main/stream.md) | [Online SCTE-35 Parser](https://iodisco.com/scte35) | [Encode SCTE-35](https://github.com/superkabuki/threefive3/blob/main/encode.md) 
+[__Install__](#install) |[__SCTE-35 Cli__](#the-cli-tool) | [__SCTE-35 HLS__](https://github.com/superkabuki/threefive3/blob/main/hls.md) | [__Cue__ Class](https://github.com/superkabuki/threefive3/blob/main/cue.md) | [__Stream__ Class](https://github.com/superkabuki/threefive3/blob/main/stream.md) | [__Online SCTE-35 Parser__](https://iodisco.com/scte35) | [__Encode SCTE-35__](https://github.com/superkabuki/threefive3/blob/main/encode.md) | [__SCTE-35 Examples__](https://github.com/superkabuki/threefive3/tree/main/examples)
+ | [__SCTE-35 XML__ updated 04/24/2025](https://github.com/superkabuki/SCTE-35/blob/main/xml.md) | [__threefive3 runs Four Times Faster on pypy3__](https://pypy.org/)
+ 
