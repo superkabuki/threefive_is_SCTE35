@@ -28,7 +28,7 @@ def mk_tag(data):
     mk_tag parse out the
     next available xml tag from data
     """
-    return data[1:].split(" ", 1)[0].split('>')[0].strip()
+    return data[1:].split(" ", 1)[0].split(">")[0].strip()
 
 
 def mk_line(exemel):
@@ -81,13 +81,12 @@ def endtag(openlist):
     in openlist, if any nodes are still in
     openlist
     """
-    final = False
-    closed = openlist.pop()
+    closed = False
     if openlist:
-        openlist[-1].add_child(closed)
-    else:
-        final = closed
-    return final
+        closed = openlist.pop()
+        if openlist:
+            openlist[-1].add_child(closed)
+        return closed
 
 
 def uxps(exemel):
@@ -100,7 +99,7 @@ def uxps(exemel):
     exemel = exemel.replace("\n", "").strip()
     while exemel:
         line, exemel = mk_line(exemel)
-        if not line.startswith("<!--") and not line.startswith('<?xml'):
+        if not line.startswith("<!--") and not line.startswith("<?xml"):
             tag = mk_tag(line)
             if "/" not in tag:
                 node, exemel = mk_node(tag, line, exemel)
