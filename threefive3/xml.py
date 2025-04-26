@@ -96,11 +96,13 @@ def mk_xml_attrs(attrs):
     """
     return "".join([f' {key2xml(k)}="{val2xml(v)}"' for k, v in attrs.items()])
 
+
 class NodeList(list):
     """
     A NodeList instance is returned by Node.find()
     """
-    def __init__(self,*args):
+
+    def __init__(self, *args):
         super().__init__(*args)
 
     def pop(self, idx=-1):
@@ -112,7 +114,7 @@ class NodeList(list):
         node.drop()
         super().pop(idx)
 
-    def remove(self,node):
+    def remove(self, node):
         """
         remove drop node from parent
         and remove from list
@@ -271,17 +273,17 @@ class Node:
             rendrd += self.mk(child)
         return f"{rendrd}{ndent}</{name}>\n".replace(" >", ">")
 
-    def find(self,tag,obj=None):
+    def find(self, tag, obj=None):
         """
         find search children for a node with a name that matches tag
         or has an attribute that matches tag. find returns a list.
         """
-        results=NodeList()
+        results = NodeList()
         obj = self.chk_obj(obj)
         for child in obj.children:
-            if (child.name == tag) or (tag in child.attrs):
+            if (child.name == tag) or (tag in mk_xml_attrs(child.attrs)):
                 results.append(child)
-            results += self.find(tag,obj=child)
+            results += self.find(tag, obj=child)
         return results
 
     def mk_name(self):
@@ -327,14 +329,14 @@ class Node:
             return self._rendrd_children(rendrd, ndent, name)
         return rendrd.replace(">", "/>")
 
-    def set_parent(self,obj=None):
+    def set_parent(self, obj=None):
         """
         set_parent set the parent node of this node.
         a top level node's parent will be None.
         """
         obj = self.chk_obj(obj)
         for child in obj.children:
-            child.parent=obj
+            child.parent = obj
             child.set_parent(child)
 
     def drop(self, obj=None):
