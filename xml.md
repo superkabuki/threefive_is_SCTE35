@@ -134,8 +134,7 @@ a@fu:~/threefive3$ cat ~/xml3.xml
     ]
 }
 ```
-* This is why I love the new xml parser,that's all there is to it.
-* That's everything you need to know to parse SCTE-35 xml with threefive3.
+* This is why I love the new xml parser,that's everything you need to know to parse SCTE-35 xml with threefive3.
 
 
 # Encoding 
@@ -216,10 +215,10 @@ a@fu:~/threefive3$ threefive3 < ~/json2.json xml
 ```xml
 <scte35:SpliceInfoSection xmlns:scte35="https://scte.org/schemas/35"  ptsAdjustment="207000" protocolVersion="0" sapType="3" tier="4095">
    <scte35:SpliceInsert spliceEventId="1" spliceEventCancelIndicator="false" spliceImmediateFlag="true" eventIdComplianceFlag="true" availNum="1" availsExpected="255" outOfNetworkIndicator="false" uniqueProgramId="39321"/>
-   <!-- Provider Placement Opportunity End -->
+   <!-- Provider Placement Opportunity End -->    #<----- I add the segmentationType as a comment, because I'm old and lazy .
    <scte35:SegmentationDescriptor segmentationEventId="0" segmentationEventCancelIndicator="false" segmentationEventIdComplianceIndicator="true" segmentationTypeId="53" segmentNum="0" segmentsExpected="0">
       <scte35:DeliveryRestrictions webDeliveryAllowedFlag="false" noRegionalBlackoutFlag="false" archiveAllowedFlag="false" deviceRestrictions="0"/>
-      <!-- MPU -->
+      <!-- MPU -->   # <--------I add the Upid type as a comment, because I'm old and lazy.
       <scte35:SegmentationUpid segmentationUpidType="12" segmentationUpidFormat="hexbinary" formatIdentifier="1146048333" privateData="1539542133359170776941">444f4f4d5375706572446f6f6d</scte35:SegmentationUpid>
    </scte35:SegmentationDescriptor>
 </scte35:SpliceInfoSection>
@@ -251,11 +250,15 @@ threefive3 video.ts xml
 ```
 * add the TimeSignal to a Cue and render as xml
 *  (threefive3 automatically generates the Splice Info Section if needed)
+*  __Notes__:
+        *  __When you call Cue.xml() it returns a Node instance__
+        *  __if you print Cue.xml() or a Node instance, you get the Xml string.__
+  
 ```py3
 >>>> cue=Cue()
 >>>> cue.command =t
 >>>> cue.encode()
->>>> print(cue.xml())
+>>>> print(cue.xml()) 
 ```
 ```xml
 <scte35:SpliceInfoSection xmlns:scte35="https://scte.org/schemas/35"  ptsAdjustment="0" protocolVersion="0" sapType="3" tier="4095">
@@ -265,16 +268,21 @@ threefive3 video.ts xml
 </scte35:SpliceInfoSection>
 ```
 * make an Avail Splice Descriptor and add it to the Cue
-* When you call encode() on a threefive3 object, it ctells you if you've got something wrong
 ```py3
 >>>> from threefive3 import AvailDescriptor
 >>>> avd =AvailDescriptor()
 >>>> avd
 {'tag': 0, 'identifier': 'CUEI', 'name': 'Avail Descriptor', 'bites': None, 'private_data': None, 'provider_avail_id': None}
 >>>> avd.provider_avail_id="fumatica"
+```
+* __When you call encode() on a threefive3 object, it tells you if you've got something wrong__
+
+```py3
 >>>> avd.encode()
   provider_avail_id is fumatica, it should be type int, 32 bit(s) long.  # <--- threefive3 points out your mistakes
-
+```
+* __use dot notation to access the vars and make the changes__
+```
 >>>> avd.provider_avail_id=1234
 >>>> avd.encode()
 ```
@@ -283,7 +291,7 @@ threefive3 video.ts xml
 ```py3
 >>>> cue.descriptors.append(avd)
 ```
-* When ever you make a change to cue, call cue.encode() and it recalculate everything for you
+* __When ever you make a change to cue, call cue.encode() and it recalculates the length vars and the CRC32.
 ```
 >>>> cue.encode()
 ```
