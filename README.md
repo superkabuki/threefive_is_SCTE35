@@ -52,6 +52,14 @@ a@fu:~/build5/scte35/scte35$ pypy3
 >>>> strm.decode()
 ```
 
+## `Q.` Come on man, it's a scripting language how fast can it be parsing MPEGTS?
+## `A.` Faster than you think. 3.7GB in 2.7 Seconds, it's almost as fast as tsduck in C++.
+### Here's a test of tsduck, the old threefive, threefive3, and SuperKarate DeathCar. 
+#### _Don't kid yourself, nobody can even get close to SuperKarateDeathCar ,the guy who wrote it is a freakin' genius_
+![image](https://github.com/user-attachments/assets/6ce0376d-1ac3-4bbb-8c06-8d76443238de)
+
+
+
 # Checkout the Super Cool SCTE-35 [__Examples__](https://github.com/superkabuki/threefive3/tree/main/examples)
 <br>
 
