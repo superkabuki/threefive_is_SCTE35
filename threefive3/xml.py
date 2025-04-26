@@ -153,7 +153,8 @@ class Node:
         attrs :     <name attrs[k]="attrs[v]">
         children :  <name><children[0]></children[0]</name>
         depth:      tab depth for printing (automatically set)
-
+        namespace:    a NameSpace instance for the Node
+        
     Use like this:
 
         from threefive3.xml import Node
@@ -244,6 +245,15 @@ class Node:
         for child in self.children:
             rendrd += self.mk(child)
         return f"{rendrd}{ndent}</{name}>\n".replace(" >", ">")
+
+    def find(self,tag,obj=None):
+        results=[]
+        obj = self.chk_obj(obj)
+        for child in obj.children:
+            if (child.name == tag) or (tag in child.attrs):
+                results.append(child)
+            results += self.find(tag,obj=child)
+        return results
 
     def mk_name(self):
         """
