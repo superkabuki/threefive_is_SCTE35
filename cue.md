@@ -31,10 +31,12 @@ class Cue(threefive3.base.SCTE35Base)
 
 * base64
 * bytes
-* hex
-* int
+* dicts
+* hex (literal, string and bytestring)
+* int (literal, string and bytestring)
 * json
-* xml+ binary
+* xml (string and bytestring)
+* xml+ binary (string and bytestring)
 
 
 
