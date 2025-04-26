@@ -205,23 +205,6 @@ class Node:
     def __repr__(self):
         return self.mk()
 
-    def _handle_attrs(self, attrs):
-        if not attrs:
-            attrs = {}
-        if "xmlns" in attrs:
-            self.namespace.uri = attrs.pop("xmlns")
-        self.attrs = attrs
-
-    def mk_ans(self, attrs):
-        """
-        mk_ans set namespace on attributes
-        """
-        new_attrs = {}
-        if self.namespace.all:
-            for k, v in attrs.items():
-                new_attrs[f"{self.namespace.ns}:{k}"] = v
-        return new_attrs
-
     def chk_obj(self, obj):
         """
         chk_obj determines if
@@ -232,17 +215,32 @@ class Node:
             obj = self
         return obj
 
-    def set_ns(self, ns=None):
-        """
-        set_ns set namespace on the Node
-        """
-        self.namespace.ns = ns
+    def _handle_attrs(self, attrs):
+        if not attrs:
+            attrs = {}
+        if "xmlns" in attrs:
+            self.namespace.uri = attrs.pop("xmlns")
+        self.attrs = attrs
 
-    def rm_attr(self, attr):
+    def add_child(self, child, slot=None):
         """
-        rm_attr remove an attribute
+        add_child adds a child node
+        set slot to insert at index slot.
         """
-        self.attrs.pop(attr)
+        while len(self.children) > MAXCHILDREN:
+            red(f"{len(self.children)} is too many children")
+            return False
+        if not slot:
+            slot = len(self.children)
+        self.children = self.children[:slot] + [child] + self.children[slot:]
+        self.set_parent()
+
+    def add_comment(self, comment, slot=None):
+        """
+        add_comment add a Comment node
+        """
+        self.add_child(Comment(comment), slot)
+        self.set_parent()
 
     def add_attr(self, attr, value):
         """
@@ -250,102 +248,55 @@ class Node:
         """
         self.attrs[attr] = value
 
-    def set_depth(self):
+    def rm_child(self, child):
         """
-        set_depth is used to format
-        tabs in output
-        """
-        for child in self.children:
-            while self.depth > MAXDEPTH:
-                red(f"{self.depth} is too deep for SCTE-35 nodes.")
-                return False
-            child.depth = self.depth + 1
+        rm_child remove a child
 
-    def get_indent(self):
+        example:
+        a_node.rm_child(a_node.children[3])
         """
-        get_indent returns a string of spaces the required depth for a node
-        """
-        tab = "   "
-        return tab * self.depth
+        self.children.remove(child)
 
-    def _rendrd_children(self, rendrd, ndent, name):
-        for child in self.children:
-            rendrd += self.mk(child)
-        return f"{rendrd}{ndent}</{name}>\n".replace(" >", ">")
-
-    def find(self, tag, obj=None):
+    def rm_attr(self, attr):
         """
-        find search children for a node with a name that matches tag
-        or has an attribute that matches tag. find returns a list.
+        rm_attr remove an attribute
         """
-        results = NodeList()
-        obj = self.chk_obj(obj)
-        for child in obj.children:
-            if (child.name == tag) or (tag in mk_xml_attrs(child.attrs)):
-                results.append(child)
-            results += self.find(tag, obj=child)
-        return results
-
-    def mk_name(self):
-        """
-        mk_name add namespace to node name
-        """
-        name = self.name
-        if self.namespace.ns:
-            name = f"{self.namespace.ns}:{name}"
-        return name
-
-    def rendr_attrs(self, ndent, name):
-        """
-        rendrd_attrs renders xml attributes
-        """
-        attrs = self.attrs
-        if self.namespace.all:
-            attrs = self.mk_ans(self.attrs)
-        new_attrs = mk_xml_attrs(attrs)
-        if self.depth == 0:
-            return f"{ndent}<{name} {self.namespace.xmlns()} {new_attrs}>"
-        return f"{ndent}<{name}{new_attrs}>"
-
-    def children_namespaces(self):
-        """
-        children_namespaces give children your namespace
-        """
-        for child in self.children:
-            child.namespace.ns = self.namespace.ns
-            child.namespace.all = self.namespace.all
-            child.namespace.uri = ""
-
-    def rendr_all(self, ndent, name):
-        """
-        rendr_all renders the Node instance and it's children in xml.
-        """
-        rendrd = self.rendr_attrs(ndent, name)
-        if self.value:
-            return f"{rendrd}{self.value}</{name}>\n"
-        rendrd = f"{rendrd}\n"
-        rendrd.replace(" >", ">")
-        if self.children:
-            return self._rendrd_children(rendrd, ndent, name)
-        return rendrd.replace(">", "/>")
-
-    def set_parent(self, obj=None):
-        """
-        set_parent set the parent node of this node.
-        a top level node's parent will be None.
-        """
-        obj = self.chk_obj(obj)
-        for child in obj.children:
-            child.parent = obj
-            child.set_parent(child)
+        self.attrs.pop(attr)
 
     def drop(self, obj=None):
         """
-        delete delete self
+        drop delete self
 
         """
         obj = self.chk_obj(obj)
         obj.parent.rm_child(obj)
+
+    def findattr(self, attr, obj=None):
+        """
+        findattr  recursively searches children for all nodes that
+        have an attribute that matches attr. findattr returns a NodeList.
+        """
+        results = NodeList()
+        obj = self.chk_obj(obj)
+        for child in obj.children:
+            if attr in mk_xml_attrs(child.attrs):
+                results.append(child)
+            results += self.findattr(attr, obj=child)
+        return results
+
+    def findtag(self, tag, obj=None):
+        """
+        findtag  recursively searches children for
+        all nodes with a name that matches tag.
+        findtag returns a NodeList.
+        """
+        results = NodeList()
+        obj = self.chk_obj(obj)
+        for child in obj.children:
+            if child.name == tag:
+                results.append(child)
+            results += self.findtag(tag, obj=child)
+        return results
 
     def mk(self, obj=None):
         """
@@ -361,34 +312,97 @@ class Node:
             return obj.mk(obj)
         return obj.rendr_all(ndent, name)
 
-    def add_child(self, child, slot=None):
+    def mk_name(self):
         """
-        add_child adds a child node
-        set slot to insert at index slot.
+        mk_name add namespace to node name
         """
-        while len(self.children) > MAXCHILDREN:
-            red(f"{len(self.children)} is too many children")
-            return False
-        if not slot:
-            slot = len(self.children)
-        self.children = self.children[:slot] + [child] + self.children[slot:]
-        self.set_parent()
+        name = self.name
+        if self.namespace.ns:
+            name = f"{self.namespace.ns}:{name}"
+        return name
 
-    def rm_child(self, child):
+    def mk_ans(self, attrs):
         """
-        rm_child remove a child
+        mk_ans set namespace on attributes
+        """
+        new_attrs = {}
+        if self.namespace.all:
+            for k, v in attrs.items():
+                new_attrs[f"{self.namespace.ns}:{k}"] = v
+        return new_attrs
 
-        example:
-        a_node.rm_child(a_node.children[3])
+    def rendr_attrs(self, ndent, name):
         """
-        self.children.remove(child)
+        rendrd_attrs renders xml attributes
+        """
+        attrs = self.attrs
+        if self.namespace.all:
+            attrs = self.mk_ans(self.attrs)
+        new_attrs = mk_xml_attrs(attrs)
+        if self.depth == 0:
+            return f"{ndent}<{name} {self.namespace.xmlns()} {new_attrs}>"
+        return f"{ndent}<{name}{new_attrs}>"
 
-    def add_comment(self, comment, slot=None):
+    def _rendrd_children(self, rendrd, ndent, name):
+        for child in self.children:
+            rendrd += self.mk(child)
+        return f"{rendrd}{ndent}</{name}>\n".replace(" >", ">")
+
+    def rendr_all(self, ndent, name):
         """
-        add_comment add a Comment node
+        rendr_all renders the Node instance and it's children in xml.
         """
-        self.add_child(Comment(comment), slot)
-        self.set_parent()
+        rendrd = self.rendr_attrs(ndent, name)
+        if self.value:
+            return f"{rendrd}{self.value}</{name}>\n"
+        rendrd = f"{rendrd}\n"
+        rendrd.replace(" >", ">")
+        if self.children:
+            return self._rendrd_children(rendrd, ndent, name)
+        return rendrd.replace(">", "/>")
+
+    def set_depth(self):
+        """
+        set_depth is used to format
+        tabs in output
+        """
+        for child in self.children:
+            while self.depth > MAXDEPTH:
+                red(f"{self.depth} is too deep for SCTE-35 nodes.")
+                return False
+            child.depth = self.depth + 1
+
+    def set_ns(self, ns=None):
+        """
+        set_ns set namespace on the Node
+        """
+        self.namespace.ns = ns
+
+    def set_parent(self, obj=None):
+        """
+        set_parent set the parent node of this node.
+        a top level node's parent will be None.
+        """
+        obj = self.chk_obj(obj)
+        for child in obj.children:
+            child.parent = obj
+            child.set_parent(child)
+
+    def children_namespaces(self):
+        """
+        children_namespaces give children your namespace
+        """
+        for child in self.children:
+            child.namespace.ns = self.namespace.ns
+            child.namespace.all = self.namespace.all
+            child.namespace.uri = ""
+
+    def get_indent(self):
+        """
+        get_indent returns a string of spaces the required depth for a node
+        """
+        tab = "   "
+        return tab * self.depth
 
 
 class Comment(Node):
