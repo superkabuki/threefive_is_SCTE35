@@ -96,6 +96,30 @@ def mk_xml_attrs(attrs):
     """
     return "".join([f' {key2xml(k)}="{val2xml(v)}"' for k, v in attrs.items()])
 
+class NodeList(list):
+    """
+    A NodeList instance is returned by Node.find()
+    """
+    def __init__(self,*args):
+        super().__init__(*args)
+
+    def pop(self, idx=-1):
+        """
+        pop remove node from list
+        and from parent node by index
+        """
+        node = self[idx]
+        node.drop()
+        super().pop(idx)
+
+    def remove(self,node):
+        """
+        remove drop node from parent
+        and remove from list
+        """
+        node.drop()
+        super().remove(node)
+
 
 class NameSpace:
     """
@@ -154,7 +178,7 @@ class Node:
         children :  <name><children[0]></children[0]</name>
         depth:      tab depth for printing (automatically set)
         namespace:    a NameSpace instance for the Node
-        
+
     Use like this:
 
         from threefive3.xml import Node
@@ -174,6 +198,7 @@ class Node:
         self.attrs = None
         self._handle_attrs(attrs)
         self.children = []
+        self.parent = None
 
     def __repr__(self):
         return self.mk()
@@ -247,7 +272,11 @@ class Node:
         return f"{rendrd}{ndent}</{name}>\n".replace(" >", ">")
 
     def find(self,tag,obj=None):
-        results=[]
+        """
+        find search children for a node with a name that matches tag
+        or has an attribute that matches tag. find returns a list.
+        """
+        results=NodeList()
         obj = self.chk_obj(obj)
         for child in obj.children:
             if (child.name == tag) or (tag in child.attrs):
@@ -298,12 +327,31 @@ class Node:
             return self._rendrd_children(rendrd, ndent, name)
         return rendrd.replace(">", "/>")
 
+    def set_parent(self,obj=None):
+        """
+        set_parent set the parent node of this node.
+        a top level node's parent will be None.
+        """
+        obj = self.chk_obj(obj)
+        for child in obj.children:
+            child.parent=obj
+            child.set_parent(child)
+
+    def drop(self, obj=None):
+        """
+        delete delete self
+
+        """
+        obj = self.chk_obj(obj)
+        obj.parent.rm_child(obj)
+
     def mk(self, obj=None):
         """
         mk make the Node as xml.
         """
         obj = self.chk_obj(obj)
         obj.set_depth()
+        obj.set_parent()
         obj.children_namespaces()
         name = obj.mk_name()
         ndent = obj.get_indent()
@@ -322,6 +370,7 @@ class Node:
         if not slot:
             slot = len(self.children)
         self.children = self.children[:slot] + [child] + self.children[slot:]
+        self.set_parent()
 
     def rm_child(self, child):
         """
@@ -337,6 +386,7 @@ class Node:
         add_comment add a Comment node
         """
         self.add_child(Comment(comment), slot)
+        self.set_parent()
 
 
 class Comment(Node):
