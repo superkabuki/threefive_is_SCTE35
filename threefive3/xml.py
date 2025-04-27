@@ -179,7 +179,7 @@ class Node:
         attrs :     <tag attrs[k]="attrs[v]">
         children :  <tag><children[0]></children[0]</tag>
         depth:      tab depth for printing (automatically set)
-        namespace:  a NameSpace instance for the Node
+        namespace:    a NameSpace instance for the Node
 
     Use like this:
 
@@ -306,7 +306,7 @@ class Node:
         obj.set_depth()
         obj.set_parent()
         obj.children_namespaces()
-        name = obj.mk_name()
+        name = obj.mk_tag()
         ndent = obj.get_indent()
         if isinstance(obj, Comment):
             return obj.mk(obj)
@@ -314,7 +314,7 @@ class Node:
 
     def mk_tag(self):
         """
-        mk_name add namespace to node name
+        mk_tag add namespace to node name
         """
         tag = self.tag
         if self.namespace.ns:
@@ -343,7 +343,7 @@ class Node:
             return f"{ndent}<{tag} {self.namespace.xmlns()} {new_attrs}>"
         return f"{ndent}<{tag}{new_attrs}>"
 
-    def _rendrd_children(self, rendrd, ndent, tqg):
+    def _rendrd_children(self, rendrd, ndent, tag):
         for child in self.children:
             rendrd += self.mk(child)
         return f"{rendrd}{ndent}</{tag}>\n".replace(" >", ">")
