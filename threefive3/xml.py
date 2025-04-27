@@ -174,12 +174,12 @@ class Node:
 
     An instance of Node has:
 
-        name :      <name> </name>
-        value  :    <name>value</name>
-        attrs :     <name attrs[k]="attrs[v]">
-        children :  <name><children[0]></children[0]</name>
+        tag :      <tag> </tag>
+        value  :    <tag>value</tag>
+        attrs :     <tag attrs[k]="attrs[v]">
+        children :  <tag><children[0]></children[0]</tag>
         depth:      tab depth for printing (automatically set)
-        namespace:    a NameSpace instance for the Node
+        namespace:  a NameSpace instance for the Node
 
     Use like this:
 
@@ -187,12 +187,12 @@ class Node:
 
         ts = Node('TimeSignal')
         st = Node('SpliceTime',attrs={'pts_time':3442857000})
-        ts.add_child(st)
+        ts.addchild(st)
         print(ts)
     """
 
-    def __init__(self, name, value="", attrs=None, ns=None):
-        self.name = name
+    def __init__(self, tag, value="", attrs=None, ns=None):
+        self.tag = tag
         self.value = value
         self.depth = 0
         self.namespace = NameSpace()
@@ -222,9 +222,9 @@ class Node:
             self.namespace.uri = attrs.pop("xmlns")
         self.attrs = attrs
 
-    def add_child(self, child, slot=None):
+    def addchild(self, child, slot=None):
         """
-        add_child adds a child node
+        addchild adds a child node
         set slot to insert at index slot.
         """
         while len(self.children) > MAXCHILDREN:
@@ -235,31 +235,31 @@ class Node:
         self.children = self.children[:slot] + [child] + self.children[slot:]
         self.set_parent()
 
-    def add_comment(self, comment, slot=None):
+    def addcomment(self, comment, slot=None):
         """
-        add_comment add a Comment node
+        addcomment add a Comment node
         """
-        self.add_child(Comment(comment), slot)
+        self.addchild(Comment(comment), slot)
         self.set_parent()
 
-    def add_attr(self, attr, value):
+    def addattr(self, attr, value):
         """
-        add_attr add an attribute
+        addattr add an attribute
         """
         self.attrs[attr] = value
 
-    def rm_child(self, child):
+    def dropchild(self, child):
         """
-        rm_child remove a child
+        dropchild remove a child
 
         example:
-        a_node.rm_child(a_node.children[3])
+        a_node.dropchild(a_node.children[3])
         """
         self.children.remove(child)
 
-    def rm_attr(self, attr):
+    def dropattr(self, attr):
         """
-        rm_attr remove an attribute
+        dropattr remove an attribute
         """
         self.attrs.pop(attr)
 
@@ -269,7 +269,7 @@ class Node:
 
         """
         obj = self.chk_obj(obj)
-        obj.parent.rm_child(obj)
+        obj.parent.dropchild(obj)
 
     def findattr(self, attr, obj=None):
         """
@@ -287,13 +287,13 @@ class Node:
     def findtag(self, tag, obj=None):
         """
         findtag  recursively searches children for
-        all nodes with a name that matches tag.
+        all nodes with a tag that matches tag.
         findtag returns a NodeList.
         """
         results = NodeList()
         obj = self.chk_obj(obj)
         for child in obj.children:
-            if child.name == tag:
+            if child.tag == tag:
                 results.append(child)
             results += self.findtag(tag, obj=child)
         return results
@@ -312,14 +312,14 @@ class Node:
             return obj.mk(obj)
         return obj.rendr_all(ndent, name)
 
-    def mk_name(self):
+    def mk_tag(self):
         """
         mk_name add namespace to node name
         """
-        name = self.name
+        tag = self.tag
         if self.namespace.ns:
-            name = f"{self.namespace.ns}:{name}"
-        return name
+            tag = f"{self.namespace.ns}:{tag}"
+        return tag
 
     def mk_ans(self, attrs):
         """
@@ -331,7 +331,7 @@ class Node:
                 new_attrs[f"{self.namespace.ns}:{k}"] = v
         return new_attrs
 
-    def rendr_attrs(self, ndent, name):
+    def rendr_attrs(self, ndent, tag):
         """
         rendrd_attrs renders xml attributes
         """
@@ -340,25 +340,25 @@ class Node:
             attrs = self.mk_ans(self.attrs)
         new_attrs = mk_xml_attrs(attrs)
         if self.depth == 0:
-            return f"{ndent}<{name} {self.namespace.xmlns()} {new_attrs}>"
-        return f"{ndent}<{name}{new_attrs}>"
+            return f"{ndent}<{tag} {self.namespace.xmlns()} {new_attrs}>"
+        return f"{ndent}<{tag}{new_attrs}>"
 
-    def _rendrd_children(self, rendrd, ndent, name):
+    def _rendrd_children(self, rendrd, ndent, tqg):
         for child in self.children:
             rendrd += self.mk(child)
-        return f"{rendrd}{ndent}</{name}>\n".replace(" >", ">")
+        return f"{rendrd}{ndent}</{tag}>\n".replace(" >", ">")
 
-    def rendr_all(self, ndent, name):
+    def rendr_all(self, ndent, tag):
         """
         rendr_all renders the Node instance and it's children in xml.
         """
-        rendrd = self.rendr_attrs(ndent, name)
+        rendrd = self.rendr_attrs(ndent, tag)
         if self.value:
-            return f"{rendrd}{self.value}</{name}>\n"
+            return f"{rendrd}{self.value}</{tag}>\n"
         rendrd = f"{rendrd}\n"
         rendrd.replace(" >", ">")
         if self.children:
-            return self._rendrd_children(rendrd, ndent, name)
+            return self._rendrd_children(rendrd, ndent, tag)
         return rendrd.replace(">", "/>")
 
     def set_depth(self):
@@ -411,7 +411,7 @@ class Comment(Node):
 
     An instance of Comment has:
 
-        name :      <!-- name -->
+        tag:      <!-- tag -->
         depth:      tab depth for printing (automatically set)
 
     Since Comment is a Node, it also has attrs, value and children but
@@ -423,10 +423,10 @@ class Comment(Node):
         n = Node('root')
         c = Comment('my first comment')
 
-        n.add_child(c)
+        n.addchild(c)
         print(n)
 
-    See also Node.add_comment:
+    See also Node.addcomment:
     """
 
     def mk(self, obj=None):
