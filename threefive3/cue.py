@@ -25,6 +25,7 @@ from .words import (
     sixteen,
     equalsign,
 )
+from .xml import Node
 from .uxp import xml2cue
 
 
@@ -188,29 +189,47 @@ class Cue(SCTE35Base):
         return data
 
     def _byte_bits(self, data):
-        data = self._pkt_bits(data)
-        self.bites = self.idxsplit(data, b"\xfc")
+        if isxml(data) or isjson(data):
+            self.load(data)
+        else:
+            data = self._pkt_bits(data)
+            self.bites = self.idxsplit(data, b"\xfc")
+        return self.bites
+
+    def _node_bits(self,data):
+        data = data.mk()
+        self._from_xml(data)
+        return self.bites
+
+    def _dict_bits(self,data):
+        self.load(data)
         return self.bites
 
     def _mk_bits(self, data):
         """
-        cue._mk_bits Converts
-        Hex and Base64 strings into bytes.
+        cue._mk_bits converts
+        several SCTE-35 formats into bytes.
         """
-        if isinstance(data, dict):
-            self.load(data)
-            return self.bites
-        if isinstance(data, str):
-            return self._str_bits(data)
-        if isinstance(data, bytes):
-            if isxml(data) or isjson(data):
-                self.load(data)
-                return self.bites
-            return self._byte_bits(data)
-        if isinstance(data, int):
-            return self._int_bits(data)
+        type_map= {Node: self._node_bits,
+                               dict: self._dict_bits,
+                               str: self._str_bits,
+                               bytes:self._byte_bits,
+                               int: self._int_bits}
+        td = type(data)
+        if td in type_map.keys():
+           return type_map[td](data)
 
-        return False
+##        if isinstance(data,Node):
+##            return self._node_bits(data)
+##        if isinstance(data, dict):
+##            return self.dict_bits(data)
+##        if isinstance(data, str):
+##            return self._str_bits(data)
+##        if isinstance(data, bytes):
+##            return self._byte_bits(data)
+##        if isinstance(data, int):
+##            return self._int_bits(data)
+##        return self.bites
 
     def _mk_descriptors(self, bites):
         """
@@ -418,8 +437,8 @@ class Cue(SCTE35Base):
         be loaded by a Cue instance.
         """
         gonzo = clean(gonzo)
-        if "<scte35:Binary>" in gonzo:
-            dat = gonzo.split("<scte35:Binary>")[1].split("</scte35:Binary>")[0]
+        if "Binary" in gonzo:
+            dat = gonzo.split("Binary>",1)[1].split("<",1)[0]
             self.bites = self._mk_bits(dat)
             self.decode()
         elif "SpliceInfoSection" in gonzo:
