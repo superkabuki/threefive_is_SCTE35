@@ -449,7 +449,7 @@ class SegmentationDescriptor(SpliceDescriptor):
                 "device_restrictions": k_by_v(table20, self.device_restrictions),
             }
             dr = Node("DeliveryRestrictions", attrs=dr_attrs, ns=ns)
-            sd.add_child(dr)
+            sd.addchild(dr)
         return sd
 
     def xml(self, ns="scte35"):
@@ -471,12 +471,12 @@ class SegmentationDescriptor(SpliceDescriptor):
         the_upid = self.mk_the_upid()
         the_upid.upid_value = self.segmentation_upid
         upid_node = the_upid.xml(ns=ns)
-        sd.add_comment(comment)
+        sd.addcomment(comment)
         if isinstance(upid_node, list):
             for node in upid_node:
-                sd.add_child(node)
+                sd.addchild(node)
         else:
-            sd.add_child(upid_node)
+            sd.addchild(upid_node)
         return sd
 
     def xml_redecode(self):
