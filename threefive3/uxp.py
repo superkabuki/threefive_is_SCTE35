@@ -67,7 +67,7 @@ def starttag(line, node, openlist):
     are appended to openlist
     """
     if line.endswith("/>"):
-        openlist[-1].add_child(node)
+        openlist[-1].addchild(node)
     else:
         openlist.append(node)
     return openlist
@@ -85,8 +85,8 @@ def endtag(openlist):
     if openlist:
         closed = openlist.pop()
         if openlist:
-            openlist[-1].add_child(closed)
-        return closed
+            openlist[-1].addchild(closed)
+    return closed
 
 
 def uxps(exemel):
@@ -114,7 +114,7 @@ def xmlspliceinfosection(node):
     spliceinfosection parses exemel for info section data
     and returns a loadable dict
     """
-    if "SpliceInfoSection" in node.name:
+    if "SpliceInfoSection" in node.tag:
         node.attrs["tier"] = hex(node.attrs["tier"])
         return node.attrs
     return {}
@@ -132,8 +132,8 @@ def xmlcommand(node):
         "PrivateCommand": xmlprivatecommand,
     }
     for child in node.children:
-        if child.name in cmap:
-            out = cmap[child.name](child)
+        if child.tag in cmap:
+            out = cmap[child.tag](child)
             return out
     return {}
 
@@ -179,7 +179,7 @@ def xmlsplicetime(node):
     splicetime parses xml from a splice command
     to get pts_time, sets time_specified_flag to True
     """
-    if node.name == "SpliceTime":
+    if node.tag == "SpliceTime":
         return {
             "pts_time": node.attrs["pts_time"],
             "time_specified_flag": True,
@@ -192,7 +192,7 @@ def xmlbreakduration(node):
     breakduration parses xml for break duration, break_auto_return
     and sets duration_flag to True.
     """
-    if node.name == "BreakDuration":
+    if node.tag == "BreakDuration":
         return {
             "break_duration": node.attrs["duration"],
             "break_auto_return": node.attrs["auto_return"],
@@ -229,7 +229,7 @@ def xmlspliceinsert(node):
 
 
 def xmldeliveryrestrictions(node):
-    if node.name == "DeliveryRestrictions":
+    if node.tag == "DeliveryRestrictions":
         setme = {
             "delivery_not_restricted_flag": False,
             "device_restrictions": table20[node.attrs["device_restrictions"]],
@@ -243,7 +243,7 @@ def xmlupid(node):
     """
     upids parses out upids from a splice descriptors xml
     """
-    if node.name == "SegmentationUpid":
+    if node.tag == "SegmentationUpid":
         try:
             seg_upid = bytes.fromhex(node.value.lower().replace("0x", ""))
         except ERR:
@@ -320,8 +320,8 @@ def xmldescriptors(node):
     }
     dscripts = []
     for child in node.children:
-        if child.name in dmap:
-            dscripts.append(dmap[child.name](child))
+        if child.tag in dmap:
+            dscripts.append(dmap[child.tag](child))
     return dscripts
 
 
