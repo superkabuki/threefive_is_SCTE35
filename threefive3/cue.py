@@ -435,7 +435,7 @@ class Cue(SCTE35Base):
             comment = (
                 f"Segmentation type id {dscptr.segmentation_type_id} is not in table 22"
             )
-        sis.add_comment(comment)
+        sis.addcomment(comment)
 
     def _xml_mk_descriptor(self, sis, ns):
         """
@@ -444,7 +444,7 @@ class Cue(SCTE35Base):
         for dscptr in self.descriptors:
             if dscptr.has("segmentation_type_id"):
                 self._xml_segmentation_comment(dscptr, sis)
-            sis.add_child(dscptr.xml(ns=ns))
+            sis.addchild(dscptr.xml(ns=ns))
         return sis
 
     def xml(self, ns="scte35"):
@@ -455,7 +455,7 @@ class Cue(SCTE35Base):
         """
         sis = self.info_section.xml(ns=ns)
         cmd = self.command.xml(ns=ns)
-        sis.add_child(cmd)
+        sis.addchild(cmd)
         sis = self._xml_mk_descriptor(sis, ns)
         return sis  # xml retuns a Node instance. now
 
