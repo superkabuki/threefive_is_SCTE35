@@ -92,7 +92,7 @@ class PrivateCommand(SpliceCommand):
         """
         attrs = {"identifier": self.identifier}
         pc = Node("PrivateCommand", attrs=attrs)
-        pc.add_child(Node("PrivateBytes", value=self.private_bytes.hex(), ns=ns))
+        pc.addchild(Node("PrivateBytes", value=self.private_bytes.hex(), ns=ns))
         return pc
 
 
@@ -164,7 +164,7 @@ class TimeSignal(SpliceCommand):
             nbin.reserve(6)
             if not isinstance(self.pts_time, float):
                 blue("converting pts_time from ticks")
-                self.pts_time= self.as_90k(self.pts_time)
+                self.pts_time = self.as_90k(self.pts_time)
             self.pts_time = round(self.pts_time, 6)
             nbin.add_int(int(self.as_ticks(self.pts_time)), 33)
         else:
@@ -183,7 +183,7 @@ class TimeSignal(SpliceCommand):
                     attrs={"pts_time": self.as_ticks(self.pts_time)},
                     ns=ns,
                 )
-                ts.add_child(st)
+                ts.addchild(st)
         return ts
 
 
@@ -301,15 +301,15 @@ class SpliceInsert(TimeSignal):
             st = Node(
                 "SpliceTime", attrs={"ptsTime": self.as_ticks(self.pts_time)}, ns=ns
             )
-            prgm.add_child(st)
-            si.add_child(prgm)
+            prgm.addchild(st)
+            si.addchild(prgm)
         if self.break_duration:
             bd_attrs = {
                 "auto_return": self.break_auto_return,
                 "duration": self.as_ticks(self.break_duration),
             }
             bd = Node("BreakDuration", attrs=bd_attrs, ns=ns)
-            si.add_child(bd)
+            si.addchild(bd)
         return si
 
 
