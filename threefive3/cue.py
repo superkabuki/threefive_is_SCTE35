@@ -170,11 +170,11 @@ class Cue(SCTE35Base):
             return red("Bad Base64")
 
     def _str_bits(self, data):
-        if ishex(data):
-            return self._hex_bits(clean(data))
         if isxml(data) or isjson(data):
             self.load(data)
             return self.bites
+        if ishex(data):
+            return self._hex_bits(clean(data))
         data = data.strip()
         if data.isdigit():
             return self._int_bits(int(data))
@@ -215,6 +215,7 @@ class Cue(SCTE35Base):
                                str: self._str_bits,
                                bytes:self._byte_bits,
                                int: self._int_bits}
+
         td = type(data)
         if td in type_map.keys():
            return type_map[td](data)
