@@ -5,23 +5,22 @@
 [__Install__](#install) |[__SCTE-35 Cli__](#the-cli-tool) | [__SCTE-35 HLS__](https://github.com/superkabuki/threefive3/blob/main/hls.md) | [__Cue__ Class](https://github.com/superkabuki/threefive3/blob/main/cue.md) | [__Stream__ Class](https://github.com/superkabuki/threefive3/blob/main/stream.md) | [__Online SCTE-35 Parser__](https://iodisco.com/scte35) | [__Encode SCTE-35__](https://github.com/superkabuki/threefive3/blob/main/encode.md) | [__SCTE-35 Examples__](https://github.com/superkabuki/threefive3/tree/main/examples)
  | [__SCTE-35 XML__ updated 04/24/2025](https://github.com/superkabuki/SCTE-35/blob/main/xml.md) | [__threefive3 runs Four Times Faster on pypy3__](https://pypy.org/)
  
+✅ SCTE-35 __Parser__ <br>
+✅ SCTE-35 __Decoder__ <br>
+✅ SCTE-35 __Encoder__ <br>
+✅ SCTE-35 __HLS__   ( All SCTE-35 HLS tag formats) <br>  
+✅ SCTE-35 __DASH__ ( All SCTE-35 Xml formats) <br>
+✅ SCTE-35 __XML__   <br>
+✅ SCTE-35 __Cli__     <br>
+✅ SCTE-35 __library__ <br>
+
 * Parses __SCTE-35__ from MPEGTS, HLS, XML, MPD, XML+Binary, Base64, Bytes, Hex, Integers, or JSON.
 * Encode __SCTE-35__ to Base64, Bytes, Hex, Int, JSON,XML, or Xml+binary.
 * __All HLS SCTE-35 Tags__ are Supported.
 * __Automatic AES decryption__ for HLS.
-* Built-in network support for __HTTP(S), UDP, and Multicast__.
 * Built-in __Multicast Sender and Receiver__ _hell yes!_
 * The __SuperKabuki SCTE-35 MPEGTS Packet Injection Engine__ was added to __threefive3__ v3.0.39
  
-
-✅ SCTE-35 __Parser__ 
-✅ SCTE-35 __Decoder__  
-✅ SCTE-35 __Encoder__   
-✅ SCTE-35 __HLS__   ( All SCTE-35 HLS tag formats)  
-✅ SCTE-35 __DASH__ ( All SCTE-35 Xml formats) 
-✅ SCTE-35 __XML__
-✅ SCTE-35 __Cli__     
-✅ SCTE-35 __library__
 
 
 
