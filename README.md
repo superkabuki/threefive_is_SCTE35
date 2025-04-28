@@ -16,6 +16,11 @@
 * Built-in network support for __HTTP(S), UDP, and Multicast__.
 * Built-in __Multicast Sender and Receiver__ _hell yes!_
 
+# Heads up, I have to push a new release.
+I spent last night tricking out the Node class, and it is sweet. 
+Just let me give you a taste of what it can do. 
+## [ Sneak peak at the Super Cool new xml stuff coming in the next release](node.md) 
+
 # Latest release is v3.0.43
 Released Thursday April 24th, 2025
 * just 4250 lines of code.
