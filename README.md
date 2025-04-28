@@ -1,4 +1,6 @@
 # threefive3 is SCTE-35. 
+## The Most Advanced SCTE-35 Parser on the Planet. 
+### If you're working with SCTE-35, this is the tool you want.
 
 [__Install__](#install) |[__SCTE-35 Cli__](#the-cli-tool) | [__SCTE-35 HLS__](https://github.com/superkabuki/threefive3/blob/main/hls.md) | [__Cue__ Class](https://github.com/superkabuki/threefive3/blob/main/cue.md) | [__Stream__ Class](https://github.com/superkabuki/threefive3/blob/main/stream.md) | [__Online SCTE-35 Parser__](https://iodisco.com/scte35) | [__Encode SCTE-35__](https://github.com/superkabuki/threefive3/blob/main/encode.md) | [__SCTE-35 Examples__](https://github.com/superkabuki/threefive3/tree/main/examples)
  | [__SCTE-35 XML__ updated 04/24/2025](https://github.com/superkabuki/SCTE-35/blob/main/xml.md) | [__threefive3 runs Four Times Faster on pypy3__](https://pypy.org/)
@@ -9,25 +11,34 @@
 * __Automatic AES decryption__ for HLS.
 * Built-in network support for __HTTP(S), UDP, and Multicast__.
 * Built-in __Multicast Sender and Receiver__ _hell yes!_
+* The __SuperKabuki SCTE-35 MPEGTS Packet Injection Engine__ was added to __threefive3__ v3.0.39
+ 
+
+✅ SCTE-35 __Parser__ 
+✅ SCTE-35 __Decoder__  
+✅ SCTE-35 __Encoder__   
+✅ SCTE-35 __HLS__   ( All SCTE-35 HLS tag formats)  
+✅ SCTE-35 __DASH__ ( All SCTE-35 Xml formats) 
+✅ SCTE-35 __XML__
+✅ SCTE-35 __Cli__     
+✅ SCTE-35 __library__
 
 
-## The Most Advanced SCTE-35 Parser on the Planet. 
-### If you're working with SCTE-35, this is the tool you want.
-✅ SCTE-35 __Parser__  ✅ SCTE-35 __Encoder__    ✅ SCTE-35 __HLS__     ✅ SCTE-35 __Xml+binary__     ✅ SCTE-35 __Cli__     ✅  SCTE-35 __library__
- ✅ SCTE-35 __Xml__ 
 
-### `Q.` What is SCTE-35?
 
-### `A.` SCTE-35 is just encoded binary data, that decodes into about 100  different vars. This blob of data is used to signal when to splice in Ad Breaks with commercials and such. The variables are used to facillitate this action and to help determine the type and length of commercials. As with most things related to streaming video, it's way more complicated than it needs to be, and there are way too many options. 
-### I've spent the last five years doing nothing but SCTE-35, a lot of people consider me a subject matter expert, some people consider me an idiot. What I am is the Left Hand of God. 
-### There's plenty of free Kool Aid if anyone's thirsty.
+#### `Q.` What is SCTE-35?
+
+#### `A.` SCTE-35 is just encoded binary data, that decodes into about 100  different vars. This blob of data is used to signal when to splice in Ad Breaks with commercials and such. The variables are used to facillitate this action and to help determine the type and length of commercials. As with most things related to streaming video, it's way more complicated than it needs to be, and there are way too many options. 
+
+#### I've spent the last five years doing nothing but SCTE-35, a lot of people consider me a subject matter expert, a lot of people describe me with adjectives.
 <br><br>
 
-# Heads up, I have to push a new release.
-I spent last night tricking out the Node class, and it is sweet. 
-Just let me give you a taste of what it can do. 
-## [ Sneak peak at the Super Cool new xml stuff coming in the next release](node.md) 
-### The new xml stuff is really sweet, you can pass an DASH MPD directly to a Cue instance, and it will parse the first EVent with SCTE-35 it finds. 
+### Heads up, v3.0.45 is ready to roll.
+ * I'm trying to break anything that will break tonight, so I can fix it later today.
+ * if you have an issue, post it.
+* I spent last night tricking out the Node class.
+### [ Sneak peak at the Super Cool new xml stuff coming in the next release](node.md) 
+### The new xml stuff is really sweet, you can even pass an DASH MPD directly to a Cue instance, and it will parse the first EVent with SCTE-35 it finds. Let me show you.
 ```py3
 a@fu:~/threefive3$ pypy3
 
