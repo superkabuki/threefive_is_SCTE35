@@ -20,7 +20,58 @@
 I spent last night tricking out the Node class, and it is sweet. 
 Just let me give you a taste of what it can do. 
 ## [ Sneak peak at the Super Cool new xml stuff coming in the next release](node.md) 
+### The new xml stuff is really sweet, you can pass an DASH MPD directly to a Cue instance, and it will parse the first EVent with SCTE-35 it finds. 
+```py3
+a@fu:~/threefive3$ pypy3
 
+Python 3.9.16 (7.3.11+dfsg-2+deb12u3, Dec 30 2024, 22:36:23)
+[PyPy 7.3.11 with GCC 12.2.0] on linux
+Type "help", "copyright", "credits" or "license" for more information.
+>>>> 
+>>>> from threefive3 import Cue,reader
+>>>> data = reader('https://demo.unified-streaming.com/k8s/live/stable/scte35-n\
+o-splicing.isml/.mpd').read().strip().decode()    # use reader to pull the mpd over a network.
+>>>> cue=Cue(data)     # pass in to a Cue instance
+>>>> cue.show()
+{
+    "info_section": {
+        "table_id": "0xfc",
+        "section_syntax_indicator": false,
+        "private": false,
+        "sap_type": "0x03",
+        "sap_details": "No Sap Type",
+        "section_length": 32,
+        "protocol_version": 0,
+        "encrypted_packet": false,
+        "encryption_algorithm": 0,
+        "pts_adjustment": 0.0,
+        "cw_index": "0x00",
+        "tier": "0x0fff",
+        "splice_command_length": 15,
+        "splice_command_type": 5,
+        "descriptor_loop_length": 0,
+        "crc": "0xe4612424"
+    },
+    "command": {
+        "command_length": 15,
+        "command_type": 5,
+        "name": "Splice Insert",
+        "break_auto_return": true,
+        "break_duration": 38.4,
+        "splice_event_id": 14432855,
+        "splice_event_cancel_indicator": false,
+        "out_of_network_indicator": true,
+        "program_splice_flag": true,
+        "duration_flag": true,
+        "splice_immediate_flag": true,
+        "event_id_compliance_flag": true,
+        "unique_program_id": 49152,
+        "avail_num": 0,
+        "avails_expected": 0
+    },
+    "descriptors": []
+}
+```
 # Latest release is v3.0.43
 Released Thursday April 24th, 2025
 * just 4250 lines of code.
