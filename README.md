@@ -29,7 +29,7 @@
 
 #### `A.` SCTE-35 is just encoded binary data, that decodes into about 100  different vars. This blob of data is used to signal when to splice in Ad Breaks with commercials and such. The variables are used to facillitate this action and to help determine the type and length of commercials. As with most things related to streaming video, it's way more complicated than it needs to be, and there are way too many options. 
 
-#### I've spent the last five years doing nothing but SCTE-35, a lot of people consider me a subject matter expert, a lot of people describe me with adjectives.
+#### I've spent the last five years doing nothing but SCTE-35, a lot of people consider me a subject matter expert, other people describe me with adjectives.
 <br><br>
 
 ### Heads up, v3.0.45 is ready to roll.
