@@ -7,10 +7,58 @@ print2, atohif, iso8601, red, blue
 import datetime
 from sys import stderr
 
-ERR = (LookupError,ValueError,OSError,TypeError,IndexError,
-         NameError,AttributeError,KeyError)
+ERR = (
+    LookupError,
+    ValueError,
+    OSError,
+    TypeError,
+    IndexError,
+    NameError,
+    AttributeError,
+    KeyError,
+)
 
 write2 = True
+
+
+def rmap(data, amap):
+    """
+    rmap multiple replaces applied to a string.
+    works like translate but smoother
+    data: string
+    amap: dict
+
+    returns string
+    """
+    data = data.strip()
+    for k, v in amap.items():
+        data = data.replace(k, v)
+    return data
+
+
+def _type2string(atype):
+    """
+    _type2string turn <class 'int'> into the string 'int'
+    """
+    replace_map = {
+        "<class '": "",
+        "'>": "",
+    }
+    return rmap(str(atype), replace_map)
+
+
+def badtype(data, shouldbe):
+    """
+    badtype show red message that we have a wrong type.
+    data can be anything.
+    shouldbe is a string like "int", or "SpliceCommand"
+    data: anything
+    shouldbe: type
+    """
+    t = _type2string(type(data))
+    s = _type2string(shouldbe)
+    red(f"Xml needs to be a {s} not {t}")
+    return False
 
 
 def print2(gonzo=b""):
@@ -48,22 +96,20 @@ def clean(data):
     clean strip and if it's a byte string
     convert to a string
     """
-    if not isinstance(data,(str,bytes)):
-        return data
-    data=data.strip()
-    if isinstance(data,bytes):
-        try:
-            data=data.decode()
-        except ERR:
-            pass
-    return  data
+    if isinstance(data, bytes):
+        data = data.decode()
+    if not isinstance(data, str):
+        badtype(data, str)
+    else:
+        data = data.strip()
+    return data
 
 
 def ishex(data):
     """
     ishex determine if a string is a hex value.
     """
-    if isinstance(data,str):
+    if isinstance(data, str):
         hexed = "0123456789abcdef"
         data = data.lower().strip("0x")
         return all([c in hexed for c in data])
@@ -76,10 +122,11 @@ def isjson(data):
     is json.
     """
     data = clean(data)
-    if data[0] in ['{' , b'{']:
-        if data[-1] in ['}',b'}']:
+    if data[0] in ["{", b"{"]:
+        if data[-1] in ["}", b"}"]:
             return True
-    return  False
+    return False
+
 
 def isxml(data):
     """
@@ -87,10 +134,11 @@ def isxml(data):
     is xml.
     """
     data = clean(data)
-    if data[0] in ['<',b'<']:
-        if data[-1] in ['>',b'>']:
+    if data[0] in ["<", b"<"]:
+        if data[-1] in [">", b">"]:
             return True
-    return  False
+    return False
+
 
 def iso8601():
     """
