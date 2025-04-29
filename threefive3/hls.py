@@ -14,7 +14,7 @@ from .hlstags import TagParser, HEADER_TAGS
 from .segment import Segment
 from .cue import Cue
 from .new_reader import reader
-from .stuff import atohif, iso8601, red, blue, ERR,reblue
+from .stuff import atohif, iso8601, red, blue, ERR, reblue
 
 
 REV = "\033[7m"
@@ -468,7 +468,7 @@ class HlsParser:
 
     def _chk_cue_in(self, line, head):
         print(line)
-        if line.startswith("#EXT-X-CUE-IN") :#and self.cue_state == "CONT":
+        if line.startswith("#EXT-X-CUE-IN"):  # and self.cue_state == "CONT":
             self.cue_state = "IN"
             self.to_sidecar(self.pts, line)
             self.clear()
@@ -493,7 +493,7 @@ class HlsParser:
         set_cue_state determines cue_state
 
         """
-      #  line= self.auto_cuein(line)
+        #  line= self.auto_cuein(line)
         if cue.encode() == self.last_cue:
             return ""
         self.last_cue = cue.encode()
@@ -588,7 +588,7 @@ class HlsParser:
         ##        if "#EXT-X-CUE-IN" not in self.prof.hls_tags:
         ##            return self.invalid(line)
         self.reset_break()
-        self.cue_state="IN"
+        self.cue_state = "IN"
         return self.set_cue_state(line, line)
 
     def chk_x_cue_out(self, tags, line):
@@ -692,7 +692,7 @@ class HlsParser:
         """
         auto_cuein handles cue.command.auto-return
         """
-        #if self.cue_state == "CONT":
+        # if self.cue_state == "CONT":
         if self.break_timer and self.break_duration:
             if self.break_timer >= self.break_duration:
                 self.cue_state = "IN"
@@ -726,7 +726,7 @@ class HlsParser:
             if isinstance(tags["#EXTINF"], str):
                 tags["#EXTINF"] = tags["#EXTINF"].rsplit(",", 1)[0]
             seg_time = round(atohif(tags["#EXTINF"]), 6)
-        #    line = self.auto_cuein(line)
+            #    line = self.auto_cuein(line)
             if self.pts is not None:
                 self.pts += seg_time
             if self.break_timer is not None:
@@ -741,18 +741,20 @@ class HlsParser:
             gonzo = f"{REV} Break\033[;107m\033[44m {round(self.break_timer,3)}"
             if self.break_duration:
                 gonzo = f"{gonzo}/{round(self.break_duration,3)}"
-             #   if self.break_timer > self.break_duration:
-                   # print("AUTO IN HERE")
-                    #self.auto_cuein("## AUTO IN")
+            #   if self.break_timer > self.break_duration:
+            # print("AUTO IN HERE")
+            # self.auto_cuein("## AUTO IN")
         else:
             gonzo = f' {REV}Media \033[;107m\033[44m {self.media[-1].rsplit("/", 1)[1].split("?", 1)[0].strip()}'
 
         reblue(
-            f"{iso8601()}{REV} {self.hls_pts}\033[;107m\033[44m {self.pts:.6f}\033[;107m\033[44m {gonzo}")
-##            end="\r",
-##            file=sys.stderr,
-##            flush=True,
-##        )
+            f"{iso8601()}{REV} {self.hls_pts}\033[;107m\033[44m {self.pts:.6f}\033[;107m\033[44m {gonzo}"
+        )
+
+    ##            end="\r",
+    ##            file=sys.stderr,
+    ##            flush=True,
+    ##        )
 
     def ts_pts(self, seg):
         """
@@ -1221,3 +1223,4 @@ helpme = """
 
 if __name__ == "__main__":
     cli()
+\
