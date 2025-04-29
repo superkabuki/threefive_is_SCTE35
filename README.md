@@ -8,7 +8,7 @@
 ✅ SCTE-35 __Parser__ <br>
 ✅ SCTE-35 __Decoder__ <br>
 ✅ SCTE-35 __Encoder__ <br>
-✅ SCTE-35 __HLS__   ( All SCTE-35 HLS tag formats) <br>  
+✅ SCTE-35 __HLS__   ( All SCTE-35 HLS tag formats) 
 ✅ SCTE-35 __DASH__ ( All SCTE-35 Xml formats) <br>
 ✅ SCTE-35 __XML__   <br>
 ✅ SCTE-35 __Cli__     <br>
