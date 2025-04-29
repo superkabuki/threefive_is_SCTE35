@@ -1,3 +1,9 @@
+ 
+
+ I've spent the last five years doing nothing but SCTE-35, a lot of people consider me a subject matter expert, other people describe me with adjectives. ~Adrian 
+
+
+
 # threefive3 is SCTE-35. 
 ## The Most Advanced SCTE-35 Parser on the Planet. 
 ### If you're working with SCTE-35, this is the tool you want.
@@ -20,17 +26,13 @@
 * __Automatic AES decryption__ for HLS.
 * Built-in __Multicast Sender and Receiver__ _hell yes!_
 * The __SuperKabuki SCTE-35 MPEGTS Packet Injection Engine__ was added to __threefive3__ v3.0.39
- 
-
-
-
 
 #### `Q.` What is SCTE-35?
 
 #### `A.` SCTE-35 is just encoded binary data, that decodes into about 100  different vars. This blob of data is used to signal when to splice in Ad Breaks with commercials and such. The variables are used to facillitate this action and to help determine the type and length of commercials. As with most things related to streaming video, it's way more complicated than it needs to be, and there are way too many options. 
 
-#### I've spent the last five years doing nothing but SCTE-35, a lot of people consider me a subject matter expert, other people describe me with adjectives.
-<br><br>
+
+<br>
 
 ### Heads up, v3.0.45 is ready to roll.
  * I'm trying to break anything that will break tonight, so I can fix it later today.
