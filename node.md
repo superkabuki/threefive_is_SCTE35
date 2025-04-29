@@ -5,8 +5,9 @@ If you return xml from a threefive3 object, A Node instance is returned.
 
 #### Entity Expansion.
 I am considering how to do entity expansion safely, 
-I'm going to limit size and not allow repeating entities.
-I think not allowing repeated entities will stop most Entity expansion hacks.  
+__I'm going to limit size and not allow repeating entities.__
+Not allowing repeated entities will stop most Entity expansion hacks. 
+
 __If you have a better idea, speak up.__
 
 #### DTD Validation. 
