@@ -91,13 +91,27 @@ def atohif(value):
     return value
 
 
+def codec_detect(data):
+    """
+    codec_detect decode bytes by trying multiple encodings.
+    """
+    codecs= ["big5","utf8",  "latin1","euc_kr","koi8_r","koi8_t",
+             "cp437","cp1250", "cp1251","ascii", "utf16", "utf32",]
+    for codec in codecs:
+        try:
+            data = data.decode(encoding=codec)
+            return codec,data
+        except:
+                pass
+
+            
 def clean(data):
     """
     clean strip and if it's a byte string
     convert to a string
     """
     if isinstance(data, bytes):
-        data = data.decode()
+        codec,data = codec_detect(data)
     if not isinstance(data, str):
         badtype(data, str)
     else:
