@@ -3,10 +3,22 @@
 If you parse xml into a threefive3 object, the xml is first parsed into a Node instance.<br>
 If you return xml from a threefive3 object, A Node instance is returned.
 
+#### Entity Expansion.
+I am considering how to do entity expansion safely, 
+I'm going to limit size and not allow repeating entities.
+I think not allowing repeated entities will stop most Entity expansion hacks.  
+__If you have a better idea, speak up.__
+
+#### DTD Validation. 
+Currently, I have no plans to implement DTD validation. 
+The SCTE-35 data is validated by threefive3 already,
+and I don't see the benefit of validating other DTDs, 
+there are plenty of other tools for that sort of thing.
+
 ## Here's what you can do with a Node instance.
 
 * __Parse a DASH mpd__
-* use __Ultra Xml Parser Supreme__ (_uxps_)
+* use __Ultra Xml Parser__ (_Supreme_)
 ```py3
 
 a@fu:~/threefive3$ pypy3
@@ -14,9 +26,10 @@ Python 3.9.16 (7.3.11+dfsg-2+deb12u3, Dec 30 2024, 22:36:23)
 [PyPy 7.3.11 with GCC 12.2.0] on linux
 Type "help", "copyright", "credits" or "license" for more information.
 >>>> from threefive3 import reader
->>>> from threefive3.uxp import uxps
+>>>> from threefive3.uxp import UltraXmlParser
 >>>> data = reader('/home/a/fu.mpd').read().strip().decode()
->>>> n= uxps(data)         # use uxps (Ultra Xml Parser Supreme) to parse into a Node instance (n)
+>>>> u = UltraXmlParser()  # <---   use Ultra Xml Parser (Supreme)
+>>>> n =u.parse(data)     # <--- UltraXmlParser.parse(data) returns a Node instance
 ```
 * __search recursively for Event tags in the MPD xml__
 * __Node.findtag(tag)__ returns a NodeList instance, so you can modify the Xml if needed.
