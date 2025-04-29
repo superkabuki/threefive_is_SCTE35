@@ -4,16 +4,16 @@ If you parse xml into a threefive3 object, the xml is first parsed into a Node i
 If you return xml from a threefive3 object, A Node instance is returned.
 
 #### Entity Expansion.
-I am considering how to do entity expansion safely, 
-__I'm going to limit size and not allow repeating entities.__
+I am considering how to do entity expansion safely, <br>
+__I'm going to limit size and not allow repeating entities.__ <br>
 Not allowing repeated entities will stop most Entity expansion hacks. 
-
+<br>
 __If you have a better idea, speak up.__
 
 #### DTD Validation. 
-Currently, I have no plans to implement DTD validation. 
-The SCTE-35 data is validated by threefive3 already,
-and I don't see the benefit of validating other DTDs, 
+Currently, __I have no plans to implement DTD validation.__  <br>
+The SCTE-35 data is validated by threefive3 already, <br>
+and I don't see the benefit of validating other DTDs, <br>
 there are plenty of other tools for that sort of thing.
 
 ## Here's what you can do with a Node instance.
