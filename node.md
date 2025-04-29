@@ -3,9 +3,16 @@
 If you parse xml into a threefive3 object, the xml is first parsed into a Node instance.<br>
 If you return xml from a threefive3 object, A Node instance is returned.
 
+
+#### Namespaces
+threefive3.xml.Node __implements namespaces via the embedded NameSpace class__
+<br> Namespaces can be set,changed or disabled for the entire Xml, or by individual Nodes. <br>
+The namespace Uri can be set, changed or disabled. <br>
+A namespace can also be aset changed or disabled on Node attributes.
+
 #### Entity Expansion.
 I am considering how to do entity expansion safely, <br>
-__I'm going to limit size and not allow repeating entities.__ <br>
+__I'm going to limit size and not allow repeating entities for the same value.__ <br>
 Not allowing repeated entities will stop most entity expansion hacks. 
 <br>
 __If you have a better idea, speak up.__
