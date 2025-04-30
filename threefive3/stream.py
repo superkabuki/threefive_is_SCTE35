@@ -6,7 +6,7 @@ import sys
 
 from functools import partial
 from .new_reader import reader
-from .stuff import print2, blue, ERR
+from .stuff import print2, blue, ERR, clean
 from .cue import Cue
 from .packetdata import PacketData
 from .streamtypes import streamtype_map
@@ -64,8 +64,8 @@ class ProgramInfo:
         show print2 the Program Infomation
         in a familiar format.
         """
-        serv = self.service.decode(errors="ignore")
-        prov = self.provider.decode(errors="ignore")
+        serv = clean(self.service)
+        prov = clean(self.provider)
         print2("")
         print2(f"\tService:  {serv}")
         print2(f"\tProvider: {prov}")
@@ -318,7 +318,7 @@ class Stream:
         self.info = True
         for pkt in self.iter_pkts():
             self._parse(pkt)
-            if self.pmt_count > len(self.pmt_payloads) << 1:
+            if self.pmt_count > 2<< 3:
                 blue(f"PMT Count: {self.pmt_count}")
                 break
         if self.maps.prgm.keys():
@@ -385,7 +385,7 @@ class Stream:
 
     def _unpad(self, bites=b""):
         return bites.strip(b"\xff")
-    
+
     def _mk_packet_data(self, pid):
         prgm = self.maps.pid_prgm[pid]
         pdata = PacketData(pid, prgm)
@@ -449,7 +449,7 @@ class Stream:
     def _pmt_pid(self, pay, pid):
         self.pmt_count += 1
         if pay in self.pmt_payloads:
-            if self.pmt_count > len(self.pmt_payloads) << 1:
+            if self.pmt_count > len(self.pmt_payloads) << 4:
                 return
         self.pmt_payloads[self.pid2prgm(pid)] = pay
         self._parse_pmt(pay, pid)
