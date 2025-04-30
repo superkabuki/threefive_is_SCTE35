@@ -104,7 +104,7 @@ def codec_detect(data):
         except:
                 pass
 
-            
+
 def clean(data):
     """
     clean strip and if it's a byte string
