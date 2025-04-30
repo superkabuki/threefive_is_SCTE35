@@ -6,7 +6,7 @@ from .bitn import Bitn
 from .base import SCTE35Base
 from .segmentation import table20, table22, dvb_table2
 from .upids import upid_map
-from .stuff import red, blue, ERR
+from .stuff import red, blue, ERR,clean
 from .xml import Node
 
 
@@ -50,7 +50,7 @@ class SpliceDescriptor(SCTE35Base):
         parse splice descriptor identifier
         """
         if self.bites:
-            self.identifier = self.bites[:4].decode()
+            self.identifier = clean(self.bites[:4])
             # disabled for ffmv30
             #      if self.identifier != "CUEI":
             #          raise Exception('Identifier Is Not "CUEI"')
@@ -60,9 +60,8 @@ class SpliceDescriptor(SCTE35Base):
         """
         decode handles Private Descriptors
         """
-        self.private_data = self.bites.decode()
         if isinstance(self.private_data, bytes):
-            self.private_data = self.bites.decode()
+            self.private_data = clean(self.bites)
 
     def encode(self, nbin=None):
         """
