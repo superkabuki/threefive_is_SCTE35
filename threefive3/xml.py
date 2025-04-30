@@ -4,7 +4,6 @@ xml.py  The Node class for converting to xml,
         and several helper functions
 """
 
-from xml.sax.saxutils import escape, unescape
 from .stuff import red
 
 MAXCHILDREN = 128
@@ -292,8 +291,9 @@ class Node:
         """
         results = NodeList()
         obj = self.chk_obj(obj)
+        obj.mk()
         for child in obj.children:
-            if child.tag == tag:
+            if tag == child.tag :
                 results.append(child)
             results += self.findtag(tag, obj=child)
         return results
@@ -306,11 +306,11 @@ class Node:
         obj.set_depth()
         obj.set_parent()
         obj.children_namespaces()
-        name = obj.mk_tag()
+        tag = obj.mk_tag()
         ndent = obj.get_indent()
         if isinstance(obj, Comment):
             return obj.mk(obj)
-        return obj.rendr_all(ndent, name)
+        return obj.rendr_all(ndent, tag)
 
     def mk_tag(self):
         """
@@ -432,4 +432,4 @@ class Comment(Node):
     def mk(self, obj=None):
         obj = self.chk_obj(obj)
         obj.set_depth()
-        return f"{obj.get_indent()}<!-- {obj.name} -->\n"
+        return f"{obj.get_indent()}<!-- {obj.tag} -->\n"
