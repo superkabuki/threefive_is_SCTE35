@@ -95,8 +95,8 @@ def codec_detect(data):
     """
     codec_detect decode bytes by trying multiple encodings.
     """
-    codecs= ["big5","utf8",  "latin1","euc_kr","koi8_r","koi8_t",
-             "cp437","cp1250", "cp1251","ascii", "utf16", "utf32",]
+    codecs= ["utf8","latin1","ascii","big5","euc_kr","koi8_r","koi8_t",
+             "cp437","cp1250", "cp1251","utf16", "utf32",]
     for codec in codecs:
         try:
             data = data.decode(encoding=codec)
