@@ -1,5 +1,5 @@
 # The Node Class 
-#### _Coming in threefive3 v3.0.45_
+#### _requires threefive3 v3.0.45_
 If you parse xml into a threefive3 object, the xml is first parsed into a Node instance.<br>
 If you return xml from a threefive3 object, A Node instance is returned.
 
