@@ -357,12 +357,12 @@ def xml2cue(ex):
     """
     xml2cue parse xml to find SCTE-35 data
     """
-    bignode = UltraXmlParser()
-    bignode.parse(ex)
+    u = UltraXmlParser()
+    bignode= u.parse(ex)
     if isinstance(bignode, Node):
         return {
-            "info_section": bignode.xmlspliceinfosection(bignode),
-            "command": bignode.xmlcommand(bignode),
-            "descriptors": bignode.xmldescriptors(bignode),
+            "info_section": u.xmlspliceinfosection(bignode),
+            "command": u.xmlcommand(bignode),
+            "descriptors": u.xmldescriptors(bignode),
         }
     return False
