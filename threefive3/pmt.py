@@ -3,7 +3,9 @@ from .crc import crc32
 
 
 class Dscptr:
-
+    """
+    Dscptr class Descriptors for PMT
+    """
     def __init__(self, bitn=None):
         self.type = 0
         self.length = 0
@@ -19,12 +21,18 @@ class Dscptr:
         return str(vars(self))
 
     def add(self, nbin):
+        """
+        add add descriptor to nbin
+        """
         nbin.add_int(self.type, 8)
         nbin.add_int(self.length, 8)
         nbin.add_bites(self.value)
 
 
 class PmtStream:
+    """
+    PmtStream defines a stream for a PMT
+    """
     def __init__(self, bitn=None, conv_pids=None):
 
         self.descriptors = []
@@ -43,11 +51,14 @@ class PmtStream:
                 eil -= dscptr.total_size << 3
                 self.descriptors.append(dscptr)
         if conv_pids:
-             if self.elementary_PID in conv_pids:
-                 self.add_CUEI()
+            if self.elementary_PID in conv_pids:
+                self.add_CUEI()
         self.total_size = 5 + self.ES_info_length
 
     def add_CUEI(self):
+        """
+        add_CUEI create CUEI descriptor for stream
+        """
         self.stream_type = 134
         cuei = Dscptr()
         cuei.type = 5
@@ -61,6 +72,9 @@ class PmtStream:
         return str(vars(self))
 
     def add(self, nbin):
+        """
+        add stream to nbin
+        """
         nbin.add_int(self.stream_type, 8)
         nbin.reserve(3)
         nbin.add_int(self.elementary_PID, 13)
@@ -71,7 +85,9 @@ class PmtStream:
 
 
 class PMT:
-
+    """
+    PMT  class for generating a PMT.
+    """
     def __init__(self, payload, conv_pids=None):
         self.conv_pids = conv_pids
         bitn = Bitn(payload)
@@ -99,6 +115,9 @@ class PMT:
         return str(vars(self))
 
     def parse_descriptors(self):
+        """
+        parse_descriptors in PMT
+        """
         descriptors = []
         bitlen = self.program_info_length << 3
         data = self.bitn.as_bytes(bitlen)
@@ -112,6 +131,9 @@ class PMT:
         return descriptors
 
     def parse_streams(self):
+        """
+        parse_streams parse streams included in PMT
+        """
         streams = []
         while self.bitn.idx > 32:
             pms = PmtStream(self.bitn, self.conv_pids)
@@ -119,6 +141,9 @@ class PMT:
         return streams
 
     def add_SCTE35stream(self, pid):
+        """
+        add_SCTE35stream add SCTE35 stream to PMT
+        """
         pms = PmtStream()
         pms.elementary_PID = pid
         pms.stream_type = 0x86
@@ -127,6 +152,9 @@ class PMT:
         self.streams.append(pms)
 
     def mk(self):
+        """
+        mk build PMT
+        """
         vals = [dscptr.value for dscptr in self.descriptors]
         if b"CUEI" not in vals:
             #       blue("Adding SCTE-35 Descriptor")
