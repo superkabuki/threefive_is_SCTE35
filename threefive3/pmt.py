@@ -42,9 +42,9 @@ class PmtStream:
                 dscptr = Dscptr(bitn)
                 eil -= dscptr.total_size << 3
                 self.descriptors.append(dscptr)
-        # if conv_pids:
-        # if self.elementary_PID in conv_pids:
-        # self.add_CUEI()
+        if conv_pids:
+             if self.elementary_PID in conv_pids:
+                 self.add_CUEI()
         self.total_size = 5 + self.ES_info_length
 
     def add_CUEI(self):
