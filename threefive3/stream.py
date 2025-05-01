@@ -318,7 +318,7 @@ class Stream:
         self.info = True
         for pkt in self.iter_pkts():
             self._parse(pkt)
-            if self.pmt_count > 2<< 3:
+            if self.pmt_count > 2 << 3:
                 blue(f"PMT Count: {self.pmt_count}")
                 break
         if self.maps.prgm.keys():
