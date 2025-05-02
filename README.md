@@ -1,15 +1,15 @@
- 
+ [__Install__](#install) |[__SCTE-35 Cli__](#the-cli-tool) | [__SCTE-35 HLS__](https://github.com/superkabuki/threefive3/blob/main/hls.md) | [__Cue__ Class](https://github.com/superkabuki/threefive3/blob/main/cue.md) | [__Stream__ Class](https://github.com/superkabuki/threefive3/blob/main/stream.md) | [__Online SCTE-35 Parser__](https://iodisco.com/scte35) | [__Encode SCTE-35__](https://github.com/superkabuki/threefive3/blob/main/encode.md) | [__SCTE-35 Examples__](https://github.com/superkabuki/threefive3/tree/main/examples)
+ | [__SCTE-35 XML__ ](https://github.com/superkabuki/SCTE-35/blob/main/xml.md) and [More __XML__](node.md) | [__threefive3 runs Four Times Faster on pypy3__](https://pypy.org/) | [__SuperKabuki SCTE-35 MPEGTS Packet Injection__](inject.md)
+ <br><br>
 
- I've spent the last five years doing nothing but SCTE-35, a lot of people consider me a subject matter expert, other people describe me with adjectives. ~Adrian 
-
+ _I've spent the last five years doing nothing but SCTE-35, a lot of people consider me a subject matter expert, other people describe me with adjectives._ ~Adrian 
 
 
 # threefive3 is SCTE-35. 
 ## The Most Advanced SCTE-35 Parser on the Planet. 
 ### If you're working with SCTE-35, this is the tool you want.
 
-[__Install__](#install) |[__SCTE-35 Cli__](#the-cli-tool) | [__SCTE-35 HLS__](https://github.com/superkabuki/threefive3/blob/main/hls.md) | [__Cue__ Class](https://github.com/superkabuki/threefive3/blob/main/cue.md) | [__Stream__ Class](https://github.com/superkabuki/threefive3/blob/main/stream.md) | [__Online SCTE-35 Parser__](https://iodisco.com/scte35) | [__Encode SCTE-35__](https://github.com/superkabuki/threefive3/blob/main/encode.md) | [__SCTE-35 Examples__](https://github.com/superkabuki/threefive3/tree/main/examples)
- | [__SCTE-35 XML__ ](https://github.com/superkabuki/SCTE-35/blob/main/xml.md) and [More __XML__](node.md) | [__threefive3 runs Four Times Faster on pypy3__](https://pypy.org/) | [__SuperKabuki SCTE-35 MPEGTS Packet Injection__](inject.md)
+
  
 ✅ SCTE-35 __Parser__ <br>
 ✅ SCTE-35 __Decoder__ <br>
@@ -106,17 +106,6 @@ a@fu:~/build5/scte35/scte35$ pypy3
 >>>> strm=Stream('https://futzu.com/xaa.ts')
 >>>> strm.decode()
 ```
-
-### `Q.` Come on man, python is a damn scripting language, how fast can it be parsing MPEGTS?
-
-### `A.`  3.7GB in 2.7 Seconds runnng on pypy3, it's almost as fast as tsduck written in C++
-
-## Here's a test of tsduck, the old threefive, threefive3, and SuperKarate DeathCar. 
-
-
-![image](https://github.com/user-attachments/assets/6ce0376d-1ac3-4bbb-8c06-8d76443238de)
-
-
 
 # Checkout the Super Cool SCTE-35 [__Examples__](https://github.com/superkabuki/threefive3/tree/main/examples)
 <br>
@@ -615,11 +604,21 @@ optional arguments:
 a@fu:~$ 
 ```
 
+# `Q.` Come on man, python is a damn scripting language, how fast can it be parsing MPEGTS?
+
+# `A.`  3.7GB in 2.7 Seconds runnng on pypy3, it's almost as fast as tsduck written in C++
+
+## Here's a test of tsduck, the old threefive, threefive3, and SuperKarate DeathCar. 
+
+
+![image](https://github.com/user-attachments/assets/6ce0376d-1ac3-4bbb-8c06-8d76443238de)
+
+
+
 
 ### [iodisco.com/scte35](https://iodisco.com/scte35)
 
 
 ___
-[__Install__](#install) |[__SCTE-35 Cli__](#the-cli-tool) | [__SCTE-35 HLS__](https://github.com/superkabuki/threefive3/blob/main/hls.md) | [__Cue__ Class](https://github.com/superkabuki/threefive3/blob/main/cue.md) | [__Stream__ Class](https://github.com/superkabuki/threefive3/blob/main/stream.md) | [__Online SCTE-35 Parser__](https://iodisco.com/scte35) | [__Encode SCTE-35__](https://github.com/superkabuki/threefive3/blob/main/encode.md) | [__SCTE-35 Examples__](https://github.com/superkabuki/threefive3/tree/main/examples)
- | [__SCTE-35 XML__ updated 04/24/2025](https://github.com/superkabuki/SCTE-35/blob/main/xml.md) | [__threefive3 runs Four Times Faster on pypy3__](https://pypy.org/)
- 
+ [__Install__](#install) |[__SCTE-35 Cli__](#the-cli-tool) | [__SCTE-35 HLS__](https://github.com/superkabuki/threefive3/blob/main/hls.md) | [__Cue__ Class](https://github.com/superkabuki/threefive3/blob/main/cue.md) | [__Stream__ Class](https://github.com/superkabuki/threefive3/blob/main/stream.md) | [__Online SCTE-35 Parser__](https://iodisco.com/scte35) | [__Encode SCTE-35__](https://github.com/superkabuki/threefive3/blob/main/encode.md) | [__SCTE-35 Examples__](https://github.com/superkabuki/threefive3/tree/main/examples)
+ | [__SCTE-35 XML__ ](https://github.com/superkabuki/SCTE-35/blob/main/xml.md) and [More __XML__](node.md) | [__threefive3 runs Four Times Faster on pypy3__](https://pypy.org/) | [__SuperKabuki SCTE-35 MPEGTS Packet Injection__](inject.md)
