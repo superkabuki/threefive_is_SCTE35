@@ -34,10 +34,7 @@
 
 <br>
 
-### Heads up, v3.0.45 is ready to roll.
- * I'm trying to break anything that will break tonight, so I can fix it later today.
- * if you have an issue, post it.
-* I spent last night tricking out the Node class.
+
 ### [Super Cool new xml stuff in threefive v3.0.45](node.md) 
 ### The new xml stuff is really sweet, you can even pass an DASH MPD directly to a Cue instance, and it will parse the first EVent with SCTE-35 it finds. Let me show you.
 ```py3
