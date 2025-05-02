@@ -9,7 +9,7 @@
 ### If you're working with SCTE-35, this is the tool you want.
 
 [__Install__](#install) |[__SCTE-35 Cli__](#the-cli-tool) | [__SCTE-35 HLS__](https://github.com/superkabuki/threefive3/blob/main/hls.md) | [__Cue__ Class](https://github.com/superkabuki/threefive3/blob/main/cue.md) | [__Stream__ Class](https://github.com/superkabuki/threefive3/blob/main/stream.md) | [__Online SCTE-35 Parser__](https://iodisco.com/scte35) | [__Encode SCTE-35__](https://github.com/superkabuki/threefive3/blob/main/encode.md) | [__SCTE-35 Examples__](https://github.com/superkabuki/threefive3/tree/main/examples)
- | [__SCTE-35 XML__ ](https://github.com/superkabuki/SCTE-35/blob/main/xml.md) and [More __XML__](node.md) | [__threefive3 runs Four Times Faster on pypy3__](https://pypy.org/)
+ | [__SCTE-35 XML__ ](https://github.com/superkabuki/SCTE-35/blob/main/xml.md) and [More __XML__](node.md) | [__threefive3 runs Four Times Faster on pypy3__](https://pypy.org/) | [__SuperKabuki SCTE-35 MPEGTS Packet Injection__](inject.md)
  
 ✅ SCTE-35 __Parser__ <br>
 ✅ SCTE-35 __Decoder__ <br>
@@ -25,7 +25,7 @@
 * __All HLS SCTE-35 Tags__ are Supported.
 * __Automatic AES decryption__ for HLS.
 * Built-in __Multicast Sender and Receiver__ _hell yes!_
-* The __SuperKabuki SCTE-35 MPEGTS Packet Injection Engine__ was added to __threefive3__ v3.0.39
+* [The __SuperKabuki SCTE-35 MPEGTS Packet Injection Engine__](inject.md) was added to __threefive3__ v3.0.39
 
 #### `Q.` What is SCTE-35?
 
