@@ -36,7 +36,7 @@
 
 
 ### [Super Cool new xml stuff in threefive v3.0.45](node.md) 
-### The new xml stuff is really sweet, you can even pass an DASH MPD directly to a Cue instance, and it will parse the first EVent with SCTE-35 it finds. Let me show you.
+### The new xml stuff is really sweet, you can even pass an DASH MPD directly to a Cue instance, and it will parse the first Event with SCTE-35 it finds. Let me show you.
 ```py3
 a@fu:~/threefive3$ pypy3
 
@@ -46,7 +46,7 @@ Type "help", "copyright", "credits" or "license" for more information.
 >>>> 
 >>>> from threefive3 import Cue,reader
 >>>> data = reader('https://demo.unified-streaming.com/k8s/live/stable/scte35-n\
-o-splicing.isml/.mpd').read().strip().decode()    # use reader to pull the mpd over a network.
+o-splicing.isml/.mpd').read()    # use reader to pull the mpd over a network.
 >>>> cue=Cue(data)     # pass in to a Cue instance
 >>>> cue.show()
 {
