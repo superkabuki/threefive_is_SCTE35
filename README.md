@@ -129,18 +129,19 @@ a@fu:~/build5/scte35/scte35$ pypy3
 
 
 # `Documentation`
-### Install
+### `Install`
 * [Install](#install)
-
-### Examples 
+### `Examples` 
 * [__Examples__](https://github.com/superkabuki/threefive3/tree/main/examples)
-### XML
+### `XML`
 * [XML](https://github.com/superkabuki/SCTE-35/blob/main/xml.md) __New__! _updated 05/01/2025_
-### Cli
+### `Cli`
 * [SCTE-35 Cli Super Tool](#the-cli-tool) Encodes, Decodes, and Recodes. This is pretty cool, it does SCTE-35 seven different ways.
      * The cli tool comes with builtin documentation just type `threefive3 help`
-### HLS
+### `HLS`
 * [Advanced Parsing of SCTE-35 in HLS with threefive3](https://github.com/superkabuki/threefive3/blob/main/hls.md) All HLS SCTE-35 tags, Sidecar Files, AAC ID3 Header Timestamps, SCTE-35 filters... Who loves you baby?
+### `MPEGTS Packet Injection`
+* [The SuperKabuki MPEGTS Packet Injection Engine in the cli](inject.md)
 ### `Classes`
 * The python built in help is always the most up to date docs for the library.
 
