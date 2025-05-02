@@ -138,7 +138,7 @@ a@fu:~/build5/scte35/scte35$ pypy3
 ### `HLS`
 * [Advanced Parsing of SCTE-35 in HLS with threefive3](https://github.com/superkabuki/threefive3/blob/main/hls.md) All HLS SCTE-35 tags, Sidecar Files, AAC ID3 Header Timestamps, SCTE-35 filters... Who loves you baby?
 ### `MPEGTS Packet Injection`
-* [The SuperKabuki MPEGTS Packet Injection Engine in the cli](inject.md)
+* [The SuperKabuki MPEGTS Packet Injection Engine in the Cli](inject.md)
 ### `Classes`
 * The python built in help is always the most up to date docs for the library.
 
