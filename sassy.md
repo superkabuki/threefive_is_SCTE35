@@ -1,16 +1,25 @@
 # Sassy
 ##### _SCTE-35 As a Service and Stuff_
 
-### If you just want to decode SCTE-35 data into JSON, try Sassy.
+## If you just want to decode SCTE-35 data into JSON, try Sassy.
 
-### Sassy accepts both GET and POST request.
+## Sassy accepts both POST and GET requests and even works in your browser..
+
+* [POST](#post)
+* [GET](#get)
+* [Browser](#browser)
+
+## `URLs`
+
 | Method| URL                                                              |
 |-------|------------------------------------------------------------------|
 | POST  | https://iodisco.com/cb/sassy  POST scte35=your_urlencoded_scte35 |
 | GET   | https://iodisco.com/cb/sassy?scte35=your_urlencoded_scte35       |
 
 
-### POST to https://iodisco.com/cb/sassy
+## `POST`
+
+* POST to https://iodisco.com/cb/sassy
 * POST urlencoded SCTE-35 base64 to sassy and receive a JSON response
 ```js
 curl -d 'scte35=%2FDA0AAGRZOeYAAAABQb%2BhJ8vqAAeAhxDVUVJ%2F%2F%2F%2F%2F3%2F%2FAAZv8wABCGZ1bWF0aWNhEAEAiZ5ZMw%3D%3D'  https://iodisco.com/cb/sassy
@@ -75,7 +84,9 @@ curl  -d 'scte35=0xfc302f00019164e7980000000506fe849f2fa80019021743554549fffffff
 }
 ```
 
-### Format for GET requests https://iodisco.com/cb/sassy?scte35=your_data_goes_here
+### `GET`
+
+* Format for GET requests https://iodisco.com/cb/sassy?scte35=your_data_goes_here
 
 * pass a Hex encoded SCTE-35 string to sassy and get back JSON
 
@@ -152,3 +163,10 @@ curl https://iodisco.com/cb/sassy?scte35=279693935392547735358333178501628315815
     ]
 }
 ```
+## `Browser`
+* open in your browser: https://iodisco.com/cb/sassy?scte35=0xfc302f00019164e7980000000506fe849f2fa80019021743554549ffffffff7fbf010866756d6174696361100100ae05fd2e
+
+<br> 
+![image](https://github.com/user-attachments/assets/3147be1d-54ce-4692-b9ec-8381f47e9cdf)
+
+
