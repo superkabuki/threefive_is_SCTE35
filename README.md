@@ -5,10 +5,9 @@
  _I've spent the last five years doing nothing but SCTE-35, a lot of people consider me a subject matter expert, other people describe me with adjectives._ ~Adrian 
 
 
+### threefive3 has been installed over 31,000 times since January.
+### threefive, the base of threefive3, has been installed over 1,000,000 times in the last five years.
 # threefive3 is SCTE-35. 
-## The Most Advanced SCTE-35 Parser on the Planet. 
-### If you're working with SCTE-35, this is the tool you want.
-
 
  
 ✅ SCTE-35 __Parser__ <br>
