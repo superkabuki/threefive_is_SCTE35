@@ -31,24 +31,16 @@ class SCTE35Base:
         err_mesg = f"{mesg} it should be type {var_type}, {bit_count} bit(s) long."
         red(err_mesg)
 
-    def _bool_int(self, var_name, var_value, bit_count, var_type):
+    def _bool_int(self, var_value, var_type):
         if var_type == int:
-            if isinstance(var_value, bool):
-                self._err2(var_name, var_value, bit_count, var_type)
-                return True
+            return isinstance(var_value, bool)
         return False
 
-    def _wrong_type(self, var_name, var_value, bit_count, var_type):
-        if not isinstance(var_value, var_type):
-            self._err2(var_name, var_value, bit_count, var_type)
-            return True
-        return False
+    def _wrong_type(self, var_value, var_type):
+        return not isinstance(var_value, var_type)
 
-    def _is_none(self, var_name, var_value, bit_count, var_type):
-        if var_value is None:
-            self._err2(var_name, var_value, bit_count, var_type)
-            return True
-        return False
+    def _is_none(self, var_value, var_type):
+        return  var_value is None
 
     def _chk_var(self, var_type, nbin_method, var_name, bit_count):
         """
@@ -56,7 +48,8 @@ class SCTE35Base:
         """
         var_value = self.__dict__[var_name]
         for me in [self._is_none, self._bool_int, self._wrong_type]:
-            if me(var_name, var_value, bit_count, var_type):
+            if me( var_value, var_type):
+                self._err2(var_name, var_value, bit_count, var_type)
                 return
         nbin_method(var_value, bit_count)
 
@@ -135,7 +128,7 @@ class SCTE35Base:
         kv_clean recursively removes items
         from a dict if the value is None.
         """
-
+        return vars(self)
         def b2l(val):
             if isinstance(val, SCTE35Base):
                 val.kv_clean()
