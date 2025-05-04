@@ -166,7 +166,5 @@ curl https://iodisco.com/cb/sassy?scte35=279693935392547735358333178501628315815
 ## `Browser`
 * open in your browser: https://iodisco.com/cb/sassy?scte35=0xfc302f00019164e7980000000506fe849f2fa80019021743554549ffffffff7fbf010866756d6174696361100100ae05fd2e
 
-<br> 
-![image](https://github.com/user-attachments/assets/3147be1d-54ce-4692-b9ec-8381f47e9cdf)
 
-
+![image](https://github.com/user-attachments/assets/a015819d-f8c9-4255-8fcc-0aebbe110392)
