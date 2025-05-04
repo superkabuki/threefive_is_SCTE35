@@ -222,18 +222,6 @@ class Cue(SCTE35Base):
         if td in type_map.keys():
             return type_map[td](data)
 
-    ##        if isinstance(data,Node):
-    ##            return self._node_bits(data)
-    ##        if isinstance(data, dict):
-    ##            return self.dict_bits(data)
-    ##        if isinstance(data, str):
-    ##            return self._str_bits(data)
-    ##        if isinstance(data, bytes):
-    ##            return self._byte_bits(data)
-    ##        if isinstance(data, int):
-    ##            return self._int_bits(data)
-    ##        return self.bites
-
     def _mk_descriptors(self, bites):
         """
         Cue._mk_descriptors parses
