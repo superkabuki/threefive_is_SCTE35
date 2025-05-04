@@ -2,7 +2,8 @@
 # Is all this SCTE-35 stuff a bit more than you wanted? 
 ## If you just want to decode SCTE-35 data into JSON, try Sassy.
 
-### Sassy accepts bot GET and POST request.
+### Sassy accepts both GET and POST request.
+
 
 ### Format for GET requests https://iodisco.com/sassy?scte35=your_data_goes_here
 
