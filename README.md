@@ -129,7 +129,8 @@ a@fu:~/build5/scte35/scte35$ pypy3
 ### `MPEGTS Packet Injection`
 * [The SuperKabuki MPEGTS Packet Injection Engine in the Cli](inject.md)
 
-###  [__SCTE-35 As a Service__](sassy.md)
+### `SCTE-35 As a Service`
+* Decode SCTE-35 without installing anything. [__Sassy__](sassy.md) is SCTE-35 as a service. 
 
 ### `Classes`
 * The python built in help is always the most up to date docs for the library.
