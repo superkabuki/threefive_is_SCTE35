@@ -4,14 +4,14 @@ threefive3.Cue Class
 
 from base64 import b64decode, b64encode
 import json
-from .stuff import clean, red, ishex, isjson, isxml, ERR
 from .bitn import NBin
 from .base import SCTE35Base
-from .section import SpliceInfoSection
 from .commands import command_map
-from .descriptors import splice_descriptor, descriptor_map
 from .crc import crc32
+from .descriptors import splice_descriptor, descriptor_map
+from .section import SpliceInfoSection
 from .segmentation import table22
+from .stuff import clean, red, ishex, isjson, isxml, ERR
 from .words import (
     minusone,
     zero,
@@ -131,12 +131,6 @@ class Cue(SCTE35Base):
         """
         return [d.get() for d in self.descriptors]
 
-    def bytes(self):
-        """
-        get_bytes returns Cue.bites
-        """
-        return self.bites
-
     def fix_bad_b64(self, data):
         """
         fix_bad_b64 fixes bad padding on Base64
@@ -144,21 +138,6 @@ class Cue(SCTE35Base):
         while len(data) % four != zero:
             data = data + equalsign
         return data
-
-    def _int_bits(self, data):
-        """
-        _int_bits convert a SCTE-35 Cue from integer to bytes.
-        """
-        length = data.bit_length() >> three
-        bites = int.to_bytes(data, length, byteorder="big")
-        return bites
-
-    def _hex_bits(self, data):
-        """
-        _hex_bits convert a SCTE-35 Cue from hex to bytes.
-        """
-        i = int(data, sixteen)
-        return self._int_bits(i)
 
     def _b64_bits(self, data):
         """
@@ -169,7 +148,54 @@ class Cue(SCTE35Base):
         except ERR:
             return red("Bad Base64")
 
+    def _byte_bits(self, data):
+        if isxml(data) or isjson(data):
+            self.load(data)
+        else:
+            data = self._pkt_bits(data)
+            self.bites = self.idxsplit(data, b"\xfc")
+        return self.bites
+
+    def _dict_bits(self, data):
+        self.load(data)
+        return self.bites
+
+    def _hex_bits(self, data):
+        """
+        _hex_bits convert a SCTE-35 Cue from hex to bytes.
+        """
+        i = int(data, sixteen)
+        return self._int_bits(i)
+
+    def _int_bits(self, data):
+        """
+        _int_bits convert a SCTE-35 Cue from integer to bytes.
+        """
+        length = data.bit_length() >> three
+        bites = int.to_bytes(data, length, byteorder="big")
+        return bites
+
+    def _node_bits(self, data):
+        """
+        _node_bits convert a Node instance into bytes.
+        """
+        data = data.mk()
+        self._from_xml(data)
+        return self.bites
+
+    def _pkt_bits(self, data):
+        """
+        _pkt_bits parse a raw mpegts SCTE-35 packet.
+        """
+        if data.startswith(b"G"):
+            return data.split(b"\x00\x00\x01\xfc", one)[minusone]
+        return data
+
     def _str_bits(self, data):
+        """
+        _str_bits converts SCTE-35 xml, json, hex, string ints, and base64
+        into bytes.
+        """
         if isxml(data) or isjson(data):
             self.load(data)
             return self.bites
@@ -180,44 +206,21 @@ class Cue(SCTE35Base):
             return self._int_bits(int(data))
         return self._b64_bits(data)
 
-    def _pkt_bits(self, data):
-        """
-        _pkt_bits parse raw mpegts SCTE-35 packet
-        """
-        if data.startswith(b"G"):
-            return data.split(b"\x00\x00\x01\xfc", one)[minusone]
-        return data
-
-    def _byte_bits(self, data):
-        if isxml(data) or isjson(data):
-            self.load(data)
-        else:
-            data = self._pkt_bits(data)
-            self.bites = self.idxsplit(data, b"\xfc")
-        return self.bites
-
-    def _node_bits(self, data):
-        data = data.mk()
-        self._from_xml(data)
-        return self.bites
-
-    def _dict_bits(self, data):
-        self.load(data)
-        return self.bites
-
     def _mk_bits(self, data):
         """
-        cue._mk_bits converts
-        several SCTE-35 formats into bytes.
+        cue._mk_bits autodetects
+        SCTE-35 in base64, bytes,
+        dicts, hex, ints, json, Nodes,
+        mpegts packets, xml,
+        and xml+binary
         """
         type_map = {
-            Node: self._node_bits,
-            dict: self._dict_bits,
-            str: self._str_bits,
             bytes: self._byte_bits,
+            dict: self._dict_bits,
             int: self._int_bits,
+            Node: self._node_bits,
+            str: self._str_bits,
         }
-
         td = type(data)
         if td in type_map.keys():
             return type_map[td](data)
@@ -238,8 +241,8 @@ class Cue(SCTE35Base):
 
     def mk_info_section(self, bites):
         """
-        Cue.mk_info_section parses the
-        Splice Info Section
+        Cue.mk_info_section parses
+        the Splice Info Section
         of a SCTE35 cue.
         """
         info_size = fourteen
@@ -263,78 +266,13 @@ class Cue(SCTE35Base):
         del self.command.bites
         return bites[iscl:]
 
-    # encode related
+    def _no_cmd(self):
+        """
+        _no_cmd raises an exception if no splice command.
+        """
+        return red("A splice command is required")
 
-    def _assemble(self):
-        dscptr_bites = self._unloop_descriptors()
-        dll = len(dscptr_bites)
-        self.info_section.descriptor_loop_length = dll
-        cmd_bites = self.command.encode()
-        cmdl = self.command.command_length = len(cmd_bites)
-        self.info_section.splice_command_length = cmdl
-        self.info_section.splice_command_type = self.command.command_type
-        # 11 bytes for info section + command + 2 descriptor loop length
-        # + descriptor loop + 4 for crc
-        self.info_section.section_length = eleven + cmdl + two + dll + four
-        self.bites = self.info_section.encode()
-        self.bites += cmd_bites
-        self.bites += int.to_bytes(
-            self.info_section.descriptor_loop_length, two, byteorder="big"
-        )
-        self.bites += dscptr_bites
-
-    def base64(self):
-        """
-        base64 Cue.base64() converts SCTE35 data
-        to a base64 encoded string.
-        """
-        if self.command:
-            self._assemble()
-            self._encode_crc()
-            return b64encode(self.bites).decode()
-        return False
-
-    def encode(self):
-        """
-        encode is an alias for base64
-        """
-        return self.base64()
-
-    def int(self):
-        """
-        int returns self.bites as an int.
-        """
-        self.encode()
-        return int.from_bytes(self.bites, byteorder="big")
-
-    def encode_as_int(self):
-        """
-        encode_as_int backward compatibility
-        """
-        return self.int()
-
-    def hex(self):
-        """
-        hex returns self.bites as
-        a hex string
-        """
-        return hex(self.int())
-
-    def encode_as_hex(self):
-        """
-        encode_as_hex backward compatibility
-        """
-        return self.hex()
-
-    def _encode_crc(self):
-        """
-        _encode_crc encode crc32
-        """
-        crc_int = crc32(self.bites)
-        self.info_section.crc = hex(crc_int)
-        self.bites += int.to_bytes(crc_int, four, byteorder="big")
-
-    def _unloop_descriptors(self):
+   def _unloop_descriptors(self):
         """
         _unloop_descriptors
         for each descriptor in self.descriptors
@@ -349,6 +287,24 @@ class Cue(SCTE35Base):
             all_bites.add_int(dsptr.descriptor_length, eight)
             all_bites.add_bites(chunk)
         return all_bites.bites
+
+    def _assemble(self):
+        dscptr_bites = self._unloop_descriptors()
+        dll = len(dscptr_bites)
+        self.info_section.descriptor_loop_length = dll
+        cmd_bites = self.command.encode()
+        cmdl = self.command.command_length = len(cmd_bites)
+        self.info_section.splice_command_length = cmdl
+        self.info_section.splice_command_type = self.command.command_type
+        # 11 bytes for info section + command + 2 bytes for descriptor loop length
+        # + descriptor loop + 4 bytes for crc
+        self.info_section.section_length = eleven + cmdl + two + dll + four
+        self.bites = self.info_section.encode()
+        self.bites += cmd_bites
+        self.bites += int.to_bytes(
+            self.info_section.descriptor_loop_length, two, byteorder="big"
+        )
+        self.bites += dscptr_bites
 
     def _load_info_section(self, gonzo):
         """
@@ -388,12 +344,6 @@ class Cue(SCTE35Base):
             dscptr = descriptor_map[dstuff["tag"]]()
             dscptr.load(dstuff)
             self.descriptors.append(dscptr)
-
-    def _no_cmd(self):
-        """
-        _no_cmd raises an exception if no splice command.
-        """
-        return red("A splice command is required")
 
     def load(self, gonzo):
         """
@@ -474,8 +424,64 @@ class Cue(SCTE35Base):
         xml returns a threefive3.Node instance
         which can be edited as needed or printed.
         xmlbin
-
         """
         return f"""<{ns}:Signal xmlns:{ns}="https://scte.org/schemas/35">
     <{ns}:Binary>{self.base64()}</{ns}:Binary>
 </{ns}:Signal>"""
+
+    def base64(self):
+        """
+        base64 Cue.base64() converts SCTE35 data
+        to a base64 encoded string.
+        """
+        if self.command:
+            self._assemble()
+            self._encode_crc()
+            return b64encode(self.bites).decode()
+        return False
+
+    def bytes(self):
+        """
+        get_bytes returns Cue.bites
+        """
+        return self.bites
+
+    def hex(self):
+        """
+        hex returns self.bites as
+        a hex string
+        """
+        return hex(self.int())
+
+    def int(self):
+        """
+        int returns self.bites as an int.
+        """
+        self.encode()
+        return int.from_bytes(self.bites, byteorder="big")
+
+    def encode(self):
+        """
+        encode is an alias for base64
+        """
+        return self.base64()
+
+    def encode_as_int(self):
+        """
+        encode_as_int backward compatibility
+        """
+        return self.int()
+
+    def encode_as_hex(self):
+        """
+        encode_as_hex backward compatibility
+        """
+        return self.hex()
+
+    def _encode_crc(self):
+        """
+        _encode_crc encode crc32
+        """
+        crc_int = crc32(self.bites)
+        self.info_section.crc = hex(crc_int)
+        self.bites += int.to_bytes(crc_int, four, byteorder="big")
