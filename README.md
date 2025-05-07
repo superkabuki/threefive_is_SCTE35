@@ -4,6 +4,10 @@
 
  _I've spent the last five years doing nothing but SCTE-35, a lot of people consider me a subject matter expert, other people describe me with adjectives._ ~Adrian 
 
+## `Q.` What is SCTE-35?
+
+## `A.` SCTE-35 is just encoded binary data. This  data is used to signal when to splice in commercials and such. The variables are used to facillitate this action and to help determine the type and length of commercials. As with most things related to streaming video, it's way more complicated than it needs to be, kind of like trying to learning Latin in a Chinese fire drill. Don't worry though, threefive3 makes it much easier.
+
 
 ### threefive3 has been installed Over 4 Times in Egypt, At Least 3 Times in Iceland, and 1 Time in Myanmar.
 # threefive3 is SCTE-35. 
@@ -25,9 +29,6 @@
 * Built-in __Multicast Sender and Receiver__ _hell yes!_
 * [The __SuperKabuki SCTE-35 MPEGTS Packet Injection Engine__](inject.md) was added to __threefive3__ v3.0.39
 
-#### `Q.` What is SCTE-35?
-
-#### `A.` SCTE-35 is just encoded binary data, that decodes into about 100  different vars. This blob of data is used to signal when to splice in Ad Breaks with commercials and such. The variables are used to facillitate this action and to help determine the type and length of commercials. As with most things related to streaming video, it's way more complicated than it needs to be, and there are way too many options. 
 
 
 <br>
@@ -107,6 +108,11 @@ a@fu:~/build5/scte35/scte35$ pypy3
 
 # Checkout the Super Cool SCTE-35 [__Examples__](https://github.com/superkabuki/threefive3/tree/main/examples)
 <br>
+
+### Sassy, the new SCTE-35 as a service, SCTE-35 as JSON in your browser      
+
+* Open in your browser
+* https://iodisco.com/cb/sassy?scte35=0xfc302f00019164e7980000000506fe849f2fa80019021743554549ffffffff7fbf010866756d6174696361100100ae05fd2e
 
  
 * Xml is back and better than ever. __The new Ultra Xml Parser Supreme__ replaces the Super Xml Parser.
