@@ -4,8 +4,11 @@
 
 <br>
 
-# threefive3 is the most advanced SCTE-35 tool available. 
-# No asterisks. No exceptions. 
+# threefive3 is the most advanced SCTE-35 tool available. * 
+
+<br>
+
+### * _No asterisks._
 
 
  <br>
@@ -13,10 +16,6 @@
 ![image](https://github.com/user-attachments/assets/191bbef7-35cd-4ade-808b-b2165d3443fe)
 
  <br>
-
-
- _I've spent the last five years doing nothing but SCTE-35, a lot of people consider me a subject matter expert, other people describe me with adjectives._ ~Adrian 
- <br><br>
 
 
 ## `Q.` What is SCTE-35?
