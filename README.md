@@ -6,33 +6,19 @@
 
 ## `Q.` What is SCTE-35?
 
-## `A.` SCTE-35 is just encoded binary data. The SCTE-35 data is used to signal when to splice in commercials and such. The decoded variables in SCTE-35 are used determine the type and length of commercials. As with most things related to streaming video, it's way too complicated. Don't worry threefive3 makes it much easier.
+## `A.` SCTE-35 is just encoded binary data. The SCTE-35 data is used to signal when to splice in commercials and such. The decoded variables in SCTE-35 are used determine the type and length of commercials. As with most things related to streaming video, it's way too complicated. Don't worry though, threefive3 makes it much easier.
 
 
-### threefive3 has been installed Over 4 Times in Egypt, At Least 3 Times in Iceland, and 1 Time in Myanmar.
-# threefive3 is SCTE-35. 
+# threefive3 is the most advanced SCTE-35 tool available.
 
- 
-✅ SCTE-35 __Parser__ <br>
-✅ SCTE-35 __Decoder__ <br>
-✅ SCTE-35 __Encoder__ <br>
-✅ SCTE-35 __HLS__   ( All SCTE-35 HLS tag formats) <br>
-✅ SCTE-35 __DASH__ ( All SCTE-35 Xml formats) <br>
-✅ SCTE-35 __XML__   <br>
-✅ SCTE-35 __Cli__     <br>
-✅ SCTE-35 __library__ <br>
-
-* Parses __SCTE-35__ from MPEGTS, HLS, XML, MPD, XML+Binary, Base64, Bytes, Hex, Integers, or JSON.
-* Encode __SCTE-35__ to Base64, Bytes, Hex, Int, JSON,XML, or Xml+binary.
+* __Decode SCTE-35__ in __TEN__ formats: __MPEGTS, Base64, Bytes, Dicts, Hex,HLS, Integers,JSON,XML and XML+Binary__.
+* __Encode SCTE-35__ in __EIGHT__ formats: __MPEGTS, Base64, Bytes, Hex, Int, JSON,XML, and Xml+binary.__
 * __All HLS SCTE-35 Tags__ are Supported.
 * __Automatic AES decryption__ for HLS.
-* Built-in __Multicast Sender and Receiver__ _hell yes!_
+* Built-in __Multicast Sender and Receiver__ 
 * [The __SuperKabuki SCTE-35 MPEGTS Packet Injection Engine__](inject.md) was added to __threefive3__ v3.0.39
 
-
-
 <br>
-
 
 ### [Super Cool new xml stuff in threefive v3.0.45](node.md) 
 ### The new xml stuff is really sweet, you can even pass an DASH MPD directly to a Cue instance, and it will parse the first Event with SCTE-35 it finds. Let me show you.
