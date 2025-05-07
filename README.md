@@ -6,7 +6,7 @@
 
 ## `Q.` What is SCTE-35?
 
-## `A.` SCTE-35 is just encoded binary data. This  data is used to signal when to splice in commercials and such. The decoded variables in SCTE-35 are used determine the type and length of commercials. As with most things related to streaming video, it's way more complicated than it needs to be, Don't worry though, threefive3 makes it much easier.
+## `A.` SCTE-35 is just encoded binary data. The SCTE-35 data is used to signal when to splice in commercials and such. The decoded variables in SCTE-35 are used determine the type and length of commercials. As with most things related to streaming video, it's way more complicated than it needs to be, Don't worry though, threefive3 makes it much easier.
 
 
 ### threefive3 has been installed Over 4 Times in Egypt, At Least 3 Times in Iceland, and 1 Time in Myanmar.
