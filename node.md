@@ -4,25 +4,6 @@ If you parse xml into a threefive3 object, the xml is first parsed into a Node i
 If you return xml from a threefive3 object, A Node instance is returned.
 
 
-#### Namespaces
-threefive3.xml.Node __implements namespaces via the embedded NameSpace class__
-<br> Namespaces can be set,changed or disabled for the entire Xml, or by individual Nodes. <br>
-The namespace Uri can be set, changed or disabled. <br>
-A namespace can also be aset changed or disabled on Node attributes.
-
-#### Entity Expansion.
-I am considering how to do entity expansion safely, <br>
-__I'm going to limit size and not allow repeating entities for the same value.__ <br>
-Not allowing repeated entities will stop most entity expansion hacks. 
-<br>
-__If you have a better idea, speak up.__
-
-#### DTD Validation. 
-Currently, __I have no plans to implement DTD validation.__  <br>
-The SCTE-35 data is validated by threefive3 already, <br>
-and I don't see the benefit of validating other DTDs, <br>
-there are plenty of other tools for that sort of thing.
-
 ## Here's what you can do with a Node instance.
 
 * __Parse a DASH mpd__
@@ -254,5 +235,24 @@ class Node(builtins.object)
  |      a top level node's parent will be None.
  |  
 ```
+
+#### Namespaces
+threefive3.xml.Node __implements namespaces via the embedded NameSpace class__
+<br> Namespaces can be set,changed or disabled for the entire Xml, or by individual Nodes. <br>
+The namespace Uri can be set, changed, or disabled. <br>
+A namespace can also be set, changed, or disabled on Node attributes.
+
+#### Entity Expansion.
+I am considering how to do entity expansion safely, <br>
+__I'm going to limit size and not allow repeating entities for the same value.__ <br>
+Not allowing repeated entities will stop most entity expansion hacks. 
+<br>
+__If you have a better idea, speak up.__
+
+#### DTD Validation. 
+Currently, __I have no plans to implement DTD validation.__  <br>
+The SCTE-35 data is validated by threefive3 already, <br>
+and I don't see the benefit of validating other DTDs, <br>
+there are plenty of other tools for that sort of thing.
 
 
