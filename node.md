@@ -1,8 +1,5 @@
 # The Node Class 
 #### _requires threefive3 v3.0.45_
-If you parse xml into a threefive3 object, the xml is first parsed into a Node instance.<br>
-If you return xml from a threefive3 object, A Node instance is returned.
-
 
 ## Here's what you can do with a Node instance.
 
@@ -14,16 +11,23 @@ a@fu:~/threefive3$ pypy3
 Python 3.9.16 (7.3.11+dfsg-2+deb12u3, Dec 30 2024, 22:36:23)
 [PyPy 7.3.11 with GCC 12.2.0] on linux
 Type "help", "copyright", "credits" or "license" for more information.
+
 >>>> from threefive3 import reader
 >>>> from threefive3.uxp import UltraXmlParser
->>>> data = reader('/home/a/fu.mpd').read().strip().decode()
+
+>>>> data = reader('/home/a/fu.mpd').decode()
+
 >>>> u = UltraXmlParser()  # <---   use Ultra Xml Parser (Supreme)
 >>>> n =u.parse(data)     # <--- UltraXmlParser.parse(data) returns a Node instance
 ```
+
 * __search recursively for Event tags in the MPD xml__
 * __Node.findtag(tag)__ returns a NodeList instance, so you can modify the Xml if needed.
+
  ```py3
+
 >>>> events = n.findtag("Event")
+
 >>>> events
 [         <Event presentationTime="1725946427520" duration="0.426667" id="14268737">
             <Signal>
@@ -57,20 +61,27 @@ Type "help", "copyright", "credits" or "license" for more information.
          </Event>
 ]
 ```
+
 * __These events can be modified or deleted and the changes applied in real time.__
+
 ```py3
+
 >>>> events  = n.findtag("Event")
+
 >>>> len(events)
 6
+
 >>>> events.pop()
 >>>> len(events)
 5
+
 >>>> events.pop(0)
 >>>> len(events)
 4
->>>> 
 ```
+
 * you can also search with __Node.findattr(attr)__ for xml nodes that have an attribute
+
 ```py3
 >>>> bwidth_nodes=n.findattr("bandwidth")
 >>>> bwidth_nodes
@@ -78,8 +89,10 @@ Type "help", "copyright", "credits" or "license" for more information.
 , <Representation   id="video" bandwidth="1000000" scanType="progressive"/>
 ]
 ```
+
 * __you can modify those nodes too.__
 * Here I add an attribute to the first bwidth_node
+
 ```py3
 >>>> bwidth_nodes[0].addattr("fu","2you")
 >>>> bwidth_nodes
@@ -89,6 +102,7 @@ Type "help", "copyright", "credits" or "license" for more information.
 ```
 * __access the parent__
 * _You can also chain parents like bwidth_nodes[0].parent.parent_
+
 ```py3
 >>>> bwidth_nodes[0].parent    
 
@@ -103,12 +117,14 @@ Type "help", "copyright", "credits" or "license" for more information.
    <Representation id="audio_eng" bandwidth="128000" fu="2you"/>
 </AdaptationSet>
 ````
+
 * __go crazy with namespaces__
     * namespaces can be set from the top, or by node.
     *  namespaces can set on tags and/or attributes.
 <br><br>
 
 * set the namespace on the first node
+
 ```py3
 >>>> bwidth_nodes[0].namespace.ns="supercool"
 >>>> bwidth_nodes
@@ -116,7 +132,9 @@ Type "help", "copyright", "credits" or "license" for more information.
 , <Representation   id="video" bandwidth="1000000" scanType="progressive"/>
 ]
 ```
+
 * set the second node to a different namespace
+
 ```py3
 >>>> bwidth_nodes[1].namespace.ns="hottamale"
 >>>> bwidth_nodes
@@ -124,7 +142,9 @@ Type "help", "copyright", "credits" or "license" for more information.
 , <hottamale:Representation   id="video" bandwidth="1000000" scanType="progressive"/>
 ]
 ```
+
 * apply the namespace to the attributes the second node
+
 ```py3
 >>>> bwidth_nodes[1].namespace.all = True
 >>>> bwidth_nodes
@@ -134,6 +154,7 @@ Type "help", "copyright", "credits" or "license" for more information.
 ```
 
 ### Help is built-in
+
 ```py3
 Help on class Node in module threefive3.xml:
 
