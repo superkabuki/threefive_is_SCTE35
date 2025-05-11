@@ -6,18 +6,25 @@
 
 # threefive3 is the most advanced SCTE-35 tool available. * 
 
-<br>
-
 ### * _No asterisks._
 
 
- <br>
+## Heads up! 
+<pre>I called this repo threefive3 in an attempt to avoid confusion with my old threefive repo.
+ That has not proven to be the case.
  
-![image](https://github.com/user-attachments/assets/191bbef7-35cd-4ade-808b-b2165d3443fe)
+ So going forward, <b>it will be threefive and will be released as such.</b>
+ 
+ To update your threefive3 code to threefive, I suggest  `sed -i 's/threefive3/threefive/g' *.py` 
 
- <br>
+ threefive v3.047 was pushed this morning and is 100% threefive3 compatible.
+ 
+ Sorry, I'm not trying to be a dick.
+
+ . </pre>
 
 
+----
 ## `Q.` What is SCTE-35?
 
 ## `A.` SCTE-35 is just encoded binary data. The SCTE-35 data is used to signal when to splice in commercials and such. The decoded variables in SCTE-35 are used determine the type and length of commercials. As with most things related to streaming video, it's way too complicated. Don't worry though, threefive3 makes it much easier.
