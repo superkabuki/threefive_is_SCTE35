@@ -8,14 +8,14 @@ scte35 command line SCTE35 decoder.
 
 import select
 import sys
-from threefive3.gums import cli as gumscli
-from threefive3.hls import cli as hlscli
-from threefive3.sixfix import cli as sixcli
-from threefive3.superkabuki import cli as skcli
-from threefive3.iframes import IFramer
-from threefive3.new_reader import reader
-from threefive3 import Cue, Stream, print2, blue, version, red
-from threefive3.stuff import ERR
+from threefive.gums import cli as gumscli
+from threefive.hls import cli as hlscli
+from threefive.sixfix import cli as sixcli
+from threefive.superkabuki import cli as skcli
+from threefive.iframes import IFramer
+from threefive.new_reader import reader
+from threefive import Cue, Stream, print2, blue, version, red
+from threefive.stuff import ERR
 
 # import cProfile
 # from sideways import cli as sidecli
