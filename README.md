@@ -10,12 +10,12 @@
 
 
 ## Heads up! 
-<pre>I called this repo threefive in an attempt to avoid confusion with my old threefive repo.
+<pre>I called this repo threefive3 in an attempt to avoid confusion with my old threefive repo.
  That has not proven to be the case.
  
  So going forward, <b>it will be threefive and will be released as such.</b>
  
- To update your threefive code to threefive, I suggest  `sed -i 's/threefive/threefive/g' *.py` 
+ To update your threefive3 code to threefive, I suggest  `sed -i 's/threefive3/threefive/g' *.py` 
 
  threefive v3.047 was pushed this morning and is 100% threefive compatible.
  
@@ -93,7 +93,7 @@ o-splicing.isml/.mpd').read()    # use reader to pull the mpd over a network.
     "descriptors": []
 }
 ```
-# Latest release is v3.0.45
+# Latest release is v3.0.47
 
 * cyclomatic complexity __2.01__ ,__That's a kickass score.__
 
