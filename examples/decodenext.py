@@ -7,8 +7,8 @@ but you trigger any action you like, this is just an example.
 
 """
 import sys
-from threefive3 import Stream
-from threefive3.new_reader import reader
+from threefive import Stream
+from threefive.new_reader import reader
 
 def do():
     arg = sys.argv[1]
