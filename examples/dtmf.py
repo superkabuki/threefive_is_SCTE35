@@ -7,7 +7,7 @@ Usage:
 """
 
 
-from threefive3 import Cue
+from threefive import Cue
 
 if __name__ == "__main__":
     DTMF = "/DAsAAAAAAAAAP/wDwUAAABef0/+zPACTQAAAAAADAEKQ1VFSbGfMTIxIxGolm0="
