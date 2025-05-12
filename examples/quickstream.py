@@ -16,7 +16,7 @@ Quickstream.py
 
  * if you don't know the SCTE-35 pid run
 
-    threefive3 show video.ts
+    threefive show video.ts
 
 * look for a line with SCTE-35 in it like:
             
@@ -34,8 +34,8 @@ Quickstream.py
 
 from functools import partial
 import sys
-from threefive3 import Cue
-from threefive3.new_reader import reader
+from threefive import Cue
+from threefive.new_reader import reader
 
 
 def parse_pid(pkt):
