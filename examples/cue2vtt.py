@@ -11,8 +11,8 @@ pypy3 cue2vtt.py thevideo.ts | mplayer thevideo.ts -sub -
 
 import sys
 import time
-from threefive3 import Stream
-from threefive3 import IFramer
+from threefive import Stream
+from threefive import IFramer
 
 
 def first():
