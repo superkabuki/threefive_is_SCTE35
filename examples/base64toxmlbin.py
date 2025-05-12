@@ -5,7 +5,7 @@ and then convert the xml+binary back to base64
 
 """
 
-from threefive3 import Cue
+from threefive import Cue
 
 
 HEAD ='\n\033[107;2;36m '
