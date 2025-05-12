@@ -623,11 +623,6 @@ a@fu:~$
 
 # `A.`  3.7GB in 2.7 Seconds runnng on pypy3, it's almost as fast as tsduck written in C++
 
-## Here's a test of tsduck, the old threefive, threefive, and SuperKarate DeathCar. 
-
-
-![image](https://github.com/user-attachments/assets/6ce0376d-1ac3-4bbb-8c06-8d76443238de)
-
 
 
 
