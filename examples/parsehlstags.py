@@ -22,8 +22,8 @@ these are the tags for the segment index_2_8875296.ts
 """
 import json
 import sys
-from threefive3.hlstags import TagParser
-from threefive3.new_reader import reader
+from threefive.hlstags import TagParser
+from threefive.new_reader import reader
 
 data={}
 for arg in sys.argv[1:]:
