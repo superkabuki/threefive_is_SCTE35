@@ -1,4 +1,4 @@
-# threefive3 commonly used classes and inheritance.
+# threefive commonly used classes and inheritance.
 
 ## Most SCTE-35 objects are subclassed from SCTE35Base
 * SCTE35Base
