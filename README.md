@@ -619,13 +619,6 @@ optional arguments:
 a@fu:~$ 
 ```
 
-# `Q.` Come on man, python is a damn scripting language, how fast can it be parsing MPEGTS?
-
-# `A.`  3.7GB in 2.7 Seconds runnng on pypy3, it's almost as fast as tsduck written in C++
-
-
-
-
 ### [iodisco.com/scte35](https://iodisco.com/scte35)
 
 
