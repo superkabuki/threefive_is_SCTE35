@@ -1,5 +1,5 @@
 # The Node Class 
-#### _requires threefive3 v3.0.45_
+#### _requires threefive v3.0.45_
 
 ## Here's what you can do with a Node instance.
 
@@ -7,13 +7,13 @@
 * use __Ultra Xml Parser__ (_Supreme_)
 ```py3
 
-a@fu:~/threefive3$ pypy3
+a@fu:~/threefive$ pypy3
 Python 3.9.16 (7.3.11+dfsg-2+deb12u3, Dec 30 2024, 22:36:23)
 [PyPy 7.3.11 with GCC 12.2.0] on linux
 Type "help", "copyright", "credits" or "license" for more information.
 
->>>> from threefive3 import reader
->>>> from threefive3.uxp import UltraXmlParser
+>>>> from threefive import reader
+>>>> from threefive.uxp import UltraXmlParser
 
 >>>> data = reader('/home/a/fu.mpd').decode()
 
@@ -156,7 +156,7 @@ Type "help", "copyright", "credits" or "license" for more information.
 ### Help is built-in
 
 ```py3
-Help on class Node in module threefive3.xml:
+Help on class Node in module threefive.xml:
 
 class Node(builtins.object)
  |  Node(tag, value='', attrs=None, ns=None)
@@ -174,7 +174,7 @@ class Node(builtins.object)
  |  
  |  Use like this:
  |  
- |      from threefive3.xml import Node
+ |      from threefive.xml import Node
  |  
  |      ts = Node('TimeSignal')
  |      st = Node('SpliceTime',attrs={'pts_time':3442857000})
@@ -258,7 +258,7 @@ class Node(builtins.object)
 ```
 
 #### Namespaces
-threefive3.xml.Node __implements namespaces via the embedded NameSpace class__
+threefive.xml.Node __implements namespaces via the embedded NameSpace class__
 <br> Namespaces can be set,changed or disabled for the entire Xml, or by individual Nodes. <br>
 The namespace Uri can be set, changed, or disabled. <br>
 A namespace can also be set, changed, or disabled on Node attributes.
@@ -272,7 +272,7 @@ __If you have a better idea, speak up.__
 
 #### DTD Validation. 
 Currently, __I have no plans to implement DTD validation.__  <br>
-The SCTE-35 data is validated by threefive3 already, <br>
+The SCTE-35 data is validated by threefive already, <br>
 and I don't see the benefit of validating other DTDs, <br>
 there are plenty of other tools for that sort of thing.
 
