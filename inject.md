@@ -5,8 +5,8 @@
 
 ```js
 
-a@fu:~/threefive3$ threefive3 inject help
-usage: threefive3 inject [-h] [-i INPUT] [-o OUTPUT] [-s SIDECAR] [-p SCTE35_PID] [-t]
+a@fu:~/threefive$ threefive inject help
+usage: threefive inject [-h] [-i INPUT] [-o OUTPUT] [-s SIDECAR] [-p SCTE35_PID] [-t]
                          [-v]
 
 optional arguments:
@@ -29,10 +29,10 @@ optional arguments:
 * insert a TimeSignal at every iframe
 ```js
 
-a@fu:~/threefive3$ touch sidecar.txt       
+a@fu:~/threefive$ touch sidecar.txt       
 
 
-@fu:~/threefive3$ threefive3 inject --input ~/mpegts2/mpegts/nmax.ts  --scte35_pid 777 --output injected-nmax.ts  --time_signal
+@fu:~/threefive$ threefive inject --input ~/mpegts2/mpegts/nmax.ts  --scte35_pid 777 --output injected-nmax.ts  --time_signal
 
 Output File:	injected-nmax.ts
 
@@ -43,7 +43,7 @@ Output File:	injected-nmax.ts
 ## Usage example
 
 ```js
-a@fu:~/threefive3$ threefive3 inject --input ~/mpegts2/mpegts/nmax.ts --sidecar ~/sidecar.txt --scte35_pid 777 --output injected-nmax.ts
+a@fu:~/threefive$ threefive inject --input ~/mpegts2/mpegts/nmax.ts --sidecar ~/sidecar.txt --scte35_pid 777 --output injected-nmax.ts
 
 Output File:	injected-nmax.ts
 
@@ -64,7 +64,7 @@ Inserted Cue:
 
 Inserted Cue:
 	@9195.574978, /DAgAAAAAAAAAP/wDwUAAAABf//+AFJlwAABAAAAAMOOklg=
-a@fu:~/threefive3$ 
+a@fu:~/threefive$ 
 
 ```
 
