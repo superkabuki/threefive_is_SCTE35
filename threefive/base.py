@@ -40,7 +40,7 @@ class SCTE35Base:
         return not isinstance(var_value, var_type)
 
     def _is_none(self, var_value, var_type):
-        return  var_value is None
+        return var_value is None
 
     def _chk_var(self, var_type, nbin_method, var_name, bit_count):
         """
@@ -48,7 +48,7 @@ class SCTE35Base:
         """
         var_value = self.__dict__[var_name]
         for me in [self._is_none, self._bool_int, self._wrong_type]:
-            if me( var_value, var_type):
+            if me(var_value, var_type):
                 self._err2(var_name, var_value, bit_count, var_type)
                 return
         nbin_method(var_value, bit_count)
@@ -129,6 +129,7 @@ class SCTE35Base:
         from a dict if the value is None.
         """
         return vars(self)
+
         def b2l(val):
             if isinstance(val, SCTE35Base):
                 val.kv_clean()
