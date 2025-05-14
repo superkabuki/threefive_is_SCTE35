@@ -4,12 +4,12 @@
 
 <br>
 
-# threefive is the most advanced SCTE-35 tool available. * 
+# threefive is the most advanced SCTE-35 tool available* 
 
-### * _No asterisks._
+ \* _No asterisks, no exceptions._
 
 
-## Heads up! 
+## `Heads up` 
 <pre>I called this repo threefive3 in an attempt to avoid confusion with my old threefive repo.
  That has not proven to be the case.
  
