@@ -1,8 +1,8 @@
-# threefive3.Stream class
+# threefive.Stream class
 
 ```js
 
-Help on class Stream in module threefive3.stream:
+Help on class Stream in module threefive.stream:
 
 class Stream(builtins.object)
  |  Stream(tsdata, show_null=True)
@@ -17,7 +17,7 @@ class Stream(builtins.object)
  |      
  |      Use like...
  |      
- |      from threefive3 import Stream
+ |      from threefive import Stream
  |      strm = Stream("vid.ts",show_null=False)
  |      strm.decode()
  |  
@@ -44,11 +44,11 @@ class Stream(builtins.object)
  |  decode(self,func=show_cue)
  |      Stream.decode reads self.tsdata to find SCTE35 packets.
  |      func can be set to a custom function that accepts
- |      a threefive3.Cue instance as it's only argument.
+ |      a threefive.Cue instance as it's only argument.
  ```
 Example:
 ```py3
-from threefive3 import Stream
+from threefive import Stream
 strm =Stream("https://futzu.com/xaa.ts")
 strm.decode()
 ```
@@ -57,12 +57,12 @@ strm.decode()
 ```py3
     func(cue)
 ```
-* the arg `cue` is a threefive3.Cue instance. When the Stream class finds SCTE-35 data, it loads it into a Cue instance and calls func.
+* the arg `cue` is a threefive.Cue instance. When the Stream class finds SCTE-35 data, it loads it into a Cue instance and calls func.
 * The default is show_cue, it prints the cue data to sterr, aka 2.
 * Here's an example that encodes the SCTE-35 Cue to base64
-Example from the threefive3 cli tool:
+Example from the threefive cli tool:
 ```py3
-from threefive3 import Stream
+from threefive import Stream
 
 def base64_out(cue):
     """
@@ -88,7 +88,7 @@ strm.decode(func=base64_out)
 ```py3
  |  decode_next(self)
  |      Stream.decode_next returns the next
- |      SCTE35 cue as a threefive3.Cue instance.
+ |      SCTE35 cue as a threefive.Cue instance.
  |
 ```
 ## Stream.decode_pids(self, scte35_pids=[], func=show_cue)
@@ -96,7 +96,7 @@ strm.decode(func=base64_out)
  |  decode_pids(self, scte35_pids=[], func=show_cue)
  |      Stream.decode_pids takes a list of SCTE-35 Pids parse
  |      and an optional call back function to run when a Cue is found.
- |      if scte35_pids is not set, all threefive3 pids will be parsed.
+ |      if scte35_pids is not set, all threefive pids will be parsed.
  |
 ```
 ## Stream.proxy(self, func=show_cue)
