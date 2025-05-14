@@ -39,12 +39,12 @@
 ## SCTE35 Cue with a Time Signal Command in Seven Steps
 
 ```python3
->>>> import threefive3
+>>>> import threefive
 ```
 1. __Create an empty SCTE-35 Cue__
 ```smalltalk
 
->>>> cue = threefive3.Cue()
+>>>> cue = threefive.Cue()
 ```
 2.  __The info_section is automatically generated__
 ```smalltalk
@@ -58,7 +58,7 @@
 ```
 3. __Create a Time Signal Splice Command__
 ```smalltalk
->>>> cmd=threefive3.TimeSignal()
+>>>> cmd=threefive.TimeSignal()
 >>>> cmd
 {'calculated_length': None, 'command_type': 6, 'name': 'Time Signal', 'bites': None, 'time_specified_flag': None, 'pts_time': None}
 ```
@@ -131,9 +131,9 @@ a@fumatica:~/threefive$ pypy3
 Python 3.7.10 (7.3.5+dfsg-2, Jun 03 2021, 20:39:46)
 [PyPy 7.3.5 with GCC 10.2.1 20210110] on linux
 Type "help", "copyright", "credits" or "license" for more information.
->>>> import threefive3
+>>>> import threefive
 >>>> Base64 = "/DAvAAAAAAAA///wFAVIAACPf+/+c2nALv4AUsz1AAAAAAAKAAhDVUVJAAABNWLbowo="
->>>> cue = threefive3.Cue(Base64)
+>>>> cue = threefive.Cue(Base64)
 >>>> cue.command
 {'calculated_length': 20, 'command_type': 5, 'name': 'Splice Insert', 'time_specified_flag': True, 'pts_time': 21514.559089, 'break_auto_return': True, 'break_duration': 60.293567, 'splice_event_id': 1207959695, 'splice_event_cancel_indicator': False, 'out_of_network_indicator': True, 'program_splice_flag': True, 'duration_flag': True, 'splice_immediate_flag': False, 'component_count': None, 'components': None, 'unique_program_id': 0, 'avail_num': 0, 'avail_expected': 0}
 ```
@@ -199,9 +199,9 @@ Type "help", "copyright", "credits" or "license" for more information.
 ## Remove a Splice Descriptor from a SCTE35 Cue
 
 ```python3
->>>> import threefive3
+>>>> import threefive
 >>>> Base64 = "/DAvAAAAAAAA///wFAVIAACPf+/+c2nALv4AUsz1AAAAAAAKAAhDVUVJAAABNWLbowo="
->>>> cue = threefive3.Cue(Base64)
+>>>> cue = threefive.Cue(Base64)
 >>>> cue.show()
 {
     "info_section": {
@@ -310,10 +310,10 @@ Type "help", "copyright", "credits" or "license" for more information.
 ### Add a Dtmf Descriptor to an existing SCTE35 Cue
 
 ```python3
->>>> import threefive3
+>>>> import threefive
 >>>> Base64 = "/DAvAAAAAAAA///wFAVIAACPf+/+c2nALv4AUsz1AAAAAAAKAAhDVUVJAAABNWLbowo="
->>>> cue = threefive3.Cue(Base64)
->>>> dscrptr = threefive3.DtmfDescriptor()
+>>>> cue = threefive.Cue(Base64)
+>>>> dscrptr = threefive.DtmfDescriptor()
 >>>> dscrptr
 {'tag': 1, 'descriptor_length': 0, 'identifier': None, 'bites': None, 'name': 'DTMF Descriptor', 'preroll': None, 'dtmf_count': None, 'dtmf_chars': []}
 ```
