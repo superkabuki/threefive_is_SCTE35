@@ -11,36 +11,36 @@ and not officially acknowledged by the SCTE-35 or HLS spec.
 with or without any HLS tags.
 
 </pre>
-# Don't worry man, threefive3 supports HLS SCTE-35 in every way possible. 
+# Don't worry man, threefive supports HLS SCTE-35 in every way possible. 
 <pre>
 	Most of the options presented here are for filtering the SCTE-35 data to what you need,
 	
-	By default, threefive3 parses everything. 
+	By default, threefive parses everything. 
 	
 </pre>
 
-# [ threefive3 hls ]
+# [ threefive hls ]
 
-* threefive3 hls is a HLS SCTE-35 parser. It takes a rendition or master m3u8 as input. 
+* threefive hls is a HLS SCTE-35 parser. It takes a rendition or master m3u8 as input. 
 * Automatic AES decryption for segments.
 * Automatic AAC and AC3 ID3 Tag sync safe timestamp header parsing for audio only renditions.
 * SCTE-35 Can be parsed from MPEGTS segments and from m3u8 files. 
 * All HLS SCTE-35 tags are supported. 
-* threefive3 hls also allows you to filter SCTE-35 Messages.
+* threefive hls also allows you to filter SCTE-35 Messages.
 
 # [ Help ]
 
   To display this help:
   
 ```rebol
-	threefive3 hls help
+	threefive hls help
 ```
 
 # [ Input ]
 
-* threefive3 hls takes an m3u8 URI as input.
+* threefive hls takes an m3u8 URI as input.
 * M3U8 formats supported:
-  * master  ( When a master.m3u8 used, threefive3 hls parses the first rendition it finds )
+  * master  ( When a master.m3u8 used, threefive hls parses the first rendition it finds )
   * rendition
   
 * Segment types supported:
@@ -63,7 +63,7 @@ with or without any HLS tags.
 
 # [ SCTE-35 ]
 
-  threefive3 hls displays SCTE-35 Embedded Cues as well as SCTE-35 HLS Tags.
+  threefive hls displays SCTE-35 Embedded Cues as well as SCTE-35 HLS Tags.
 
 * Supported HLS Tags
   * #EXT-OATCLS-SCTE35
@@ -79,7 +79,7 @@ with or without any HLS tags.
 
   running the command:
 
-            threefive3 hls profile
+            threefive hls profile
 
   will generate a default profile and write a file named hls.profile
   in the current working directory.
@@ -111,7 +111,7 @@ with or without any HLS tags.
   
 * `starts`:            set which Segmentation Type IDs to use to start breaks.
 
-  Edit the file as needed and then run threefive3 hls.
+  Edit the file as needed and then run threefive hls.
 
 # [ Profile Formatting Rules ]
 
@@ -140,7 +140,7 @@ with or without any HLS tags.
 
 # [ Cool Features ]
 
-* threefive3 hls can resume when started in the middle of an ad break.
+* threefive hls can resume when started in the middle of an ad break.
 ```rebol
             2023-10-13T05:59:50.24Z Resuming Ad Break
             2023-10-13T05:59:50.34Z Setting Break Timer to 17.733
@@ -164,13 +164,13 @@ with or without any HLS tags.
 
 * Show this help:
 ```rebol
-         threefive3 hls help
+         threefive hls help
 ```
 * Generate a new hls.profile:
 ```rebol
-        threefive3 hls profile
+        threefive hls profile
 ```
 * parse an m3u8:
 ```rebol
-        threefive3 hls  https://example.com/out/master.m3u8
+        threefive hls  https://example.com/out/master.m3u8
 ```
