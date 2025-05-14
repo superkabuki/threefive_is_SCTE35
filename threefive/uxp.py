@@ -140,6 +140,7 @@ class NodeConverter:
     """
     NodeConverter class converts A SpliceInfoSection Node to a dict.
     """
+
     def xmlspliceinfosection(self, node):
         """
         spliceinfosection parses exemel for info section data
@@ -357,13 +358,13 @@ class NodeConverter:
                 dscripts.append(dmap[child.tag](child))
         return dscripts
 
-    def convert(self,node):
+    def convert(self, node):
         return {
             "info_section": self.xmlspliceinfosection(node),
             "command": self.xmlcommand(node),
             "descriptors": self.xmldescriptors(node),
         }
-        
+
 
 def xml2cue(ex):
     """
