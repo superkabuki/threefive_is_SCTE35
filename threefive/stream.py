@@ -335,13 +335,13 @@ class Stream:
         last_pts = None
         for pkt in self.iter_pkts():
             pid = self._parse_info(pkt)
-            # if pid in self.pids.pcr:
-            self._chk_pts(pkt, pid)
-            pts = self.pid2pts(pid)
-            if pts:
-                if pts != last_pts:
-                    print(f"\t{self.pid2prgm(pid)}\t{pts}")
-                last_pts = pts
+            if pid in self.pids.pcr:
+                self._chk_pts(pkt, pid)
+                pts = self.pid2pts(pid)
+                if pts:
+                    if pts != last_pts:
+                        print(f"\t{self.pid2prgm(pid)}\t{pts}")
+                    last_pts = pts
 
     def pts(self):
         """
@@ -447,11 +447,11 @@ class Stream:
         return pkt[head_size:]
 
     def _pmt_pid(self, pay, pid):
-##        self.pmt_count += 1
-##        if pay in self.pmt_payloads:
-##            if self.pmt_count > len(self.pmt_payloads) << 4:
-##                return
-##        self.pmt_payloads[self.pid2prgm(pid)] = pay
+        self.pmt_count += 1
+        if pay in self.pmt_payloads:
+            if self.pmt_count > len(self.pmt_payloads) << 2:
+                return
+        self.pmt_payloads[self.pid2prgm(pid)] = pay
         self._parse_pmt(pay, pid)
 
     def _pat_pid(self, pay, pid):
@@ -510,7 +510,7 @@ class Stream:
         return cue
 
     def _pid_has_scte35(self, pid):
-        #  return pid in self.pids.scte35.union(self.pids.maybe_scte35) # Sucks. 
+        #  return pid in self.pids.scte35.union(self.pids.maybe_scte35) # Sucks.
         # return (pid in self.pids.scte35 or pid in self.pids.maybe_scte35) # Fast
         return pid in (self.pids.scte35 or self.pids.maybe_scte35)  # Fastest
         # return pid in (self.pids.scte35|self.pids.maybe_scte35)  # wtf? Super Sucks
@@ -658,8 +658,7 @@ class Stream:
         seclen = self._parse_length(pay[1], pay[2])
         if self._section_incomplete(pay, pid, seclen):
             return False
-        if self. _same_as_last(pay, pid):
-            print("SAME")
+        if self._same_as_last(pay, pid):
             return False
         program_number = self._parse_program(pay[3], pay[4])
         if not program_number:
