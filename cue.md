@@ -1,18 +1,18 @@
-# Help on class Cue in module threefive3.Cue
+# Help on class Cue in module threefive.Cue
 
 
 ```py3
 
-class Cue(threefive3.base.SCTE35Base)
+class Cue(threefive.base.SCTE35Base)
  |  Cue(data=None, packet_data=None)
  |  
- |  The threefive3.Cue class handles parsing
+ |  The threefive.Cue class handles parsing
  |  SCTE 35 message strings.
  |  Example usage:
  |  
- |  >>>> import threefive3
+ |  >>>> import threefive
  |  >>>> Base64 = "/DAvAAAAAAAA///wBQb+dGKQoAAZAhdDVUVJSAAAjn+fCAgAAAAALKChijUCAKnMZ1g="
- |  >>>> cue = threefive3.Cue(Base64)
+ |  >>>> cue = threefive.Cue(Base64)
  |  >>>> cue.show()
  |  
  |  * A cue instance can be initialized with
@@ -27,7 +27,7 @@ class Cue(threefive3.base.SCTE35Base)
  |  >>>> cue.command.pts_time
  |  21695.740089
 ```
-### SCTE-35 data comes in a variety of formats. threefive3 handles many of the SCTE-35 formats.
+### SCTE-35 data comes in a variety of formats. threefive handles many of the SCTE-35 formats.
 
 * base64
 * bytes
@@ -49,7 +49,7 @@ Python 3.9.16 (7.3.11+dfsg-2+deb12u3, Dec 30 2024, 22:36:23)
 [PyPy 7.3.11 with GCC 12.2.0] on linux
 Type "help", "copyright", "credits" or "license" for more information.
 
->>>> from threefive3 import Cue
+>>>> from threefive import Cue
 >>>> data='/DAgAAAAAAAAAP/wDwUAAAABf//+AFJlwAABAAAAAMOOklg='
 >>>> cue=Cue(data)
 ```
