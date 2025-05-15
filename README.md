@@ -10,17 +10,46 @@
 
 
 ## `Heads up` 
-<pre>I called this repo threefive3 in an attempt to avoid confusion with my old threefive repo.
- That has not proven to be the case.
+<pre>I called this repo threefive3 in an attempt to avoid confusion with my old threefive repo,
+ and that has not proven to be the case.
  
  So going forward, <b>it will be threefive and will be released as such.</b>
  
  To update your threefive3 code to threefive, I suggest  `sed -i 's/threefive3/threefive/g' *.py` 
-
- threefive v3.047 was pushed this morning and is 100% threefive compatible.
+ I just used sed for m3ufu, x9k3, umzz, gums, showcues, sixfix, the superkabuki packet injection engine,
+ all the examples. This code base covers the old threefive interface.If I changed a method name, you can still 
+ call it by the old name or the new name. For example in the Cue class I renamed <b>encode_as_hex() to just hex()</b>,
+ and you call either one
  
- Sorry, I'm not trying to be a dick.
+ threefive v3.0.49 is on deck, I'm just giving it a smoke test. 
 
+ Some massive performance improvements in v3.0.49
+
+ * threefive now decodes SCTE-35 from Ten different formats, 
+ 
+ MPEGTS, Base64, Bytes, Dicts, Hex,HLS, Integers,JSON,XML and XML+Binary.
+  
+ * threefive noww encodes to eight different formats, 
+ 
+ MPEGTS, Base64, Bytes, Hex, Int, JSON,XML, and Xml+binary
+ 
+ * threefive Supports All SCTE-35 HLS Tags.  
+ 
+ * MPEGTs SCTE-35 packet injection is now twice as fast, 
+ I'm using a static CRC table when generating new PMTs. 
+ 
+ * Xml is super solid.
+
+* 4391 lines of code, 2014 lines of comments
+ 
+ * Cyclomatic Complexity
+ 613 blocks (classes, functions, methods) analyzed.
+ Average complexity: A (2.0163132137030995)
+
+ * pylint score: 9.62
+ 
+
+ threefive has no opponent.
  . </pre>
 
 
