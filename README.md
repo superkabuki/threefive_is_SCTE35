@@ -1,6 +1,20 @@
  [__Install__](#install) |[__SCTE-35 Cli__](#the-cli-tool) | [__SCTE-35 HLS__](https://github.com/superkabuki/threefive/blob/main/hls.md) | [__Cue__ Class](https://github.com/superkabuki/threefive/blob/main/cue.md) | [__Stream__ Class](https://github.com/superkabuki/threefive/blob/main/stream.md) | [__Online SCTE-35 Parser__](https://iodisco.com/scte35) | [__Encode SCTE-35__](https://github.com/superkabuki/threefive/blob/main/encode.md) | [__SCTE-35 Examples__](https://github.com/superkabuki/threefive/tree/main/examples)
  | [__SCTE-35 XML__ ](https://github.com/superkabuki/SCTE-35/blob/main/xml.md) and [More __XML__](node.md) | [__SuperKabuki SCTE-35 MPEGTS Packet Injection__](inject.md) | [__SCTE-35 As a Service__](sassy.md)
 
+# `Heads up` 
+<pre>I called this repo threefive3 in an attempt to avoid confusion with my old threefive repo,
+that didn't work at all.
+ 
+ Going forward, <b>this will be threefive and will be released as such.</b>
+ 
+ Adrian
+ </pre>
+
+
+### `Q.` What is SCTE-35?
+
+### `A.` SCTE-35 is just encoded binary data. The SCTE-35 data is used to signal when to splice in commercials and such. The decoded variables in SCTE-35 are used determine the type and length of commercials. As with most things related to streaming video, it's way too complicated. Don't worry though, threefive makes it much easier.
+
 
 <br>
 
@@ -9,66 +23,38 @@
  \* _No asterisks, no exceptions._
 
 
-## `Heads up` 
-<pre>I called this repo threefive3 in an attempt to avoid confusion with my old threefive repo,
- and that has not proven to be the case.
- 
- So going forward, <b>it will be threefive and will be released as such.</b>
- 
- To update your threefive3 code to threefive, I suggest  `sed -i 's/threefive3/threefive/g' *.py` 
- I just used sed for m3ufu, x9k3, umzz, gums, showcues, sixfix, the superkabuki packet injection engine,
- all the examples. This code base covers the old threefive interface.If I changed a method name, you can still 
- call it by the old name or the new name. For example in the Cue class I renamed <b>encode_as_hex() to just hex()</b>,
- and you call either one
- 
- threefive v3.0.49 is on deck, I'm just giving it a smoke test. 
-
- Some massive performance improvements in v3.0.49
-
- * threefive now decodes SCTE-35 from Ten different formats, 
- 
- MPEGTS, Base64, Bytes, Dicts, Hex,HLS, Integers,JSON,XML and XML+Binary.
-  
- * threefive noww encodes to eight different formats, 
- 
- MPEGTS, Base64, Bytes, Hex, Int, JSON,XML, and Xml+binary
- 
- * threefive Supports All SCTE-35 HLS Tags.  
- 
- * MPEGTs SCTE-35 packet injection is now twice as fast, 
- I'm using a static CRC table when generating new PMTs. 
- 
- * Xml is super solid.
-
-* 4391 lines of code, 2014 lines of comments
- 
- * Cyclomatic Complexity
- 613 blocks (classes, functions, methods) analyzed.
- Average complexity: A (2.0163132137030995)
-
- * pylint score: 9.62
- 
-
- threefive has no opponent.
-
- Adrian
- 
- . </pre>
-
-
-----
-## `Q.` What is SCTE-35?
-
-## `A.` SCTE-35 is just encoded binary data. The SCTE-35 data is used to signal when to splice in commercials and such. The decoded variables in SCTE-35 are used determine the type and length of commercials. As with most things related to streaming video, it's way too complicated. Don't worry though, threefive makes it much easier.
-
-
-
 * __Decode SCTE-35__ in __TEN__ formats: __MPEGTS, Base64, Bytes, Dicts, Hex,HLS, Integers,JSON,XML and XML+Binary__.
 * __Encode SCTE-35__ in __EIGHT__ formats: __MPEGTS, Base64, Bytes, Hex, Int, JSON,XML, and Xml+binary.__
 * __All HLS SCTE-35 Tags__ are Supported.
 * __Automatic AES decryption__ for HLS.
 * Built-in __Multicast Sender and Receiver__ 
 * [The __SuperKabuki SCTE-35 MPEGTS Packet Injection Engine__](inject.md) was added to __threefive__ v3.0.39
+
+
+### [Sassy, the new SCTE-35 as a service, Decode SCTE-35 in your browser](sassy.md)      
+* returns decoded SCTE-35 as JSON
+* https://iodisco.com/cb/sassy?scte35=0xfc302f00019164e7980000000506fe849f2fa80019021743554549ffffffff7fbf010866756d6174696361100100ae05fd2e
+* open that URL in a browser
+* curl works too.
+* If you can make an https request, you can decode SCTE-35 with sassy, no installation required.
+* powered by nstuff
+
+### MPEGTS streams can be parsed for SCTE-35 with three lines of code.
+
+```py3
+a@fu:~/build5/scte35/scte35$ pypy3
+
+>>>> from threefive import Stream
+>>>> strm=Stream('https://futzu.com/xaa.ts')
+>>>> strm.decode()
+```
+
+### Checkout the Super Cool SCTE-35 [__Examples__](https://github.com/superkabuki/threefive/tree/main/examples)
+<br>
+
+
+----
+
 
 <br>
 
@@ -125,32 +111,16 @@ o-splicing.isml/.mpd').read()    # use reader to pull the mpd over a network.
     "descriptors": []
 }
 ```
-# Latest release is v3.0.47
+# Latest release is v3.0.49
 
 * cyclomatic complexity __2.01__ ,__That's a kickass score.__
 
-* pylint score is __9.65/10__, _this needs a liitle work_.
+* pylint score is __9.62/10__, _this needs a liitle work_.
 
 > Stay up to date, only the latest release is supported.
 > 
 
-## MPEGTS streams can be parsed for SCTE-35 with three lines of code.
 
-```py3
-a@fu:~/build5/scte35/scte35$ pypy3
-
->>>> from threefive import Stream
->>>> strm=Stream('https://futzu.com/xaa.ts')
->>>> strm.decode()
-```
-
-# Checkout the Super Cool SCTE-35 [__Examples__](https://github.com/superkabuki/threefive/tree/main/examples)
-<br>
-
-### Sassy, the new SCTE-35 as a service, SCTE-35 as JSON in your browser      
-
-* Open in your browser
-* https://iodisco.com/cb/sassy?scte35=0xfc302f00019164e7980000000506fe849f2fa80019021743554549ffffffff7fbf010866756d6174696361100100ae05fd2e
 
  
 * Xml is back and better than ever. __The new Ultra Xml Parser Supreme__ replaces the Super Xml Parser.
