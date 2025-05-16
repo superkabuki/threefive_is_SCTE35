@@ -143,7 +143,7 @@ o-splicing.isml/.mpd').read()    # use reader to pull the mpd over a network.
 * [The SuperKabuki MPEGTS Packet Injection Engine in the Cli](inject.md)
 
 ### `SCTE-35 As a Service`
-* Decode SCTE-35 without installing anything. [__Sassy__](sassy.md) is SCTE-35 as a service. 
+* Decode SCTE-35 without installing anything. If you can make an https request, you can use [__Sassy__](sassy.md) to decode SCTE-35. . 
 
 ### `Classes`
 * The python built in help is always the most up to date docs for the library.
