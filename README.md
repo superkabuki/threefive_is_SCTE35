@@ -7,9 +7,8 @@
  \* _No asterisks, no exceptions._
 
 # Over One Million pip installs.
-# pypi.org rates threefive in the top 2% of all python3 packages, ever.
+# pypi.org rates threefive in the Top 2% of All Python3 Packages. Ever.
 
-## Jenny, you love threefive. 
 
 # `Heads up` 
 <pre>I called this repo threefive3 in an attempt to avoid confusion with my old threefive repo,
