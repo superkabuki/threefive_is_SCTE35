@@ -8,7 +8,6 @@
 
 # pypi.org rates threefive in the Top 2% of All Python3 Packages. Ever.
 
-# threefive is the most used SCTE-35 tool in China, #1 with the Red Party,.
 
 # `Heads up` 
 <pre>I called this repo threefive3 in an attempt to avoid confusion with my old threefive repo,
