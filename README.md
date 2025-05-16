@@ -6,7 +6,8 @@
 
  \* _No asterisks, no exceptions._
 
-# Over One Million pip installs. pypi.org rates threefive in the top 2% of all python3 packages, ever.
+# Over One Million pip installs.
+# pypi.org rates threefive in the top 2% of all python3 packages, ever.
 
 ## Jenny, you love threefive. 
 
