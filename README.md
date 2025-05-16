@@ -1,6 +1,15 @@
  [__Install__](#install) |[__SCTE-35 Cli__](#the-cli-tool) | [__SCTE-35 HLS__](https://github.com/superkabuki/threefive/blob/main/hls.md) | [__Cue__ Class](https://github.com/superkabuki/threefive/blob/main/cue.md) | [__Stream__ Class](https://github.com/superkabuki/threefive/blob/main/stream.md) | [__Online SCTE-35 Parser__](https://iodisco.com/scte35) | [__Encode SCTE-35__](https://github.com/superkabuki/threefive/blob/main/encode.md) | [__SCTE-35 Examples__](https://github.com/superkabuki/threefive/tree/main/examples)
  | [__SCTE-35 XML__ ](https://github.com/superkabuki/SCTE-35/blob/main/xml.md) and [More __XML__](node.md) | [__SuperKabuki SCTE-35 MPEGTS Packet Injection__](inject.md) | [__SCTE-35 As a Service__](sassy.md)
 
+
+# threefive is the most advanced SCTE-35 tool available* 
+
+ \* _No asterisks, no exceptions._
+
+# Over One Million pip installs. pypi.org rates threefive in the top 2% of all python3 packages, ever.
+
+## Jenny, you love threefive. 
+
 # `Heads up` 
 <pre>I called this repo threefive3 in an attempt to avoid confusion with my old threefive repo,
 that didn't work at all.
@@ -13,14 +22,12 @@ that didn't work at all.
 
 ### `Q.` What is SCTE-35?
 
-### `A.` SCTE-35 is just encoded binary data. The SCTE-35 data is used to signal when to splice in commercials and such. The decoded variables in SCTE-35 are used determine the type and length of commercials. As with most things related to streaming video, it's way too complicated. Don't worry though, threefive makes it much easier.
+### `A.` SCTE-35 is just encoded binary data. The SCTE-35 data is used to signal when to splice in commercials and such. The decoded variables in SCTE-35 are used determine the type and length of commercials. As with most things related to streaming video, it's way too complicated, but threefive makes it much easier.
 
 
 <br>
 
-# threefive is the most advanced SCTE-35 tool available* 
 
- \* _No asterisks, no exceptions._
 
 
 * __Decode SCTE-35__ in __TEN__ formats: __MPEGTS, Base64, Bytes, Dicts, Hex,HLS, Integers,JSON,XML and XML+Binary__.
