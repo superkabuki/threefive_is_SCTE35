@@ -1009,17 +1009,20 @@ class HlsParser:
         audio  only renditions are much smaller and parse much faster.
         """
         for line in lines:
+            if self.rendition:
+                break
             if line.startswith(b"#EXT-X-STREAM-INF"):
                 idx = lines.index(line) + 1
                 nline = lines[idx].decode("utf-8").strip().strip("\n")
                 base_url = uri.rsplit("/", 1)[0]
                 uri = base_url + "/" + nline
                 uri.replace("\n", "")
-                # print(f"{REV} Rendition Found {NORM} {uri} ")
+                print(f"{REV} Rendition Found {NORM} {uri} ")
                 if b"RESOLUTION" not in line:
                     self.rendition = uri
-                    return
-        self.rendition = uri
+                    return 
+                else:
+                    self.rendition = uri
 
     def find_renditions(self, uri):
         """
