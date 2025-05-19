@@ -61,6 +61,7 @@ class SixFix(Stream):
         """
         iter_pkts iterates a mpegts stream into packets
         """
+        # Skip find_start to catch first PAT/PMT
         return iter(partial(self._tsdata.read, self.PACKET_SIZE * num_pkts), b"")
 
     def _parse_by_pid(self, pkt, pid):
@@ -77,14 +78,16 @@ class SixFix(Stream):
 
     def _parse_pkts(self, out_file):
         active = io.BytesIO()
+        # active hold
         pkt_count = 0
-        chunk_size = 2884
+        activepkts = 2884
         for pkt in self.iter_pkts():
             pid = self._parse_pid(pkt[1], pkt[2])
             pkt = self._parse_by_pid(pkt, pid)
             if pkt:
                 active.write(pkt)
-                pkt_count = (pkt_count + 1) % chunk_size
+                # dump active buff  to out_file every activepkts
+                pkt_count = (pkt_count + 1) % activepkts
                 if not pkt_count:
                     out_file.write(active.getbuffer())
                     active = io.BytesIO()
@@ -102,10 +105,10 @@ class SixFix(Stream):
         pay = self._chk_partial(pay, pid, self._PMT_TID)
         return pay
 
-    def _unpad_pmt(self, pay):
-        while pay[-1] == 255:
-            pay = pay[:-1]
-        return pay
+    ##    def _unpad_pmt(self, pay):
+    ##        while pay[-1] == 255:
+    ##            pay = pay[:-1]
+    ##        return pay
 
     def pmt2packets(self, pmt, program_number):
         """
@@ -135,7 +138,7 @@ class SixFix(Stream):
         return True
 
     def _pmt_precheck(self, pay, pid):
-        pay = self._unpad_pmt(pay)
+        pay = self._unpad(pay)
         pay = self._chk_payload(pay, pid)
         if not pay:
             return False
@@ -178,38 +181,6 @@ class SixFix(Stream):
         idx = 12 + proginfolen
         si_len = seclen - (9 + proginfolen)  #  ???
         return self.pmt2packets(pmt, program_number)
-
-    def _parse_program_streams(self, si_len, pay, idx, program_number):
-        """
-        parse the elementary streams
-        from a program
-        """
-        chunk_size = 5
-        end_idx = (idx + si_len) - 4
-        start = idx
-        while idx < end_idx:
-            pay, stream_type, pid, ei_len = self._parse_stream_type(pay, idx)
-            idx += chunk_size
-            idx += ei_len
-            self.maps.pid_prgm[pid] = program_number
-            self._set_scte35_pids(pid, stream_type)
-        streams = pay[start:end_idx]
-        return streams
-
-    def _parse_stream_type(self, pay, idx):
-        """
-        extract stream pid and type
-        """
-        npay = pay
-        stream_type = pay[idx]
-        el_pid = self._parse_pid(pay[idx + 1], pay[idx + 2])
-        #       if el_pid in self.con_pids:
-        if stream_type == 0x6:
-            stream_type = 0x86
-            npay = pay[:idx] + b"\x86" + pay[idx + 1 :]
-        ei_len = self._parse_length(pay[idx + 3], pay[idx + 4])
-        self._set_scte35_pids(el_pid, stream_type)
-        return npay, stream_type, el_pid, ei_len
 
 
 def sixfix(arg):
