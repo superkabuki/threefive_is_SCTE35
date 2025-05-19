@@ -467,7 +467,7 @@ class HlsParser:
         return f"{NSUB}{self.hls_pts}: {self.pts}"
 
     def _chk_cue_in(self, line, head):
-        print(line)
+       # print("\n",line,"\n")
         if line.startswith("#EXT-X-CUE-IN"):  # and self.cue_state == "CONT":
             self.cue_state = "IN"
             self.to_sidecar(self.pts, line)
@@ -498,7 +498,7 @@ class HlsParser:
             return ""
         self.last_cue = cue.encode()
         if line and "CONT" not in line:
-            head = f"\n{iso8601()}{REV}{line}{NORM}{self.pts_stuff()} {REV} Splice Point {NORM}"
+            head = f"\n{iso8601()}{REV}{line}{NORM}\n{REV} Splice Point {NORM}{self.pts_stuff()} "
             line = self._chk_cue_in(line, head)
             line = self._chk_cue_out(line, head)
 
@@ -741,20 +741,15 @@ class HlsParser:
             gonzo = f"{REV} Break\033[;107m\033[44m {round(self.break_timer,3)}"
             if self.break_duration:
                 gonzo = f"{gonzo}/{round(self.break_duration,3)}"
-            #   if self.break_timer > self.break_duration:
-            # print("AUTO IN HERE")
-            # self.auto_cuein("## AUTO IN")
+##                if self.break_timer > self.break_duration:
+##                    print("AUTO IN HERE")
+##                    self.auto_cuein("## AUTO IN")
         else:
-            gonzo = f' {REV}Media \033[;107m\033[44m {self.media[-1].rsplit("/", 1)[1].split("?", 1)[0].strip()}'
+            gonzo = f'{REV}Media \033[;107m\033[44m {self.media[-1].rsplit("/", 1)[1].split("?", 1)[0].strip()}'
 
         reblue(
             f"{iso8601()}{REV} {self.hls_pts}\033[;107m\033[44m {self.pts:.6f}\033[;107m\033[44m {gonzo}"
         )
-
-    ##            end="\r",
-    ##            file=sys.stderr,
-    ##            flush=True,
-    ##        )
 
     def ts_pts(self, seg):
         """
@@ -992,7 +987,6 @@ class HlsParser:
         pull m3u8 and parse it.
         """
         print(f"{REV} Parsing Started {NORM} {iso8601()}\n")
-
         print(f"    {REV} Rendition Selected {NORM} {self.rendition}\n ")
         self.base_uri = self.rendition.rsplit("/", 1)[0]
         self.sliding_window = SlidingWindow()
@@ -1001,36 +995,34 @@ class HlsParser:
         with open(self.flat, "a", encoding="utf-8") as flat:
             flat.write("#EXT-X-ENDLIST\n")
 
-    def pick_one(self, lines, uri):
+    def pick_one(self, arg, uri):
         """
         pick_one  if lines come from a master.m3u8
         find the first rendition and make a uri or return uri.
         pick the first audio  only rendition or the last rendition found.
         audio  only renditions are much smaller and parse much faster.
         """
-        for line in lines:
-            if self.rendition:
+        while arg:
+            line = arg.readline()
+            if not line:
                 break
             if line.startswith(b"#EXT-X-STREAM-INF"):
-                idx = lines.index(line) + 1
-                nline = lines[idx].decode("utf-8").strip().strip("\n")
-                base_url = uri.rsplit("/", 1)[0]
-                uri = base_url + "/" + nline
-                uri.replace("\n", "")
-                print(f"{REV} Rendition Found {NORM} {uri} ")
-                if b"RESOLUTION" not in line:
-                    self.rendition = uri
-                    return 
-                else:
-                    self.rendition = uri
+                nline = arg.readline()
+                self.base_url = uri.rsplit("/", 1)[0]
+                nuri = self.base_url + "/" + nline.decode("utf-8")
+                nuri.replace("\n", "")
+                print(f"{REV} Rendition Found {NORM} {nuri} ")
+                self.rendition =nuri
+                return
+        if not self.rendition:
+            self.rendition=uri
 
     def find_renditions(self, uri):
         """
         find_renditions search master.m3u8 for playable renditions.
         """
         with reader(uri) as arg:
-            lines = arg.readlines()
-            self.pick_one(lines, uri)
+            self.pick_one(arg,uri)
 
 
 def _chk_help():
