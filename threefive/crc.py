@@ -6,9 +6,10 @@ from .crctable import CRCTABLE
 
 INIT_VALUE = 0xFFFFFFFF
 GONZO = INIT_VALUE - 0xFF
-EIGHT=8
-TWENTYFOUR=24
-TWOFIFTYFIVE=255
+EIGHT = 8
+TWENTYFOUR = 24
+TWOFIFTYFIVE = 255
+
 
 def crc32(data):
     """
@@ -16,7 +17,9 @@ def crc32(data):
     """
     crc = INIT_VALUE
     for bite in data:
-        crc = CRCTABLE[bite ^ ((crc >> TWENTYFOUR) & TWOFIFTYFIVE)] ^ ((crc << EIGHT) & (GONZO))
+        crc = CRCTABLE[bite ^ ((crc >> TWENTYFOUR) & TWOFIFTYFIVE)] ^ (
+            (crc << EIGHT) & (GONZO)
+        )
     return crc
 
 
