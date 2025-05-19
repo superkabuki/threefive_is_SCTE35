@@ -6,7 +6,6 @@
 
  \* _No asterisks, no exceptions._
 
-# pypi.org rates threefive in the Top 2% of All Python3 Packages. Ever.
 
 
 # `Heads up` 
