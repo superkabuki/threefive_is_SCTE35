@@ -38,10 +38,9 @@ that didn't work at all.
 
 
 ### [Sassy, the new SCTE-35 as a service, Decode SCTE-35 in your browser](sassy.md)      
-* returns decoded SCTE-35 as JSON
-* https://iodisco.com/cb/sassy?scte35=0xfc302f00019164e7980000000506fe849f2fa80019021743554549ffffffff7fbf010866756d6174696361100100ae05fd2e
-* open that URL in a browser
-* curl works too.
+* If you just want to decode SCTE-35 data into JSON, try Sassy.
+* If you just want to encode JSON into SCTE-35, Try Sassy
+* If you just want to decode and encode SCTE-35 in your browser, Try Sassy.
 * If you can make an https request, you can decode SCTE-35 with sassy, no installation required.
 * powered by nstuff
 
