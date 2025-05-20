@@ -2,7 +2,7 @@
 ##### _SCTE-35 As a Service and Stuff_
 
 ## If you just want to decode SCTE-35 data into JSON, try Sassy.
-
+## If you just want to encode JSON into SCTE-35, Try Sassy
 ## Sassy accepts both POST and GET requests and even works in your browser..
 
 * [POST](#post)
