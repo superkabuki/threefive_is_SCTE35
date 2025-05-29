@@ -605,6 +605,7 @@ ___
 
 * The threefive cli has long been a Multicast Receiver( client )
 * The cli now comes with a builtin Multicast Sender( server).
+ * __Start the Receiver first__
 * It's optimized for MPEGTS (1316 byte Datagrams) but you can send any video or file.
 * The defaults will work in most situations, you don't even have to set the address.
 * threefive cli also supports UDP Unicast Streaming.
