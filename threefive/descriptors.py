@@ -406,18 +406,19 @@ class SegmentationDescriptor(SpliceDescriptor):
     def _encode_segmentation(self, nbin):
         if self.segmentation_duration_flag:
             nbin.add_int(self.as_ticks(self.segmentation_duration), 40)
-        self._chk_var(int, nbin.add_int, "segmentation_upid_type", 8)
-        self._chk_var(int, nbin.add_int, "segmentation_upid_length", 8)
         upid_type = self.segmentation_upid_type
-        if upid_type not in upid_map:
-            upid_type = 0xFD
-            red("Unknown upid type , setting to 0xFD")
-        the_upid = upid_map[upid_type][1](
-            None, upid_type, self.segmentation_upid_length
-        )
-        the_upid.encode(nbin, self.segmentation_upid)
-        self._chk_var(int, nbin.add_int, "segmentation_type_id", 8)
-        self._encode_segments(nbin)
+        if upid_type:
+            self._chk_var(int, nbin.add_int, "segmentation_upid_type", 8)
+            self._chk_var(int, nbin.add_int, "segmentation_upid_length", 8)
+            if upid_type not in upid_map:
+                upid_type = 0xFD
+                red("Unknown upid type , setting to 0xFD")
+            the_upid = upid_map[upid_type][1](
+                None, upid_type, self.segmentation_upid_length
+            )
+            the_upid.encode(nbin, self.segmentation_upid)
+            self._chk_var(int, nbin.add_int, "segmentation_type_id", 8)
+            self._encode_segments(nbin)
 
     def _encode_segments(self, nbin):
         self._chk_var(int, nbin.add_int, "segment_num", 8)
