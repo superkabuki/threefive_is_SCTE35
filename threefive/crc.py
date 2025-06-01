@@ -4,10 +4,10 @@ crc.py  crc32 function for encoding.
 
 from .crctable import CRCTABLE
 
-INIT_VALUE =      0xFFFFFFFF
-GONZO =              0xFFFFFF00
-EIGHT =                 0x08
-TWENTYFOUR =  0x18
+INIT_VALUE = 0xFFFFFFFF
+GONZO =  0xFFFFFF00
+EIGHT = 0x08
+TWENTYFOUR = 0x18
 TWOFIFTYFIVE = 0xFF
 
 
