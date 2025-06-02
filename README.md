@@ -6,7 +6,17 @@
 
  \* _No asterisks, no exceptions._
 
+--- 
+* Installs today: __171__
 
+* Installs in the last week: __2,947__
+
+* Installs in the last month: __13,624__
+
+* Total Installs: __1,018,835__
+
+* Data source: __pypi.org__
+---
 
 # `Heads up` 
 <pre>I called this repo threefive3 in an attempt to avoid confusion with my old threefive repo,
@@ -18,10 +28,7 @@ that didn't work at all.
  </pre>
 
 # v3.0.49 is the latest 
-* Installs today: __171__
-* Installs in the last week: __2,947__
-* Installs in the last month: __13,624__
-* Installs in the last five years: __1,018,835__
+---
 
 * __Decode SCTE-35__ in __TEN__ formats: __MPEGTS, Base64, Bytes, Dicts, Hex,HLS, Integers,JSON,XML and XML+Binary__.
 * __Encode SCTE-35__ in __EIGHT__ formats: __MPEGTS, Base64, Bytes, Hex, Int, JSON,XML, and Xml+binary.__
