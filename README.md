@@ -1,19 +1,20 @@
  [__Install__](#install) |[__SCTE-35 Cli__](#the-cli-tool) | [__SCTE-35 HLS__](https://github.com/superkabuki/threefive/blob/main/hls.md) | [__Cue__ Class](https://github.com/superkabuki/threefive/blob/main/cue.md) | [__Stream__ Class](https://github.com/superkabuki/threefive/blob/main/stream.md) | [__Online SCTE-35 Parser__](https://iodisco.com/scte35) | [__Encode SCTE-35__](https://github.com/superkabuki/threefive/blob/main/encode.md) | [__SCTE-35 Examples__](https://github.com/superkabuki/threefive/tree/main/examples)
  | [__SCTE-35 XML__ ](https://github.com/superkabuki/SCTE-35/blob/main/xml.md) and [More __XML__](node.md) | [__SuperKabuki SCTE-35 MPEGTS Packet Injection__](inject.md) | [__SCTE-35 As a Service__](sassy.md)
 
-
-# threefive is the most advanced SCTE-35 tool available* 
+# <samp>threefive is the most advanced SCTE-35 tool available*</samp> 
 
  \* _No asterisks, no exceptions._
 
 --- 
-* Installs today: __171__
+## <samp>all the cool kids use threefive for SCTE-35</samp>
 
-* Installs in the last week: __2,947__
+* <samp>Installs today: __171__</samp>
 
-* Installs in the last month: __13,624__
+* <samp>Installs in the last week: __2,947__</samp>
 
-* Total Installs: __1,018,835__
+* <samp>Installs in the last month: __13,624__</samp>
+
+* <samp>Total Installs: __1,018,835__ </samp>
 
 * Data source: __pypi.org__
 ---
@@ -26,7 +27,7 @@ that didn't work at all.
  
  Adrian
  </pre>
-
+<samp>
 # v3.0.49 is the latest 
 ---
 
@@ -36,13 +37,13 @@ that didn't work at all.
 * __Automatic AES decryption__ for HLS.
 * Built-in __Multicast Sender and Receiver__ 
 * [The __SuperKabuki SCTE-35 MPEGTS Packet Injection Engine__](inject.md) was added to __threefive__ v3.0.39
+</samp>
 
 ---
+
+
 ### [Sassy, the new SCTE-35 as a service, Decode SCTE-35 in your browser](sassy.md)      
 
-* If you just want to decode SCTE-35 data into JSON, try [__Sassy__](sassy.md) .
-* If you just want to encode JSON into SCTE-35, Try [__Sassy__](sassy.md) .
-* If you just want to decode and encode SCTE-35 in your browser, Try [__Sassy__](sassy.md). 
 * If you can make an https request, you can decode SCTE-35 with [__Sassy__](sassy.md) , no installation required.
 * powered by nstuff
 
@@ -119,19 +120,6 @@ o-splicing.isml/.mpd').read()    # use reader to pull the mpd over a network.
     "descriptors": []
 }
 ```
-# Latest release is v3.0.49
-
-* cyclomatic complexity __2.01__ ,__That's a kickass score.__
-
-* pylint score is __9.62/10__, _this needs a liitle work_.
-
-> Stay up to date, only the latest release is supported.
-> 
-
-
-
- 
-* Xml is back and better than ever. __The new Ultra Xml Parser Supreme__ replaces the Super Xml Parser.
 
 #### [__threefive runs Four Times Faster on pypy3__](https://pypy.org/) | 
 
@@ -631,6 +619,20 @@ a@fu:~$
 ```
 
 ### [iodisco.com/scte35](https://iodisco.com/scte35)
+ <table>
+  <tr>
+    <th>Month</th>
+    <th>Savings</th>
+  </tr>
+  <tr>
+    <td>January</td>
+    <td>$100</td>
+  </tr>
+</table> 
+
+ <svg width="100" height="100">
+  <circle cx="50" cy="50" r="40" stroke="green" stroke-width="4" fill="yellow" />
+</svg> 
 
 
 ___
