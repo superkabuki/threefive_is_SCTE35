@@ -128,8 +128,6 @@ class SCTE35Base:
         kv_clean recursively removes items
         from a dict if the value is None.
         """
-        return vars(self)
-
         def b2l(val):
             if isinstance(val, SCTE35Base):
                 val.kv_clean()
