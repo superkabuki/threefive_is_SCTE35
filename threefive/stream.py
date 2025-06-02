@@ -10,7 +10,6 @@ from .stuff import print2, blue, ERR, clean
 from .cue import Cue
 from .packetdata import PacketData
 from .streamtypes import streamtype_map
-from .iframes import IFramer
 
 
 def no_op(cue):
@@ -156,11 +155,9 @@ class Stream:
         self.show_null = show_null
         self.start = {}
         self.info = False
-        # self.the_program = None
         self.the_scte35_pids = []
         self.pids = Pids()
         self.maps = Maps()
-        # self.iframer = IFramer(shush=True)
         self.pmt_payloads = {}
         self.pmt_count = 0
 
@@ -380,7 +377,6 @@ class Stream:
         return False
 
     def _unpad_afc(self, pkt):
-        #    if self._afc_flag(pkt[3]):
         return pkt[:4] + self._unpad(pkt[4:])
 
     def _unpad(self, bites=b""):
@@ -473,6 +469,7 @@ class Stream:
             self._pmt_pid(pay, pid)
             return
         if not self._same_as_last(pay, pid):
+
             self._pat_pid(pay, pid)
             self._sdt_pid(pay, pid)
 
