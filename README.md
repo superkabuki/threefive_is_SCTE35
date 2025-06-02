@@ -6,7 +6,7 @@
  \* _No asterisks, no exceptions._
 
 --- 
-## <samp>all the cool kids use threefive for SCTE-35</samp>
+## <samp>latest release __v3.0.51__</samp>
 
 * <samp>Installs today: __171__</samp>
 
