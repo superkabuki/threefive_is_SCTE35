@@ -18,16 +18,10 @@ that didn't work at all.
  </pre>
 
 # v3.0.49 is the latest 
-
-### `Q.` What is SCTE-35?
-
-### `A.` SCTE-35 is just encoded binary data. The SCTE-35 data is used to signal when to splice in commercials and such. The decoded variables in SCTE-35 are used determine the type and length of commercials. As with most things related to streaming video, it's way too complicated, but threefive makes it much easier.
-
-
-<br>
-
-
-
+* Installs today: __171__
+* Installs in the last week: __2,947__
+* Installs in the last month: __13,624__
+* Installs in the last five years: __1,018,835__
 
 * __Decode SCTE-35__ in __TEN__ formats: __MPEGTS, Base64, Bytes, Dicts, Hex,HLS, Integers,JSON,XML and XML+Binary__.
 * __Encode SCTE-35__ in __EIGHT__ formats: __MPEGTS, Base64, Bytes, Hex, Int, JSON,XML, and Xml+binary.__
