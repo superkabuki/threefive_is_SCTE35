@@ -8,13 +8,13 @@
 --- 
 ## <samp>latest release __v3.0.51__</samp>
 
-* <samp>Installs today: __171__</samp>
+* <samp>Installs today: __104__ </samp>
 
-* <samp>Installs in the last week: __2,947__</samp>
+* <samp>Installs in the last week: __1,526__ </samp>
 
-* <samp>Installs in the last month: __13,624__</samp>
+* <samp>Installs in the last month: __13,323__ </samp>
 
-* <samp>Total Installs: __1,018,835__ </samp>
+* <samp>Total Installs: __1,019,016__ </samp>
 
 * Data source: __pypi.org__
 ---
