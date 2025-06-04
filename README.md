@@ -630,6 +630,87 @@ a@fu:~$
   </tr>
 </table> 
 
+
+<details><summary>Base64 SCTE-35</summary>
+ 
+ 
+* The Cli tool can decode Base64 SCTE-35 on the command line.
+
+ 
+```smalltalk
+	a@fu:~$ threefive '/DAgAAAAAAAAAP/wDwUAAAABf//+AA27oAABAAAAANwB3tE='
+```
+
+* Using the library Base64 SCTE-35 is decoded by the Cue class.
+
+```py3
+	
+	from threefive import Cue
+	
+	data='/DAgAAAAAAAAAP/wDwUAAAABf//+AA27oAABAAAAANwB3tE='   
+	
+	cue=Cue(data)
+	
+	cue.show()
+	
+```
+
+</details>
+
+<details><summary>Hex SCTE-35</summary>
+
+	
+* The Cli tool 
+```js
+	a@fu:~$ threefive 0xfc302000000000000000fff00f05000000017ffffe000dbba0000100000000dc01ded1
+
+```
+* Convert from Hex to bas64,bytes,json,Int, xml or xmlbin
+```js
+	a@fu:~$ threefive 0xfc302000000000000000fff00f05000000017ffffe000dbba0000100000000dc01ded1 base64
+```
+```js
+	a@fu:~$ threefive 0xfc302000000000000000fff00f05000000017ffffe000dbba0000100000000dc01ded1 xml
+```
+* Convert to Hex
+```js
+a@fu:~$ threefive '/DAgAAAAAAAAAP/wDwUAAAABf//+AA27oAABAAAAANwB3tE=' hex
+```
+
+* lib
+```py3
+	
+from threefive import Cue
+	
+data='0xfc302000000000000000fff00f05000000017ffffe000dbba0000100000000dc01ded1''   
+	
+cue=Cue(data)
+	
+cue.show()
+	
+```
+
+* Convert from Hex to bas64,bytes,json,Int, xml or xmlbin
+
+```py3
+from threefive import Cue	
+data='0xfc302000000000000000fff00f05000000017ffffe000dbba0000100000000dc01ded1''   
+cue=Cue(data)
+
+cue.base64() 	# base64
+
+cue.bytes()  	# or bytes
+
+cue.show()  	# or json
+
+cue.int()  		# or int
+
+cue.xml()  		# or xml
+
+cue.xmlbin() 	# or xmlbin
+```
+</details>
+
  <svg width="100" height="100">
   <circle cx="50" cy="50" r="40" stroke="green" stroke-width="4" fill="yellow" />
 </svg> 
