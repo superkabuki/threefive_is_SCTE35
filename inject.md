@@ -32,7 +32,7 @@ optional arguments:
 a@fu:~/threefive$ touch sidecar.txt       
 
 
-@fu:~/threefive$ threefive inject --input ~/mpegts2/mpegts/nmax.ts  --scte35_pid 777 --output injected-nmax.ts  --time_signal
+@fu:~/threefive$ threefive inject  -t -i ~/mpegts2/mpegts/nmax.ts  -p 777 -o injected-nmax.ts
 
 Output File:	injected-nmax.ts
 
