@@ -65,13 +65,15 @@ class Cue(SCTE35Base):
         self.info_section = SpliceInfoSection()
         self.bites = None
         if data:
-            self.bites = self._mk_bits(data)
+            self._mk_bits(data)
         self.packet_data = packet_data
         self.dash_data = None
         self.decode()
 
     def __repr__(self):
         return str(self.__dict__)
+
+# decode stuff
 
     def decode(self):
         """
@@ -131,11 +133,7 @@ class Cue(SCTE35Base):
         """
         return [d.get() for d in self.descriptors]
 
-    def bytes(self):
-        """
-        get_bytes returns Cue.bites
-        """
-        return self.bites
+
 
     def fix_bad_b64(self, data):
         """
@@ -145,71 +143,82 @@ class Cue(SCTE35Base):
             data = data + equalsign
         return data
 
+# mk_bits stuff
+
     def _int_bits(self, data):
         """
         _int_bits convert a SCTE-35 Cue from integer to bytes.
         """
         length = data.bit_length() >> three
         bites = int.to_bytes(data, length, byteorder="big")
-        return bites
+        self.bites = bites
 
     def _hex_bits(self, data):
         """
         _hex_bits convert a SCTE-35 Cue from hex to bytes.
         """
         i = int(data, sixteen)
-        return self._int_bits(i)
+        self._int_bits(i)
 
     def _b64_bits(self, data):
         """
         _b64_bits decode base64 to bytes
         """
-        try:
-            return b64decode(self.fix_bad_b64(data))
-        except ERR:
-            return red("Bad Base64")
+        self.bites = b64decode(self.fix_bad_b64(data))
 
-    def _str_bits(self, data):
+    def _xj_bits(self, data):
         if isxml(data) or isjson(data):
             self.load(data)
-            return self.bites
-        if ishex(data):
-            return self._hex_bits(clean(data))
-        data = data.strip()
+
+    def _digit_bits(self, data):
         if data.isdigit():
-            return self._int_bits(int(data))
-        return self._b64_bits(data)
+            data = int(data)
+            self._int_bits(data)
+
+    def _xjd_bits(self, data):
+        """
+        _xjd_bits auto-detect xml, json, and digits
+        in bytes or strings.
+        """
+        if isinstance(data, (str, bytes)):
+            data = data.strip()
+            self._xj_bits(data)
+            self._digit_bits(data)
+
+    def _str_bits(self, data):
+        if ishex(data):
+            self._hex_bits(clean(data))
+        else:
+            self._b64_bits(data)
 
     def _pkt_bits(self, data):
         """
         _pkt_bits parse raw mpegts SCTE-35 packet
         """
         if data.startswith(b"G"):
-            return data.split(b"\x00\x00\x01\xfc", one)[minusone]
+            data = data.split(b"\x00\x00\x01\xfc", one)[minusone]
         return data
 
     def _byte_bits(self, data):
-        if isxml(data) or isjson(data):
-            self.load(data)
-        else:
-            data = self._pkt_bits(data)
-            self.bites = self.idxsplit(data, b"\xfc")
-        return self.bites
+        data = self._pkt_bits(data)
+        self.bites = self.idxsplit(data, b"\xfc")
 
     def _node_bits(self, data):
         data = data.mk()
         self._from_xml(data)
-        return self.bites
 
     def _dict_bits(self, data):
         self.load(data)
-        return self.bites
 
     def _mk_bits(self, data):
         """
         cue._mk_bits converts
         several SCTE-35 formats into bytes.
         """
+        self._xjd_bits(data)
+        if self.bites:
+            return
+
         type_map = {
             Node: self._node_bits,
             dict: self._dict_bits,
@@ -217,9 +226,12 @@ class Cue(SCTE35Base):
             bytes: self._byte_bits,
             int: self._int_bits,
         }
+
         td = type(data)
         if td in type_map.keys():
-            return type_map[td](data)
+            type_map[td](data)
+
+# mk stuff
 
     def _mk_descriptors(self, bites):
         """
@@ -262,7 +274,7 @@ class Cue(SCTE35Base):
         del self.command.bites
         return bites[iscl:]
 
-    # encode related
+# encode stuff
 
     def _assemble(self):
         dscptr_bites = self._unloop_descriptors()
@@ -293,24 +305,12 @@ class Cue(SCTE35Base):
             return b64encode(self.bites).decode()
         return False
 
-    def encode(self):
-        """
-        encode is an alias for base64
-        """
-        return self.base64()
 
-    def int(self):
+    def bytes(self):
         """
-        int returns self.bites as an int.
+        get_bytes returns Cue.bites
         """
-        self.encode()
-        return int.from_bytes(self.bites, byteorder="big")
-
-    def encode_as_int(self):
-        """
-        encode_as_int backward compatibility
-        """
-        return self.int()
+        return self.bites
 
     def hex(self):
         """
@@ -319,11 +319,30 @@ class Cue(SCTE35Base):
         """
         return hex(self.int())
 
+    def int(self):
+        """
+        int returns self.bites as an int.
+        """
+        self.encode()
+        return int.from_bytes(self.bites, byteorder="big")
+
+    def encode(self):
+        """
+        encode is an alias for base64
+        """
+        return self.base64()
+
     def encode_as_hex(self):
         """
         encode_as_hex backward compatibility
         """
         return self.hex()
+
+    def encode_as_int(self):
+        """
+        encode_as_int backward compatibility
+        """
+        return self.int()
 
     def _encode_crc(self):
         """
@@ -348,6 +367,8 @@ class Cue(SCTE35Base):
             all_bites.add_int(dsptr.descriptor_length, eight)
             all_bites.add_bites(chunk)
         return all_bites.bites
+
+# load stuff
 
     def _load_info_section(self, gonzo):
         """
@@ -421,6 +442,7 @@ class Cue(SCTE35Base):
         self.encode()
         return self.bites
 
+## xml stuff
     def _from_xml(self, gonzo):
         """
         _from_xml converts xml to data that can
@@ -466,7 +488,7 @@ class Cue(SCTE35Base):
         cmd = self.command.xml(ns=ns)
         sis.addchild(cmd)
         sis = self._xml_mk_descriptor(sis, ns)
-        return sis  # xml retuns a Node instance. now
+        return sis  # xml retuns a Node instance.
 
     def xmlbin(self, ns="scte35"):
         """
