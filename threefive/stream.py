@@ -6,7 +6,7 @@ import sys
 
 from functools import partial
 from .new_reader import reader
-from .stuff import print2, blue, ERR, clean
+from .stuff import print2, blue, clean, ERR
 from .cue import Cue
 from .packetdata import PacketData
 from .streamtypes import streamtype_map
@@ -218,7 +218,7 @@ class Stream:
     def _split_by_idx(pay, marker):
         try:
             return pay[pay.index(marker) :]
-        except:
+        except ERR:
             return False
 
     def _find_start(self):
@@ -353,8 +353,8 @@ class Stream:
         """
         prgm = 1
         if pid in self.maps.pid_prgm:
-            return self.maps.pid_prgm[pid]
-        return False
+            prgm = self.maps.pid_prgm[pid]
+        return prgm
 
     def pid2pts(self, pid):
         """
@@ -443,12 +443,13 @@ class Stream:
         return pkt[head_size:]
 
     def _pmt_pid(self, pay, pid):
-        self.pmt_count += 1
-        if pay in self.pmt_payloads:
-            if self.pmt_count > len(self.pmt_payloads) << 2:
-                return
-        self.pmt_payloads[self.pid2prgm(pid)] = pay
-        self._parse_pmt(pay, pid)
+        if pid in self.pids.pmt:
+            self.pmt_count += 1
+            if pay in self.pmt_payloads:
+                if self.pmt_count > len(self.pmt_payloads) << 2:
+                    return
+            self.pmt_payloads[self.pid2prgm(pid)] = pay
+            self._parse_pmt(pay, pid)
 
     def _pat_pid(self, pay, pid):
         if pid == self.pids.PAT_PID:
@@ -465,11 +466,8 @@ class Stream:
         based on pid of the pkt
         """
         pay = self._parse_payload(pkt)
-        if pid in self.pids.pmt:
-            self._pmt_pid(pay, pid)
-            return
         if not self._same_as_last(pay, pid):
-
+            self._pmt_pid(pay, pid)
             self._pat_pid(pay, pid)
             self._sdt_pid(pay, pid)
 
@@ -522,7 +520,7 @@ class Stream:
         if pid in self.maps.last:
             last = self.maps.last[pid]
         self.maps.last[pid] = pay
-        return last
+        return last == pay
 
     def _section_incomplete(self, pay, pid, seclen):
         # + 3 for the bytes before section starts
@@ -531,6 +529,7 @@ class Stream:
         if (seclen + 3) > len(pay):
             self.maps.partial[pid] = pay
             return True
+        return False
 
     def _parse_cue(self, pay, pid):
         packet_data = None
@@ -572,6 +571,7 @@ class Stream:
         """
         parse a threefive cue from one or more packets
         """
+        self._parse_pts(pkt, pid)  # Check ffmpeg style packets
         pay = self._mk_scte35_payload(pkt, pid)
         if not pay:
             return False
