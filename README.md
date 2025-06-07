@@ -8,32 +8,17 @@
 
 --- 
 
-## <samp>pypi.org ranks threefive in the top 2% of all python3 packages. __Ever__.</samp>
-
-
-## <samp>latest release __v3.0.51__</samp>
-
-* <samp>Installs today: __314__ </samp>
-
-* <samp>Installs in the last week: __1,790__ </samp>
-
-* <samp>Installs in the last month: __13,555__ </samp>
-
-* <samp>Total Installs: __1,020,454__ </samp>
-
-* Data source: __pypi.org__
----
-
 # `Heads up` 
 <pre>I called this repo threefive3 in an attempt to avoid confusion with my old threefive repo,
 that didn't work at all.
  
  Going forward, <b>this will be threefive and will be released as such.</b>
- 
+
  Adrian
  </pre>
 <samp>
-# v3.0.49 is the latest 
+	
+# v3.0.51 is the latest 
 ---
 
 * __Decode SCTE-35__ in __TEN__ formats: __MPEGTS, Base64, Bytes, Dicts, Hex,HLS, Integers,JSON,XML and XML+Binary__.
@@ -44,7 +29,8 @@ that didn't work at all.
 * [The __SuperKabuki SCTE-35 MPEGTS Packet Injection Engine__](inject.md) was added to __threefive__ v3.0.39
 </samp>
 
----
+![1e56f4a4ef52659528821f26071239fb](https://github.com/user-attachments/assets/d0377d75-c35a-48a9-97f4-c8797abc33dd)
+
 
 
 ### [Sassy, the new SCTE-35 as a service, Decode SCTE-35 in your browser](sassy.md)      
@@ -66,6 +52,7 @@ a@fu:~/build5/scte35/scte35$ pypy3
 ### Checkout the Super Cool SCTE-35 [__Examples__](https://github.com/superkabuki/threefive/tree/main/examples)
 <br>
 
+![jordache jeans](https://github.com/user-attachments/assets/3698f277-12fd-43fc-97d6-55f8e5c22ab8)
 
 ----
 
@@ -161,6 +148,9 @@ a@fu:~/build7/threefive$ pypy3
 * [Class Structure](https://github.com/superkabuki/threefive/blob/main/classes.md)
 * [Cue Class](https://github.com/superkabuki/threefive/blob/main/cue.md)  Cue is the main SCTE-35 class to use. 
 * [Stream Class](https://github.com/superkabuki/threefive/blob/main/stream.md)  The Stream class handles MPEGTS SCTE-35 streams local, Http(s), UDP, and Multicast.
+
+![l_5d826369de696a54cee72816](https://github.com/user-attachments/assets/408268a1-ec4c-4f1a-89af-01134dfe2c50)
+
 ___
 
 ### `| more`
@@ -190,6 +180,8 @@ make install
 ___
 
 ### `Using the library`
+![Gloria-vanderbilt-1](https://github.com/user-attachments/assets/f30539e1-9437-48a1-871b-80b54f395b63)
+
 * Let me show you how easy threefive is to use.
 * well start off reading SCTE-35 xml from a file
 ```py3
@@ -364,6 +356,8 @@ Type "help", "copyright", "credits" or "license" for more information.
     "avails_expected": 5
 }
 ```
+![08-denim](https://github.com/user-attachments/assets/560d7846-3f5b-4d5d-8ca9-16bc31f0f62d)
+
 * re-encode to base64 with the new duration
 ```py3
 >>>> cue.base64()
@@ -485,6 +479,7 @@ threefive udp://@235.2.5.35:3535
 threefive '/DAWAAAAAAAAAP/wBQb+ztd7owAAdIbbmw=='
 
 ```
+![8b07384dffca7cc2afc33589a7921429](https://github.com/user-attachments/assets/cd6db63e-13c0-4452-9fbf-1068a8073389)
 
 
 | Input Type |     Cli Example                                                                                             |
@@ -537,6 +532,8 @@ ___
 threefive iframes https://example.com/video.ts
 ```
 ___
+![08-denim](https://github.com/user-attachments/assets/fef4803e-7224-4aaa-a1a6-cca9c25566ac)
+
 #### `packets`   
 * Print raw SCTE-35 packets from multicast mpegts video
 
@@ -593,6 +590,7 @@ ___
  threefive help
 ```
 ___
+![jordache+(1+of+6)](https://github.com/user-attachments/assets/014ddf2a-dab3-4da1-83a4-9f165d21fa9c)
 
 
 ### Stream Multicast with the threefive cli, it's easy.
@@ -694,6 +692,7 @@ cue=Cue(data)
 cue.show()
 	
 ```
+![Jordache-1](https://github.com/user-attachments/assets/b2732dd7-d161-4af1-b832-8abff2aba28b)
 
 * Convert from Hex to bas64,bytes,json,Int, xml or xmlbin
 
