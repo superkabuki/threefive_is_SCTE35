@@ -3,18 +3,23 @@
 
 # <samp>threefive is the most advanced SCTE-35 tool available*</samp> 
 
- \* _No asterisks, no exceptions._
+
+ \* _No asterisks._
 
 --- 
+
+## <samp>pypi.org ranks threefive in the top 2% of all python3 packages. __Ever__.</samp>
+
+
 ## <samp>latest release __v3.0.51__</samp>
 
-* <samp>Installs today: __104__ </samp>
+* <samp>Installs today: __286__ </samp>
 
-* <samp>Installs in the last week: __1,526__ </samp>
+* <samp>Installs in the last week: __1,762__ </samp>
 
-* <samp>Installs in the last month: __13,323__ </samp>
+* <samp>Installs in the last month: __13,527__ </samp>
 
-* <samp>Total Installs: __1,019,016__ </samp>
+* <samp>Total Installs: __1,020,426__ </samp>
 
 * Data source: __pypi.org__
 ---
