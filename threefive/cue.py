@@ -73,7 +73,7 @@ class Cue(SCTE35Base):
     def __repr__(self):
         return str(self.__dict__)
 
-# decode stuff
+    # decode stuff
 
     def decode(self):
         """
@@ -133,8 +133,6 @@ class Cue(SCTE35Base):
         """
         return [d.get() for d in self.descriptors]
 
-
-
     def fix_bad_b64(self, data):
         """
         fix_bad_b64 fixes bad padding on Base64
@@ -143,7 +141,7 @@ class Cue(SCTE35Base):
             data = data + equalsign
         return data
 
-# mk_bits stuff
+    # mk_bits stuff
 
     def _int_bits(self, data):
         """
@@ -231,7 +229,7 @@ class Cue(SCTE35Base):
         if td in type_map.keys():
             type_map[td](data)
 
-# mk stuff
+    # mk stuff
 
     def _mk_descriptors(self, bites):
         """
@@ -274,7 +272,7 @@ class Cue(SCTE35Base):
         del self.command.bites
         return bites[iscl:]
 
-# encode stuff
+    # encode stuff
 
     def _assemble(self):
         dscptr_bites = self._unloop_descriptors()
@@ -304,7 +302,6 @@ class Cue(SCTE35Base):
             self._encode_crc()
             return b64encode(self.bites).decode()
         return False
-
 
     def bytes(self):
         """
@@ -368,7 +365,7 @@ class Cue(SCTE35Base):
             all_bites.add_bites(chunk)
         return all_bites.bites
 
-# load stuff
+    # load stuff
 
     def _load_info_section(self, gonzo):
         """
@@ -442,7 +439,7 @@ class Cue(SCTE35Base):
         self.encode()
         return self.bites
 
-## xml stuff
+    ## xml stuff
     def _from_xml(self, gonzo):
         """
         _from_xml converts xml to data that can
