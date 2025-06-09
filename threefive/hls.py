@@ -467,7 +467,7 @@ class HlsParser:
         return f"{NSUB}{self.hls_pts}: {self.pts}"
 
     def _chk_cue_in(self, line, head):
-       # print("\n",line,"\n")
+        # print("\n",line,"\n")
         if line.startswith("#EXT-X-CUE-IN"):  # and self.cue_state == "CONT":
             self.cue_state = "IN"
             self.to_sidecar(self.pts, line)
@@ -741,9 +741,9 @@ class HlsParser:
             gonzo = f"{REV} Break\033[;107m\033[44m {round(self.break_timer,3)}"
             if self.break_duration:
                 gonzo = f"{gonzo}/{round(self.break_duration,3)}"
-##                if self.break_timer > self.break_duration:
-##                    print("AUTO IN HERE")
-##                    self.auto_cuein("## AUTO IN")
+        ##                if self.break_timer > self.break_duration:
+        ##                    print("AUTO IN HERE")
+        ##                    self.auto_cuein("## AUTO IN")
         else:
             gonzo = f'{REV}Media \033[;107m\033[44m {self.media[-1].rsplit("/", 1)[1].split("?", 1)[0].strip()}'
 
@@ -1012,17 +1012,17 @@ class HlsParser:
                 nuri = self.base_url + "/" + nline.decode("utf-8")
                 nuri.replace("\n", "")
                 print(f"{REV} Rendition Found {NORM} {nuri} ")
-                self.rendition =nuri
+                self.rendition = nuri
                 return
         if not self.rendition:
-            self.rendition=uri
+            self.rendition = uri
 
     def find_renditions(self, uri):
         """
         find_renditions search master.m3u8 for playable renditions.
         """
         with reader(uri) as arg:
-            self.pick_one(arg,uri)
+            self.pick_one(arg, uri)
 
 
 def _chk_help():
