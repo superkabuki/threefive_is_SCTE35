@@ -7,6 +7,7 @@
  \* _No asterisks._
 
 --- 
+# v3.0.53 is the latest 
 
 # `Heads up` 
 <pre>I called this repo threefive3 in an attempt to avoid confusion with my old threefive repo,
@@ -18,7 +19,6 @@ that didn't work at all.
  </pre>
 <samp>
 	
-# v3.0.51 is the latest 
 ---
 
 * __Decode SCTE-35__ in __TEN__ formats: __MPEGTS, Base64, Bytes, Dicts, Hex,HLS, Integers,JSON,XML and XML+Binary__.
