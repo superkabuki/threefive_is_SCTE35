@@ -160,6 +160,8 @@ class Stream:
         self.maps = Maps()
         self.pmt_payloads = {}
         self.pmt_count = 0
+        self.pmt_pkt=None
+        self.pat_pkt =None
 
     def __repr__(self):
         return str(self.__dict__)
@@ -331,8 +333,9 @@ class Stream:
         print("\tPrgm\tPTS")
         last_pts = None
         for pkt in self.iter_pkts():
+            self._parse(pkt)
             pid = self._parse_info(pkt)
-            if pid in self.pids.pcr:
+            if self._pusi_flag(pkt):
                 self._chk_pts(pkt, pid)
                 pts = self.pid2pts(pid)
                 if pts:
@@ -464,7 +467,7 @@ class Stream:
         _parse_tables parse for
         PAT, PMT,  and SDT tables
         based on pid of the pkt
-        """
+        """     
         pay = self._parse_payload(pkt)
         if not self._same_as_last(pay, pid):
             self._pmt_pid(pay, pid)
