@@ -1,14 +1,14 @@
  [__Install__](#install) |[__SCTE-35 Cli__](#the-cli-tool) | [__SCTE-35 HLS__](https://github.com/superkabuki/threefive/blob/main/hls.md) | [__Cue__ Class](https://github.com/superkabuki/threefive/blob/main/cue.md) | [__Stream__ Class](https://github.com/superkabuki/threefive/blob/main/stream.md) | [__Online SCTE-35 Parser__](https://iodisco.com/scte35) | [__Encode SCTE-35__](https://github.com/superkabuki/threefive/blob/main/encode.md) | [__SCTE-35 Examples__](https://github.com/superkabuki/threefive/tree/main/examples)
  | [__SCTE-35 XML__ ](https://github.com/superkabuki/SCTE-35/blob/main/xml.md) and [More __XML__](node.md) | [__SuperKabuki SCTE-35 MPEGTS Packet Injection__](inject.md) | [__SCTE-35 As a Service__](sassy.md)
+### pypi.org ranks threefive in the top 2% of all python3 packages, ever.
+--- 
 
-# <samp>threefive is the most advanced SCTE-35 tool available*</samp> 
+# threefive is the most advanced SCTE-35 tool available*
 
 
  \* _No asterisks._
 
-# threefive has been installed 1,022,676 times.
-# pypi.org ranks threefive in the top 2% of all python3 packages, ever.
---- 
+
 # v3.0.53 is the latest 
 
 # `Heads up` 
