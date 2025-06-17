@@ -124,6 +124,7 @@ class TimeSignal(SpliceCommand):
         self.name = "Time Signal"
         self.time_specified_flag = None
         self.pts_time = None
+        self.pts_ticks = None
 
     def decode(self):
         """
@@ -150,8 +151,8 @@ class TimeSignal(SpliceCommand):
         self.time_specified_flag = bitbin.as_flag(1)
         if self.time_specified_flag:
             bitbin.forward(6)
-            pts_time_ticks = bitbin.as_int(33)
-            self.pts_time = self.as_90k(pts_time_ticks)
+            self.pts_ticks = bitbin.as_int(33)
+            self.pts_time = self.as_90k(self.pts_ticks)
         else:
             bitbin.forward(7)
 
@@ -162,11 +163,13 @@ class TimeSignal(SpliceCommand):
         self._chk_var(bool, nbin.add_flag, "time_specified_flag", 1)
         if self.time_specified_flag:
             nbin.reserve(6)
-            if not isinstance(self.pts_time, float):
+            if not self.pts_ticks and self.pts_time:
+                self.pts_ticks =self.as_ticks(self.pts_time)
+            if  not self.pts_time or not isinstance(self.pts_time, float):
                 blue("converting pts_time from ticks")
-                self.pts_time = self.as_90k(self.pts_time)
+                self.pts_time = self.as_90k(self.pts_ticks)              
             self.pts_time = round(self.pts_time, 6)
-            nbin.add_int(int(self.as_ticks(self.pts_time)), 33)
+            self._chk_var(int, nbin.add_int, 'pts_ticks', 33)
         else:
             nbin.reserve(7)
 
@@ -198,6 +201,7 @@ class SpliceInsert(TimeSignal):
         self.name = "Splice Insert"
         self.break_auto_return = None
         self.break_duration = None
+        self.break_duration_ticks = None
         self.splice_event_id = None
         self.splice_event_cancel_indicator = None
         self.out_of_network_indicator = None
@@ -215,8 +219,8 @@ class SpliceInsert(TimeSignal):
         """
         self.break_auto_return = bitbin.as_flag(1)
         bitbin.forward(6)
-        break_duration_ticks = bitbin.as_int(33)
-        self.break_duration = self.as_90k(break_duration_ticks)
+        self.break_duration_ticks = bitbin.as_int(33)
+        self.break_duration = self.as_90k(self.break_duration_ticks)
 
     def decode(self):
         """
@@ -276,7 +280,9 @@ class SpliceInsert(TimeSignal):
         """
         self._chk_var(bool, nbin.add_flag, "break_auto_return", 1)
         nbin.forward(6)
-        nbin.add_int(self.as_ticks(self.break_duration), 33)
+        if not self.break_duration:
+            self.break_duration = self.as_90k(self.break_duration_ticks)
+        self._chk_var(int, nbin.add_int, "break_duration_ticks", 33)
 
     def xml(self, ns="scte35"):
         """
