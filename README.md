@@ -30,7 +30,6 @@ that didn't work at all.
 * [The __SuperKabuki SCTE-35 MPEGTS Packet Injection Engine__](inject.md) was added to __threefive__ v3.0.39
 </samp>
 
-![1e56f4a4ef52659528821f26071239fb](https://github.com/user-attachments/assets/d0377d75-c35a-48a9-97f4-c8797abc33dd)
 
 
 
@@ -55,7 +54,6 @@ a@fu:~/build5/scte35/scte35$ pypy3
 ### Checkout the Super Cool SCTE-35 [__Examples__](https://github.com/superkabuki/threefive/tree/main/examples)
 <br>
 
-![jordache jeans](https://github.com/user-attachments/assets/3698f277-12fd-43fc-97d6-55f8e5c22ab8)
 
 ----
 
