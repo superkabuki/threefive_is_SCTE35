@@ -4,7 +4,7 @@ threefive.Cue Class
 
 from base64 import b64decode, b64encode
 import json
-from .stuff import clean, red, ishex, isjson, isxml, ERR
+from .stuff import clean, red, ishex, isjson, isxml, ERR, blue
 from .bitn import NBin
 from .base import SCTE35Base
 from .section import SpliceInfoSection
@@ -147,9 +147,11 @@ class Cue(SCTE35Base):
         """
         _int_bits convert a SCTE-35 Cue from integer to bytes.
         """
+        print(data)
         length = data.bit_length() >> three
         bites = int.to_bytes(data, length, byteorder="big")
         self.bites = bites
+        print(self.bites)
 
     def _hex_bits(self, data):
         """
@@ -166,6 +168,7 @@ class Cue(SCTE35Base):
 
     def _xj_bits(self, data):
         if isxml(data) or isjson(data):
+            blue("IS XML")
             self.load(data)
 
     def _digit_bits(self, data):
@@ -427,6 +430,7 @@ class Cue(SCTE35Base):
           unless you initialize a Cue without data.
         """
         if isinstance(gonzo, bytes):
+            gonzo=gonzo.decode()
             gonzo = clean(gonzo)
         if isinstance(gonzo, str):
             if isxml(gonzo):
@@ -445,10 +449,11 @@ class Cue(SCTE35Base):
         _from_xml converts xml to data that can
         be loaded by a Cue instance.
         """
-        gonzo = clean(gonzo)
+     #   gonzo = clean(gonzo)
         if "Binary" in gonzo:
-            dat = gonzo.split("Binary>", 1)[1].split("<", 1)[0]
-            self.bites = self._mk_bits(dat)
+            dat = gonzo.split("<Binary>", 1)[1].split("</Binary>", 1)[0]
+            self._mk_bits(dat)
+            red(self.bites)
             self.decode()
         elif "SpliceInfoSection" in gonzo:
             self.load(xml2cue(gonzo))
