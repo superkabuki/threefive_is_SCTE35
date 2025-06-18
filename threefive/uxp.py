@@ -114,7 +114,7 @@ class UltraXmlParser:
 
     @staticmethod
     def _nocomment(line):
-        return (not line.startswith("<!--")) and (not line.startswith("<?xml"))
+        return (not line.startswith("<!")) and (not line.startswith("<?xml"))
 
     def parse(self, exemel):
         """
