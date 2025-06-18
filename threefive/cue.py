@@ -4,6 +4,7 @@ threefive.Cue Class
 
 from base64 import b64decode, b64encode
 import json
+import re
 from .stuff import clean, red, ishex, isjson, isxml, ERR, blue
 from .bitn import NBin
 from .base import SCTE35Base
@@ -147,11 +148,9 @@ class Cue(SCTE35Base):
         """
         _int_bits convert a SCTE-35 Cue from integer to bytes.
         """
-        print(data)
         length = data.bit_length() >> three
         bites = int.to_bytes(data, length, byteorder="big")
         self.bites = bites
-        print(self.bites)
 
     def _hex_bits(self, data):
         """
@@ -164,17 +163,23 @@ class Cue(SCTE35Base):
         """
         _b64_bits decode base64 to bytes
         """
+
         self.bites = b64decode(self.fix_bad_b64(data))
 
     def _xj_bits(self, data):
         if isxml(data) or isjson(data):
-            blue("IS XML")
-            self.load(data)
+            blue('ISXML')
+            if self.load(data):
+                return True
+        return False
+
 
     def _digit_bits(self, data):
         if data.isdigit():
             data = int(data)
             self._int_bits(data)
+            return True
+        return False
 
     def _xjd_bits(self, data):
         """
@@ -183,10 +188,12 @@ class Cue(SCTE35Base):
         """
         if isinstance(data, (str, bytes)):
             data = data.strip()
-            self._xj_bits(data)
-            self._digit_bits(data)
+            return self._xj_bits(data) | self._digit_bits(data)
+        return False
 
     def _str_bits(self, data):
+        if self._xjd_bits(data):
+            return
         if ishex(data):
             self._hex_bits(clean(data))
         else:
@@ -201,6 +208,8 @@ class Cue(SCTE35Base):
         return data
 
     def _byte_bits(self, data):
+        if self._xjd_bits(data):
+            return
         data = self._pkt_bits(data)
         self.bites = self.idxsplit(data, b"\xfc")
 
@@ -216,10 +225,6 @@ class Cue(SCTE35Base):
         cue._mk_bits converts
         several SCTE-35 formats into bytes.
         """
-        self._xjd_bits(data)
-        if self.bites:
-            return
-
         type_map = {
             Node: self._node_bits,
             dict: self._dict_bits,
@@ -430,8 +435,8 @@ class Cue(SCTE35Base):
           unless you initialize a Cue without data.
         """
         if isinstance(gonzo, bytes):
-            gonzo=gonzo.decode()
-            gonzo = clean(gonzo)
+            gonzo=gonzo.decode(errors="ignore")
+           # gonzo = clean(gonzo)
         if isinstance(gonzo, str):
             if isxml(gonzo):
                 self._from_xml(gonzo)
@@ -449,16 +454,18 @@ class Cue(SCTE35Base):
         _from_xml converts xml to data that can
         be loaded by a Cue instance.
         """
-     #   gonzo = clean(gonzo)
+        gonzo = clean(gonzo)
         if "Binary" in gonzo:
-            dat = gonzo.split("<Binary>", 1)[1].split("</Binary>", 1)[0]
+            re_start =  re.compile('<scte35:Binary>|<Binary>')
+            re_stop = re.compile('</scte35:Binary>|</Binary>')
+            dat = re.split(re_start,gonzo, 1)[1]
+            dat = re.split(re_stop,dat, 1)[0]
             self._mk_bits(dat)
-            red(self.bites)
             self.decode()
         elif "SpliceInfoSection" in gonzo:
             self.load(xml2cue(gonzo))
         else:
-            self.bites = b""
+            self.bites=b'\xfc'      # return a Splice Null instead of an Error.
         return self.bites
 
     def _xml_segmentation_comment(self, dscptr, sis):
