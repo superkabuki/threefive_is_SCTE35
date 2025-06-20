@@ -13,6 +13,9 @@ PKT_SIZE = 188
 
 
 class IFramer:
+    """
+    IFramer class does fast accurate low level iframe / idr detection.
+    """
     def __init__(self, shush=False):
         self.shush = shush
 
@@ -77,13 +80,16 @@ class IFramer:
             pts |= payload[13] >> 1
             return pts
 
-    def _afc_approved(self, pkt):
+    def _chk_rai(self, pkt):
+        """
+        _chk_rai check random access indicator
+        """
         if self._pcr_flag(pkt):
-            if self._rai_flag(pkt):
-                return True
-        if self._abc_flags(pkt):
-            return True
+            return self._rai_flag(pkt)
         return False
+
+    def _afc_approved(self, pkt):
+        return self._chk_rai(pkt) or self._abc_flags(pkt)
 
     def _is_key(self, pkt):
         """
@@ -97,12 +103,11 @@ class IFramer:
 
     def _get_pts(self, pkt):
         pts = None
-        if self._pusi_flag(pkt):
-            if self._is_key(pkt):
-                pts = self._parse_pts(pkt)
-                pts = self._to90k(pts)
-                if not self.shush and pts:
-                    print2(pts)
+        if self._is_key(pkt):
+            pts = self._parse_pts(pkt)
+            pts = self._to90k(pts)
+            if not self.shush:
+                print2(pts)
         return pts
 
     def ticks(self, pkt):
@@ -115,7 +120,11 @@ class IFramer:
         return None
 
     def parse(self, pkt):
-        return self._get_pts(pkt)
+        """
+        parse if an Iframe is found, return PTS
+        """
+        if self._pusi_flag(pkt):
+            return self._get_pts(pkt)
 
     def iter_pkts(self, video, num_pkts=1):
         """
@@ -146,6 +155,18 @@ class IFramer:
 
 
 def cli():
+    """
+    cli one function to make a cli tool
+
+    usage:
+
+    #!/usr/bin/env python3
+
+    from threefive.iframes import cli
+
+    cli()
+
+    """
     iframer = IFramer()
     iframer.do(sys.argv[1])
 
