@@ -50,7 +50,7 @@ class PmtStream:
         if bitn:
             self.parse(bitn)
         if conv_pids:
-            self._chk_conv_pids(conv_pids)
+            self.chk_conv_pids(conv_pids)
         self.total_size = 5 + self.ES_info_length
 
     def parse(self, bitn):
@@ -169,10 +169,7 @@ class PMT:
         pms.total_size = 5
         self.streams.append(pms)
 
-    def mk(self):
-        """
-        mk build PMT
-        """
+    def _add_pmt_cuei(self):
         vals = [dscptr.value for dscptr in self.descriptors]
         if b"CUEI" not in vals:
 #            blue("Adding SCTE-35 Descriptor")
@@ -182,11 +179,18 @@ class PMT:
             cuei.value = b"CUEI"
             cuei.total_size = 6
             self.descriptors.append(cuei)
-#        else:
- #           blue("SCTE-35 Descriptor already present.")
+
+    def _prog_info_len(self):
         self.program_info_length = sum(
             [dscptr.total_size for dscptr in self.descriptors]
-        )
+        )        
+  
+    def mk(self):
+        """
+        mk build PMT
+        """
+        self._add_pmt_cuei()
+        self._prog_info_len()
         stream_len = sum([stream.total_size for stream in self.streams])
         nbin = NBin()
         nbin.add_int(self.table_id, 8)  # 0x02
