@@ -91,7 +91,7 @@ threefive '/DAsAAAAAyiYAP/wCgUAAAABf1+ZmQEBABECD0NVRUkAAAAAf4ABADUAAC2XQZU='
 from threefive import Cue
 data = '/DAsAAAAAyiYAP/wCgUAAAABf1+ZmQEBABECD0NVRUkAAAAAf4ABADUAAC2XQZU='
 cue=Cue(data)
-cue.show())
+cue.show()
 ```
 
 </details>
@@ -130,7 +130,7 @@ threefive  0xfc301600000000000000fff00506fed605225b0000b0b65f3b
 from threefive import Cue
 data =  0xfc301600000000000000fff00506fed605225b0000b0b65f3b
 cue=Cue(data)
-cue.show())
+cue.show()
 ```
 
 
@@ -254,7 +254,7 @@ data = '''<scte35:Signal xmlns:scte35="https://scte.org/schemas/35">
 </scte35:Signal>
 '''
 cue=Cue(data)
-cue.show())
+cue.show()
 ```
 
 </details>
