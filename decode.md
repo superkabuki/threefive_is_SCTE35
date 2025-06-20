@@ -1,7 +1,14 @@
-<details><summary>MPEGTS</summary>
-* MPEGTS streams can be local file, http(s), multicast, or  stdin. 
+# Quick Start 
 
-* cli
+<samp>
+
+### Here's how to decode these SCTE-35 formats with threefive.
+### This covers both the Cli tool and library.
+
+<details><summary> MPEGTS </summary> </summary>
+* MPEGTS streams can be  Files, Http(s), Multicast, UDP Unicast, or  stdin. 
+
+* __cli__
 ```js
 threefive https://example.com/video.ts
 ```
@@ -10,11 +17,12 @@ threefive https://example.com/video.ts
 threefive /mpegts/*.ts
 ```
 
-* lib
+* __lib__
 ```py3
 
-from threefive import Cue
-data = '/DAsAAAAAyiYAP/wCgUAAAABf1+ZmQEBABECD0NVRUkAAAAAf4ABADUAAC2XQZU='
+from threefive import Stream
+stream = Stream('https://example.com/video.ts')
+stream.decode()
 cue=Cue(data)
 cue.show())
 ```
@@ -28,11 +36,11 @@ cue.show())
 
 <details><summary>Base64</summary>
 
-* cli
+* __cli__
 ```js
 threefive '/DAsAAAAAyiYAP/wCgUAAAABf1+ZmQEBABECD0NVRUkAAAAAf4ABADUAAC2XQZU='
 ```
-* lib
+* __lib__
 ```py3
 
 from threefive import Cue
@@ -47,10 +55,10 @@ cue.show())
 
 <details><summary>Bytes</summary>
 
-* cli
+* __cli__
 	* Bytes don't work on the cli
 
-* lib
+* __lib__
 ```py3
 
 from threefive import Cue
@@ -67,11 +75,11 @@ cue.show()
 
 * Can be a hex literal or hex string or bytes.
 
-* cli
+* __cli__
 ```js
 threefive  0xfc301600000000000000fff00506fed605225b0000b0b65f3b
 ```
-* lib
+* __lib__
 ```py3
 
 from threefive import Cue
@@ -90,11 +98,11 @@ cue.show())
 
 * Can be a literal integer or string or bytes.
 
-* cli
+* __cli__
 ```js
 threefive  1583008701074197245727019716796221243043855984942057168199483b
 ```
-* lib
+* __lib__
 ```py3
 
 from threefive import Cue
@@ -110,12 +118,12 @@ cue.show()
 
 <details><summary>JSON</summary>
 
-* cli
+* __cli__
 	* 	put JSON SCTE-35 in a file and redirect it into threefive 
 ```js
 threefive  < json.json
 ```
-* lib
+* __lib__
 
 ```py3
 
@@ -159,12 +167,12 @@ cue.show()
 
 <details><summary>Xml</summary>
 
-* cli
+* __cli__
 	* put xml SCTE-35 in a file and redirect it into threefive 
 	```js
 	threefive < xmlbin.xml
 	```
-* lib
+* __lib__
 ```py3
 from threefive import Cue
 data =  '''
@@ -187,12 +195,12 @@ cue.show()
 
 <details><summary>Xml+binary</summary>
 
-* cli
+* __cli__
 	* write xml+binary to a file and redirect it to threefive
 ```js
 threefive < xmlbin.xml
 ```
-* lib
+* __lib__
 ```py3
 
 from threefive import Cue
@@ -207,9 +215,4 @@ cue.show())
 </details>
 
 ---
-
-<details><summary></summary>
-
-
-
-</details>
+</samp>
