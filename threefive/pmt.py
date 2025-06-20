@@ -1,3 +1,9 @@
+"""
+pmt.py classes for rebuilding PMT.
+
+"""
+
+
 from .bitn import Bitn, NBin
 from .crc import crc32
 
@@ -42,20 +48,29 @@ class PmtStream:
         self.elementary_PID = None
         self.ES_info_length = 0
         if bitn:
-            self.stream_type = bitn.as_int(8)
-            bitn.forward(3)
-            self.elementary_PID = bitn.as_int(13)
-            bitn.forward(4)
-            self.ES_info_length = bitn.as_int(12)
-            eil = self.ES_info_length << 3
-            while eil > 0:
-                dscptr = Dscptr(bitn)
-                eil -= dscptr.total_size << 3
-                self.descriptors.append(dscptr)
+            self.parse(bitn)
         if conv_pids:
-            if self.elementary_PID in conv_pids:
-                self.add_CUEI()
+            self._chk_conv_pids(conv_pids)
         self.total_size = 5 + self.ES_info_length
+
+    def parse(self, bitn):
+        """
+        parse parse  PMT stream data
+        """
+        self.stream_type = bitn.as_int(8)
+        bitn.forward(3)
+        self.elementary_PID = bitn.as_int(13)
+        bitn.forward(4)
+        self.ES_info_length = bitn.as_int(12)
+        eil = self.ES_info_length << 3
+        while eil > 0:
+            dscptr = Dscptr(bitn)
+            eil -= dscptr.total_size << 3
+            self.descriptors.append(dscptr)
+
+    def _chk_conv_pids(self, conv_pids):
+        if self.elementary_PID in conv_pids:
+            self.add_CUEI()
 
     def add_CUEI(self):
         """
@@ -160,15 +175,15 @@ class PMT:
         """
         vals = [dscptr.value for dscptr in self.descriptors]
         if b"CUEI" not in vals:
-            #       blue("Adding SCTE-35 Descriptor")
+#            blue("Adding SCTE-35 Descriptor")
             cuei = Dscptr()
             cuei.type = 5
             cuei.length = 4
             cuei.value = b"CUEI"
             cuei.total_size = 6
             self.descriptors.append(cuei)
-        # else:
-        #   blue("SCTE-35 Descriptor already present.")
+#        else:
+ #           blue("SCTE-35 Descriptor already present.")
         self.program_info_length = sum(
             [dscptr.total_size for dscptr in self.descriptors]
         )
