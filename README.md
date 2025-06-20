@@ -69,8 +69,7 @@ threefive /mpegts/*.ts
 from threefive import Stream
 stream = Stream('https://example.com/video.ts')
 stream.decode()
-cue=Cue(data)
-cue.show())
+
 ```
 
 </details>
