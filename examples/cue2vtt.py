@@ -47,8 +47,8 @@ def scte35_to_vtt(cue):
         cue_start = cue.command.pts_time + cue.info_section.pts_adjustment
     else:
         cue_start = now
-    if cue_start > now:
-        time.sleep(cue_start - now)
+#    if cue_start > now:
+ #       time.sleep(cue_start - now)
     if cue.command.has("break_duration"):
         duration = cue.command.break_duration
     for d in cue.descriptors:
