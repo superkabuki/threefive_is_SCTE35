@@ -4,11 +4,6 @@
 
 
 # v3.0.53 is the latest 
-
-# `Heads up` 
-I called this repo threefive3 in an attempt to avoid confusion with my old threefive repo,<br>
-that didn't work at all. <br>Going forward, <b>this will be threefive and will be released as such.  <br>Adrian
----
 <samp>
 	
 ---
@@ -25,7 +20,7 @@ that didn't work at all. <br>Going forward, <b>this will be threefive and will b
 
 ### [The __SuperKabuki SCTE-35 MPEGTS Packet Injection Engine__](inject.md) 
 
----
+
 
 ### [Sassy, the new SCTE-35 as a service, Decode SCTE-35 in your browser](sassy.md)      
 
@@ -36,7 +31,7 @@ that didn't work at all. <br>Going forward, <b>this will be threefive and will b
 
 
 
-### [Super Cool new xml stuff in threefive](node.md) 
+### [New XML stuff in threefive](node.md) 
 
 ---
 
@@ -46,7 +41,6 @@ that didn't work at all. <br>Going forward, <b>this will be threefive and will b
 
 ### `Quick Start` 
 
-<samp>
 
 * Here's how to decode these SCTE-35 formats with threefive.
 * This covers both the Cli tool and library.
