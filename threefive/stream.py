@@ -262,7 +262,7 @@ class Stream:
         func can be set to a custom function that accepts
         a threefive.Cue instance as it's only argument.
         """
-        num_pkts = 1400
+        num_pkts = 2800
         for chunk in self.iter_pkts(num_pkts=num_pkts):
             self._decode2cues(chunk, func)
         return False
@@ -448,10 +448,11 @@ class Stream:
     def _pmt_pid(self, pay, pid):
         if pid in self.pids.pmt:
             self.pmt_count += 1
-            if pay in self.pmt_payloads:
-                if self.pmt_count > len(self.pmt_payloads) << 2:
+            prgm = self.pid2prgm(pid)
+            if prgm in self.pmt_payloads:
+                if self.pmt_count > len(self.pmt_payloads) << 3:
                     return
-            self.pmt_payloads[self.pid2prgm(pid)] = pay
+            self.pmt_payloads[prgm] = pay
             self._parse_pmt(pay, pid)
 
     def _pat_pid(self, pay, pid):
@@ -471,7 +472,9 @@ class Stream:
         pay = self._parse_payload(pkt)
         if not self._same_as_last(pay, pid):
             self._pmt_pid(pay, pid)
+
             self._pat_pid(pay, pid)
+        if self.info:
             self._sdt_pid(pay, pid)
 
     def _parse_info(self, pkt):
@@ -501,6 +504,7 @@ class Stream:
     def _parse(self, pkt):
         cue = False
         pid = self._parse_info(pkt)
+       # print('PID ==> ', pid)
         if self._pusi_flag(pkt):
             self._chk_pts(pkt, pid)
         if self._pid_has_scte35(pid):
@@ -574,7 +578,7 @@ class Stream:
         """
         parse a threefive cue from one or more packets
         """
-        self._parse_pts(pkt, pid)  # Check ffmpeg style packets
+        #self._parse_pts(pkt, pid)  # Check ffmpeg style packets
         pay = self._mk_scte35_payload(pkt, pid)
         if not pay:
             return False
