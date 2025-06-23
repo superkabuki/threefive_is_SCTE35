@@ -6,16 +6,16 @@ from .bitn import Bitn
 from .base import SCTE35Base
 from .segmentation import table20, table22, dvb_table2
 from .upids import upid_map
-from .stuff import red, ERR, clean
+from .stuff import red, ERR, clean, k_by_v
 from .xml import Node
 
 
-def k_by_v(adict, avalue):
-    """
-    dict key lookup by value
-    """
-    flipped = {v: k for k, v in adict.items()}
-    return (None, flipped[avalue])[avalue in flipped]
+##def k_by_v(adict, avalue):
+##    """
+##    dict key lookup by value
+##    """
+##    flipped = {v: k for k, v in adict.items()}
+##    return (None, flipped[avalue])[avalue in flipped]
 
 
 class SpliceDescriptor(SCTE35Base):
