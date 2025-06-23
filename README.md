@@ -2,6 +2,8 @@
  | [__SCTE-35 XML__ ](https://github.com/superkabuki/SCTE-35/blob/main/xml.md) and [More __XML__](node.md) | [__SuperKabuki SCTE-35 MPEGTS Packet Injection__](inject.md) | [__SCTE-35 As a Service__](sassy.md)
 ![image](https://github.com/user-attachments/assets/415091de-8273-4ea9-ac48-eacc558156c9)
 
+# I'm not a real needy guy but last week there were 2000 pip installs of threefive, y'all obviously like it, Give me some fucking stars, or I'm deleting everything. You bunch of ungrateful bastards.
+
 
 # v3.0.53 is the latest 
 <samp>
