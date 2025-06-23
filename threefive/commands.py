@@ -4,7 +4,7 @@ SCTE35 Splice Commands
 
 from .bitn import Bitn
 from .base import SCTE35Base
-from .stuff import blue
+from .stuff import blue,red
 from .xml import Node
 
 
@@ -36,6 +36,7 @@ class SpliceCommand(SCTE35Base):
         encode
         """
         nbin = self._chk_nbin(nbin)
+        self.command_length=len(nbin.bites)
         return nbin.bites
 
 
@@ -84,6 +85,7 @@ class PrivateCommand(SpliceCommand):
         nbin = self._chk_nbin(nbin)
         self._chk_var(int, nbin.add_int, "identifier", 32)  # 4 bytes = 32 bits
         nbin.add_bites(self.private_bytes)
+        self.command_length=len(nbin.bites)
         return nbin.bites
 
     def xml(self, ns="scte35"):
@@ -142,6 +144,7 @@ class TimeSignal(SpliceCommand):
         """
         nbin = self._chk_nbin(nbin)
         self._encode_splice_time(nbin)
+        self.command_length=len(nbin.bites)
         return nbin.bites
 
     def _splice_time(self, bitbin):
@@ -163,14 +166,11 @@ class TimeSignal(SpliceCommand):
         self._chk_var(bool, nbin.add_flag, "time_specified_flag", 1)
         if self.time_specified_flag:
             nbin.reserve(6)
-##            if not self.pts_ticks and self.pts_time:
-##                self.pts_ticks =self.as_ticks(self.pts_time)
-##            if  not self.pts_time or not isinstance(self.pts_time, float):
-##                blue("converting pts_time from ticks")
-       #     self.pts_time = self.as_90k(self.pts_ticks)              
-            #self.pts_time = round(self.pts_time, 6)       
+            if not self.pts_time:
+                return red('pts_time is not set')
             nbin.add_int(self.as_ticks(self.pts_time), 33)
         else:
+            self.pts_time=None
             nbin.reserve(7)
 
     def xml(self, ns="scte35"):
@@ -271,6 +271,7 @@ class SpliceInsert(TimeSignal):
             self._chk_var(int, nbin.add_int, "unique_program_id", 16)
             self._chk_var(int, nbin.add_int, "avail_num", 8)
             self._chk_var(int, nbin.add_int, "avails_expected", 8)
+        self.command_length=len(nbin.bites)
         return nbin.bites
 
     def encode_break_duration(self, nbin):
@@ -280,7 +281,8 @@ class SpliceInsert(TimeSignal):
         """
         self._chk_var(bool, nbin.add_flag, "break_auto_return", 1)
         nbin.forward(6)
-##        if not self.break_duration:
+        if not self.break_duration:
+            return red('break_duration is not set')
 ##            self.break_duration = self.as_90k(self.break_duration_ticks)
         nbin.add_int(self.as_ticks(self.break_duration), 33)
 
