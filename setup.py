@@ -11,9 +11,9 @@ from threefive.version import version
 setuptools.setup(
     name="threefive",
     version=version,
-    author="Adrian of Doom",
+    author="Adrian of Doom, Mei and Li(the blond)",
     author_email="spam@iodisco.com",
-    description="SCTE-35 decoder and encoder with MPEGTS and HLS and XML support.",
+    description="threefive is The #1 SCTE-35 tool on the Planet. Death to those who oppose me.",
     long_description=readme,
     long_description_content_type="text/markdown",
     url="https://github.com/superkabuki/threefive",
