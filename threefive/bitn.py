@@ -2,7 +2,7 @@
 The bitn.Bitn and bitn.NBin classes
 """
 
-from .stuff import red
+from .stuff import red,pif
 
 
 class Bitn:
@@ -154,7 +154,7 @@ class NBin:
         via self.add_int
         """
         if isinstance(hex_str, str):
-            dehexed = int(hex_str, 16)
+            dehexed = pif(hex_str)
         # just in case hex_str is an int....
         else:
             dehexed = hex_str
