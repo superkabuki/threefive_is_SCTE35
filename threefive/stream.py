@@ -248,7 +248,8 @@ class Stream:
         return False
 
     def _mk_pkts(self, chunk):
-        return [self._parse(chunk[i : i + self.PACKET_SIZE]) for i in range(0, len(chunk), self.PACKET_SIZE)]
+        return [self._parse(chunk[i : i + self.PACKET_SIZE])
+                for i in range(0, len(chunk), self.PACKET_SIZE)]
 
     def _decode2cues(self, chunk, func):
         _ = [func(cue) for cue in self._mk_pkts(chunk) if cue]
@@ -399,6 +400,19 @@ class Stream:
                 print2(f" # BAD --> pid:\t{hex(pid)}\tlast cc:\t{last_cc}\tcc:\t{c_c}")
         self.maps.pid_cc[pid] = c_c
 
+    @staticmethod
+    def mk_pts(payload):
+        """
+        mk_pts calculate pts from payload
+        """
+        pts = (payload[9] & 14) << 29
+        pts |= payload[10] << 22
+        pts |= (payload[11] >> 1) << 15
+        pts |= payload[12] << 7
+        pts |= payload[13] >> 1
+        return pts
+
+
     def _parse_pts(self, pkt, pid):
         """
         parse pts and store by program key
@@ -407,11 +421,12 @@ class Stream:
         payload = self._parse_payload(pkt)
         if len(payload) > 13:
             if self._pts_flag(payload):
-                pts = (payload[9] & 14) << 29
-                pts |= payload[10] << 22
-                pts |= (payload[11] >> 1) << 15
-                pts |= payload[12] << 7
-                pts |= payload[13] >> 1
+                pts =self.mk_pts(payload)
+##                pts = (payload[9] & 14) << 29
+##                pts |= payload[10] << 22
+##                pts |= (payload[11] >> 1) << 15
+##                pts |= payload[12] << 7
+##                pts |= payload[13] >> 1
                 prgm = self.pid2prgm(pid)
                 self.maps.prgm_pts[prgm] = pts
                 if prgm not in self.start:
