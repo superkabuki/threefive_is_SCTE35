@@ -99,7 +99,7 @@ class SCTE35Base:
         has runs hasattr with self and what
         returns value if set.
         """
-        if obj==None:
+        if obj is None:
             obj=self
         if hasattr(obj, what):
             return getattr(obj,what)
