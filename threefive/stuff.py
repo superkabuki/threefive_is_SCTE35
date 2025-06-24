@@ -44,7 +44,7 @@ def codec_detect(data):
         try:
             data = data.decode(encoding=codec)
             return codec, data
-        except:
+        except ERR:
             pass
 
 
