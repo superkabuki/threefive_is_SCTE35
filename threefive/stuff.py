@@ -1,7 +1,7 @@
 """
 stuff.py functions and such common to threefive.
 
-print2, bahtoif, clean, codec_detect, isfloat,ishex, isjson, isxml, iso8601, k_by_v, red,rmap, blue, reblue, print2, and ERR
+print2, pif, iso8601, red, blue
 """
 
 import datetime
@@ -105,9 +105,9 @@ def isxml(data):
     return False
 
 
-def bahtoif(value):
+def pif(value):
     """
-    bahtoif converts bytes, ascii, or hex to int or  float.
+    pif converts bytes, ascii, or hex to int or  float.
     """
     value= clean(value)
     value = value.strip()
