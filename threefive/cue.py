@@ -168,7 +168,7 @@ class Cue(SCTE35Base):
 
     def _xj_bits(self, data):
         if isxml(data) or isjson(data):
-            blue('ISXML')
+            blue("ISXML")
             if self.load(data):
                 return True
         return False
@@ -434,8 +434,8 @@ class Cue(SCTE35Base):
           unless you initialize a Cue without data.
         """
         if isinstance(gonzo, bytes):
-            gonzo=gonzo.decode(errors="ignore")
-           # gonzo = clean(gonzo)
+            gonzo = gonzo.decode(errors="ignore")
+        # gonzo = clean(gonzo)
         if isinstance(gonzo, str):
             if isxml(gonzo):
                 self._from_xml(gonzo)
@@ -455,16 +455,16 @@ class Cue(SCTE35Base):
         """
         gonzo = clean(gonzo)
         if "Binary" in gonzo:
-            re_start =  re.compile('<scte35:Binary>|<Binary>')
-            re_stop = re.compile('</scte35:Binary>|</Binary>')
-            dat = re.split(re_start,gonzo, 1)[1]
-            dat = re.split(re_stop,dat, 1)[0]
+            re_start = re.compile("<scte35:Binary>|<Binary>")
+            re_stop = re.compile("</scte35:Binary>|</Binary>")
+            dat = re.split(re_start, gonzo, 1)[1]
+            dat = re.split(re_stop, dat, 1)[0]
             self._mk_bits(dat)
             self.decode()
         elif "SpliceInfoSection" in gonzo:
             self.load(xml2cue(gonzo))
         else:
-            self.bites=b'\xfc'      # return a Splice Null instead of an Error.
+            self.bites = b"\xfc"  # return a Splice Null instead of an Error.
         return self.bites
 
     def _xml_segmentation_comment(self, dscptr, sis):
