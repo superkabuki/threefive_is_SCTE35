@@ -16,6 +16,7 @@ class IFramer:
     """
     IFramer class does fast accurate low level iframe / idr detection.
     """
+
     def __init__(self, shush=False):
         self.shush = shush
 
@@ -70,15 +71,15 @@ class IFramer:
         in the dict Stream._pid_pts.
         """
         payload = self._parse_payload(pkt)
-        if len(payload) < 14:
-            return
-        if self._pts_flag(payload):
-            pts = (payload[9] & 14) << 29
-            pts |= payload[10] << 22
-            pts |= (payload[11] >> 1) << 15
-            pts |= payload[12] << 7
-            pts |= payload[13] >> 1
-            return pts
+        if len(payload) > 13:
+            if self._pts_flag(payload):
+                pts = (payload[9] & 14) << 29
+                pts |= payload[10] << 22
+                pts |= (payload[11] >> 1) << 15
+                pts |= payload[12] << 7
+                pts |= payload[13] >> 1
+                return pts
+        return None
 
     def _chk_rai(self, pkt):
         """
