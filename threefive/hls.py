@@ -238,12 +238,13 @@ class Scte35Profile:
             line = self._chk_time_signal(cue, line)
         return pts, line
 
+    def _mk_cueout_line(self, duration):
+        return f"#EXT-X-CUE-OUT:{duration}\n"
+
     def _is_splice_insert_cueout(self, cue):
         line = None
-        if cue.command.out_of_network_indicator:
-            if cue.command.has("break_duration"):
-                duration = cue.command.break_duration
-                line = f"#EXT-X-CUE-OUT:{duration}\n"
+        if cue.command.has("break_duration"):
+            line = self._mk_cueout_line(cue.command.break_duration)
         return line
 
     def validate_splice_insert(self, cue):
@@ -259,8 +260,7 @@ class Scte35Profile:
         if dscptr.segmentation_type_id in self.starts:
             self.seg_type = dscptr.segmentation_type_id + 1
             if dscptr.has("segmentation_duration"):
-                duration = dscptr.segmentation_duration
-                line = f"#EXT-X-CUE-OUT:{duration}\n"
+                line = self._mk_cueout_line(dscptr.segmentation_duration)
         return line
 
     def _is_dscptr_cuein(self, dscptr, line):
