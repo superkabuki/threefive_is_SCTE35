@@ -8,7 +8,7 @@ import socket
 import struct
 import sys
 import urllib.request
-from .stuff import blue, ERR
+from .stuff import blue, ERR, bahtoif
 
 TIMEOUT = 60
 
@@ -111,7 +111,7 @@ def _open_udp(uri):
     udp://1.2.3.4:5555
     """
     udp_ip, udp_port = (uri.split("udp://")[1]).rsplit(":", 1)
-    udp_port = int(udp_port)
+    udp_port = bahtoif(udp_port)
     return _mk_udp_sock(udp_ip, udp_port)
 
 
@@ -123,7 +123,7 @@ def _open_mcast(uri):
     TTL = 32
     interface_ip = "0.0.0.0"
     multicast_group, port = (uri.split("udp://@")[1]).rsplit(":", 1)
-    multicast_port = int(port)
+    multicast_port = bahtoif(port)
     socked = _mk_socked()
     socked.setsockopt(socket.IPPROTO_IP, socket.IP_MULTICAST_TTL, struct.pack("b", TTL))
     blue(f" TTL set to {TTL}")
