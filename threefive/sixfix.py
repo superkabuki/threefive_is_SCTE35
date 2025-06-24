@@ -105,11 +105,6 @@ class SixFix(Stream):
         pay = self._chk_partial(pay, pid, self._PMT_TID)
         return pay
 
-    ##    def _unpad_pmt(self, pay):
-    ##        while pay[-1] == 255:
-    ##            pay = pay[:-1]
-    ##        return pay
-
     def pmt2packets(self, pmt, program_number):
         """
         pmt2packets split the new pmt table into 188 byte packets
