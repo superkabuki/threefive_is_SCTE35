@@ -160,8 +160,8 @@ class Stream:
         self.maps = Maps()
         self.pmt_payloads = {}
         self.pmt_count = 0
-        self.pmt_pkt=None
-        self.pat_pkt =None
+        self.pmt_pkt = None
+        self.pat_pkt = None
 
     def __repr__(self):
         return str(self.__dict__)
@@ -460,21 +460,21 @@ class Stream:
             self._parse_pat(pay)
 
     def _sdt_pid(self, pay, pid):
-        if pid == self.pids.SDT_PID:
-            self._parse_sdt(pay)
+        if self.info:
+            if pid == self.pids.SDT_PID:
+                self._parse_sdt(pay)
 
     def _parse_tables(self, pkt, pid):
         """
         _parse_tables parse for
         PAT, PMT,  and SDT tables
         based on pid of the pkt
-        """     
+        """
         pay = self._parse_payload(pkt)
-        if not self._same_as_last(pay, pid):
-            self._pmt_pid(pay, pid)
+        self._pmt_pid(pay, pid)
 
+        if not self._same_as_last(pay, pid):
             self._pat_pid(pay, pid)
-        if self.info:
             self._sdt_pid(pay, pid)
 
     def _parse_info(self, pkt):
@@ -504,7 +504,7 @@ class Stream:
     def _parse(self, pkt):
         cue = False
         pid = self._parse_info(pkt)
-       # print('PID ==> ', pid)
+        # print('PID ==> ', pid)
         if self._pusi_flag(pkt):
             self._chk_pts(pkt, pid)
         if self._pid_has_scte35(pid):
@@ -578,7 +578,7 @@ class Stream:
         """
         parse a threefive cue from one or more packets
         """
-        #self._parse_pts(pkt, pid)  # Check ffmpeg style packets
+        # self._parse_pts(pkt, pid)  # Check ffmpeg style packets
         pay = self._mk_scte35_payload(pkt, pid)
         if not pay:
             return False
