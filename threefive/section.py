@@ -6,7 +6,7 @@ SCTE35 Splice Info Section
 
 from .bitn import Bitn
 from .base import SCTE35Base
-from .stuff import red
+from .stuff import red, pif
 from .xml import Node
 
 
@@ -188,7 +188,7 @@ class SpliceInfoSection(SCTE35Base):
             "pts_adjustment": self.as_ticks(self.pts_adjustment),
             "protocol_version": self.protocol_version,
             "sap_type": self.sap_type,
-            "tier": int(self.tier, base=16),
+            "tier": pif(self.tier),
         }
         sis = Node("SpliceInfoSection", attrs=sis_attrs, ns=ns)
         return sis
