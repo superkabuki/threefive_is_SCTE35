@@ -14,7 +14,7 @@ from .hlstags import TagParser, HEADER_TAGS
 from .segment import Segment
 from .cue import Cue
 from .new_reader import reader
-from .stuff import pif, iso8601, red, blue, ERR, reblue, pif
+from .stuff import  iso8601, red, blue, ERR, reblue, pif
 
 
 REV = "\033[7m"
