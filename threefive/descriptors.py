@@ -6,7 +6,7 @@ from .bitn import Bitn
 from .base import SCTE35Base
 from .segmentation import table20, table22, dvb_table2
 from .upids import upid_map
-from .stuff import red, ERR, clean, k_by_v, bahtoif
+from .stuff import red, ERR, clean, k_by_v, pif
 from .xml import Node
 
 
@@ -448,7 +448,7 @@ class SegmentationDescriptor(SpliceDescriptor):
         Create a Node describing a SegmentationDescriptor
         """
         sd_attrs = {
-            "segmentation_event_id": bahtoif(self.segmentation_event_id),
+            "segmentation_event_id": pif(self.segmentation_event_id),
             "segmentation_event_cancel_indicator": self.segmentation_event_cancel_indicator,
             "segmentation_event_id_compliance_indicator": self.segmentation_event_id_compliance_indicator,
             "segmentation_type_id": self.segmentation_type_id,
