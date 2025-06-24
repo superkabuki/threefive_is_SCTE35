@@ -11,7 +11,7 @@ from operator import itemgetter
 from .new_reader import reader
 from .iframes import IFramer
 from .cue import Cue
-from .stuff import print2, ERR
+from .stuff import print2, ERR, bahtoif
 from .bitn import NBin
 from .commands import TimeSignal
 from .sixfix import SixFix
@@ -122,10 +122,10 @@ class SuperKabuki(SixFix):
         like "0x86" or "1000" to an int.
         """
         try:
-            self.scte35_pid = int(pid)
+            self.scte35_pid = bahtoif(pid)
         except ERR:
             try:
-                self.scte35_pid = int(pid, 16)
+                self.scte35_pid = bahtoif(pid)
             except ERR:
                 self.scte35_pid = 0x86
 
