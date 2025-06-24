@@ -14,7 +14,7 @@ from .hlstags import TagParser, HEADER_TAGS
 from .segment import Segment
 from .cue import Cue
 from .new_reader import reader
-from .stuff import atohif, iso8601, red, blue, ERR, reblue
+from .stuff import bahtoif, iso8601, red, blue, ERR, reblue, bahtoif
 
 
 REV = "\033[7m"
@@ -150,9 +150,7 @@ class Scte35Profile:
 
     @staticmethod
     def _hex_or_int(s):
-        if s.lower().startswith("0x"):
-            return int(s, 16)
-        return int(s)
+        return bahtoif(s)
 
     def _new_that(self, that):
         new_that = []
@@ -482,7 +480,7 @@ class HlsParser:
             self.cue_state = "OUT"
             self.break_timer = 0.0
             if ":" in line:
-                self.break_duration = atohif(line.split(":")[1])
+                self.break_duration = bahtoif(line.split(":")[1])
             self.to_sidecar(self.pts, line)
             self.clear()
             print(f"{head}{self.dur_stuff()}{NSUB}{self.media_stuff()}\n")
@@ -725,7 +723,7 @@ class HlsParser:
         if "#EXTINF" in tags:
             if isinstance(tags["#EXTINF"], str):
                 tags["#EXTINF"] = tags["#EXTINF"].rsplit(",", 1)[0]
-            seg_time = round(atohif(tags["#EXTINF"]), 6)
+            seg_time = round(bahtoif(tags["#EXTINF"]), 6)
             #    line = self.auto_cuein(line)
             if self.pts is not None:
                 self.pts += seg_time
@@ -843,7 +841,7 @@ class HlsParser:
         """
         if "TARGETDURATION" in line:
             if self.sleep_duration == 0:
-                target_duration = atohif(line.split(":")[1])
+                target_duration = bahtoif(line.split(":")[1])
                 self.sleep_duration = round(target_duration * 0.5, 3)
                 print(f"    {REV} Target Duration {NORM} {target_duration}\n ")
 
