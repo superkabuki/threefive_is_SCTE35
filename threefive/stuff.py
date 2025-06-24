@@ -107,8 +107,11 @@ def isxml(data):
 
 def pif(value):
     """
-    pif converts bytes, ascii, or hex to int or  float.
+    pif  parses  an int or float from byte strings and strings and hex
+    if it's not a string or byte string it  just returns the value.
     """
+    if not isinstance(value,(str,bytes)):
+        return value
     value= clean(value)
     value = value.strip()
     value = value.strip(",")
