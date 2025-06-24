@@ -90,7 +90,7 @@ def isfloat(value):
     isfloat determine if a str or bytes is a float 
     """
     value = clean(value)
-    return "." in value and value.replace(".", "").isdigit()
+    return "." in value and value.replace(".", "",1).isdigit()
 
 
 def isxml(data):
