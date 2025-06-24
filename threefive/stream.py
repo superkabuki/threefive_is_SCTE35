@@ -248,10 +248,7 @@ class Stream:
         return False
 
     def _mk_pkts(self, chunk):
-        return [
-            self._parse(chunk[i : i + self.PACKET_SIZE])
-            for i in range(0, len(chunk), self.PACKET_SIZE)
-        ]
+        return [self._parse(chunk[i : i + self.PACKET_SIZE]) for i in range(0, len(chunk), self.PACKET_SIZE)]
 
     def _decode2cues(self, chunk, func):
         _ = [func(cue) for cue in self._mk_pkts(chunk) if cue]
@@ -447,11 +444,11 @@ class Stream:
 
     def _pmt_pid(self, pay, pid):
         if pid in self.pids.pmt:
-            self.pmt_count += 1
+##            self.pmt_count += 1
             prgm = self.pid2prgm(pid)
-            if prgm in self.pmt_payloads:
-                if self.pmt_count > len(self.pmt_payloads) << 3:
-                    return
+##            if prgm in self.pmt_payloads:
+##                if self.pmt_count > len(self.pmt_payloads) << 3:
+##                    return
             self.pmt_payloads[prgm] = pay
             self._parse_pmt(pay, pid)
 
@@ -472,10 +469,8 @@ class Stream:
         """
         pay = self._parse_payload(pkt)
         self._pmt_pid(pay, pid)
-
-        if not self._same_as_last(pay, pid):
-            self._pat_pid(pay, pid)
-            self._sdt_pid(pay, pid)
+        self._pat_pid(pay, pid)
+        self._sdt_pid(pay, pid)
 
     def _parse_info(self, pkt):
         """
@@ -606,6 +601,8 @@ class Stream:
         seclen = self._parse_length(pay[1], pay[2])
         if self._section_incomplete(pay, self.pids.SDT_PID, seclen):
             return False
+##        if not self._same_as_last(pay,pid):
+##            return False
         idx = 11
         while idx < seclen + 3:
             service_id = self._parse_program(pay[idx], pay[idx + 1])
@@ -639,6 +636,8 @@ class Stream:
         seclen = self._parse_length(pay[2], pay[3])
         if self._section_incomplete(pay, self.pids.PAT_PID, seclen):
             return False
+        if self._same_as_last(pay, self.pids.PAT_PID):
+            return False
         seclen -= 5  # pay bytes 4,5,6,7,8
         idx = 9
         chunk_size = 4
@@ -662,7 +661,7 @@ class Stream:
         seclen = self._parse_length(pay[1], pay[2])
         if self._section_incomplete(pay, pid, seclen):
             return False
-        if self._same_as_last(pay, pid):
+        if self._same_as_last(pay,pid):
             return False
         program_number = self._parse_program(pay[3], pay[4])
         if not program_number:
