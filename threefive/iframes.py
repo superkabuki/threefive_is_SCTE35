@@ -6,7 +6,7 @@ threefive.iframes
 import sys
 from functools import partial
 from .new_reader import reader
-from .stuff import print2, blue, red
+from .stuff import print2
 
 
 PKT_SIZE = 188
