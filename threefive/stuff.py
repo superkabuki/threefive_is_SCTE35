@@ -20,6 +20,7 @@ ERR = (
 
 write2 = True
 
+
 def k_by_v(adict, avalue):
     """
     dict key lookup by value
