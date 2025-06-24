@@ -49,7 +49,7 @@ class PmtStream:
         if bitn:
             self.parse(bitn)
         if conv_pids:
-            self.chk_conv_pids(conv_pids)
+            self._chk_conv_pids(conv_pids)
         self.total_size = 5 + self.ES_info_length
 
     def parse(self, bitn):
