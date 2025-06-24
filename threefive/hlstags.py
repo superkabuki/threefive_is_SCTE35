@@ -3,7 +3,7 @@ hlstags.py
 
 """
 
-from .stuff import atohif, ERR
+from .stuff import pif, ERR
 from .words import (
     minusone,
     zero,
@@ -134,7 +134,7 @@ class TagParser:
         while tail:
             tail = self._strip_last_comma(tail)
             if equalsign not in tail:
-                self.tags[tag] = atohif(tail)
+                self.tags[tag] = pif(tail)
                 return
             tail, value = self._split_value(tag, tail)
             tail = self._split_key(tail, tag, value)
@@ -193,7 +193,7 @@ class TagParser:
         try:
             tail, value = tail.rsplit(equalsign, one)
             value += hold
-            value = atohif(value)
+            value = pif(value)
         except ERR:
             tail = None
         return tail, value
