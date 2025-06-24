@@ -94,13 +94,15 @@ class SCTE35Base:
         """
         return self.kv_clean()
 
-    def has(self, what):
+    def has(self, what, obj=None):
         """
         has runs hasattr with self and what
         returns value if set.
         """
-        if hasattr(self, what):
-            return vars(self)[what]
+        if obj==None:
+            obj=self
+        if hasattr(obj, what):
+            return getattr(obj,what)
         return None
 
     @staticmethod
