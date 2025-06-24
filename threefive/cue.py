@@ -173,7 +173,6 @@ class Cue(SCTE35Base):
                 return True
         return False
 
-
     def _digit_bits(self, data):
         if data.isdigit():
             data = int(data)
@@ -497,6 +496,7 @@ class Cue(SCTE35Base):
         cmd = self.command.xml(ns=ns)
         sis.addchild(cmd)
         sis = self._xml_mk_descriptor(sis, ns)
+        self.encode()
         return sis  # xml retuns a Node instance.
 
     def xmlbin(self, ns="scte35"):
@@ -504,8 +504,8 @@ class Cue(SCTE35Base):
         xml returns a threefive.Node instance
         which can be edited as needed or printed.
         xmlbin
-
         """
+
         return f"""<{ns}:Signal xmlns:{ns}="https://scte.org/schemas/35">
     <{ns}:Binary>{self.base64()}</{ns}:Binary>
 </{ns}:Signal>"""
