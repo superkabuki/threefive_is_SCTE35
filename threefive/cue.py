@@ -168,7 +168,6 @@ class Cue(SCTE35Base):
 
     def _xj_bits(self, data):
         if isxml(data) or isjson(data):
-            blue("ISXML")
             if self.load(data):
                 return True
         return False
