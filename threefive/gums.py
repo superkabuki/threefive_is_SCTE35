@@ -13,7 +13,7 @@ import sys
 import time
 from functools import partial
 from .new_reader import reader
-from .stuff import blue, reblue, print2,bahtoif
+from .stuff import blue, reblue, print2,pif
 
 
 DGRAM_SIZE = 1316
@@ -36,7 +36,7 @@ class GumS:
         self.src_ip = bind_addr.rsplit(":", 1)[0]
         self.src_port = 0
         self.ttl = mttl
-        self.dest_grp = (self.dest_ip, bahtoif(self.dest_port))
+        self.dest_grp = (self.dest_ip, pif(self.dest_port))
         self.sock = self.mk_sock()
         self.sock.bind((self.src_ip, self.src_port))
 
@@ -45,7 +45,7 @@ class GumS:
         is_multicast tests the first byte of an ipv4 address
         to see if it is in the multicast range.
         """
-        net_id = bahtoif(self.dest_ip.split(".", 1)[0])
+        net_id = pif(self.dest_ip.split(".", 1)[0])
         if net_id in range(224, 240):
             return True
         return False
