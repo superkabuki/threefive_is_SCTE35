@@ -3,7 +3,6 @@ pmt.py classes for rebuilding PMT.
 
 """
 
-
 from .bitn import Bitn, NBin
 from .crc import crc32
 
@@ -172,7 +171,7 @@ class PMT:
     def _add_pmt_cuei(self):
         vals = [dscptr.value for dscptr in self.descriptors]
         if b"CUEI" not in vals:
-#            blue("Adding SCTE-35 Descriptor")
+            #            blue("Adding SCTE-35 Descriptor")
             cuei = Dscptr()
             cuei.type = 5
             cuei.length = 4
@@ -183,8 +182,8 @@ class PMT:
     def _prog_info_len(self):
         self.program_info_length = sum(
             [dscptr.total_size for dscptr in self.descriptors]
-        )        
-  
+        )
+
     def mk(self):
         """
         mk build PMT
