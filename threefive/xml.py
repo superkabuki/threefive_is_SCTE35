@@ -4,7 +4,7 @@ xml.py  The Node class for converting to xml,
         and several helper functions
 """
 
-from .stuff import red
+from .stuff import red,pif
 
 MAXCHILDREN = 128
 MAXDEPTH = 64
@@ -16,7 +16,10 @@ def t2s(v):
     90k ticks to seconds and
     rounds to six decimal places
     """
-    return round(v / 90000.0, 6)
+    u=pif(v)
+    if  isinstance(u,(int)) and u > 90000:
+        u = round(u/ 90000.0, 6)
+    return u
 
 
 def un_camel(k):
@@ -38,10 +41,11 @@ def un_xml(v):
         "false": False,
         "true": True,
     }
-    if v.isdigit():
-        return int(v)
-    if v.replace(".", "").isdigit():
-        return float(v)
+##    if v.isdigit():
+##        return int(v)
+##    if v.replace(".", "").isdigit():
+##        return float(v)
+    v=pif(v)
     if v in mapped:
         return mapped[v]
     return v
@@ -74,7 +78,7 @@ def val2xml(val):
         return str(val).lower()
     if isinstance(val, str):
         if val.lower()[:2] == "0x":
-            return str(int(val, 16))
+            return str(pif(val))
     return val
 
 
