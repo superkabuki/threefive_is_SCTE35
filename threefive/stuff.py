@@ -5,6 +5,7 @@ print2, pif, iso8601, red, blue
 """
 
 import datetime
+from os import environ
 from sys import stderr
 
 ERR = (
@@ -168,7 +169,7 @@ def badtype(data, shouldbe):
     """
     t = _type2string(type(data))
     s = _type2string(shouldbe)
-    red(f"Xml needs to be a {s} not {t}")
+    red(f"Data needs to be a {s} not {t}")
     return False
 
 
@@ -176,10 +177,11 @@ def print2(gonzo=b""):
     """
     print2 prints to 2 aka stderr.
     """
-    if write2:
-        print(gonzo, file=stderr, flush=True)
+    if 'HTTP_USER_AGENT' in environ:
+        print(f'<script>alert("{gonzo}");</script>')
     else:
-        print(gonzo)
+        print(gonzo, file=stderr, flush=True)
+
 
 
 def iso8601():
