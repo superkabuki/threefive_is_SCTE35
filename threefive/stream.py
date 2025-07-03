@@ -502,8 +502,8 @@ class Stream:
             self._parse_pcr(pkt, pid)
 
     def _chk_pts(self, pkt, pid):
-        if pid in self.pids.pcr:
-            self._parse_pts(pkt, pid)
+     #   if pid in self.pids.pcr:
+        self._parse_pts(pkt, pid)
 
     def _chk_scte35(self, pkt, pid):
         cue = False
@@ -651,8 +651,8 @@ class Stream:
         seclen = self._parse_length(pay[2], pay[3])
         if self._section_incomplete(pay, self.pids.PAT_PID, seclen):
             return False
-        if self._same_as_last(pay, self.pids.PAT_PID):
-            return False
+##        if self._same_as_last(pay, self.pids.PAT_PID):
+##            return False
         seclen -= 5  # pay bytes 4,5,6,7,8
         idx = 9
         chunk_size = 4
