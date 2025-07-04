@@ -491,6 +491,7 @@ class Cue(SCTE35Base):
         which can be edited as needed or printed.
         xmlbin
         """
+        self.encode()
         sis = self.info_section.xml(ns=ns)
         cmd = self.command.xml(ns=ns)
         sis.addchild(cmd)
