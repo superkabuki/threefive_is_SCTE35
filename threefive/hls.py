@@ -796,6 +796,7 @@ class HlsParser:
         chk_ts  check MPEGTS for PTS and SCTE-35.
         """
         if ".ts" in this:
+            (this)
             if self.first_segment:
                 Segment(this, key_uri=self.key_uri, iv=self.iv).show()
             seg = Segment(this, key_uri=self.key_uri, iv=self.iv)
