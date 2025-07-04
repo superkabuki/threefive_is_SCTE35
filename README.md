@@ -5,11 +5,11 @@
 
 # v3.0.55 is the latest 
 
-* threefive installs.
-    * today: __225__
-    * last seven days: __2,176__
-    * last thirty days: __10,014__
-    * last five years: __1,028,141__
+* __threefive__ installs.
+    * today: __350__
+    * last seven days: __2,288__
+    * last thirty days: __10,491__
+    * last five years: __1,029,995__
 <samp>
 	
 ---
