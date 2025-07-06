@@ -1,5 +1,5 @@
 # Sassy
-##### _SCTE-35 As a Service and Stuff_
+##### _SCTE-35 As a Service and Stuff Y\'all_
 
 ## Sassy accepts both POST and GET requests and even works in your browser..
 
