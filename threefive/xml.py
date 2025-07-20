@@ -17,7 +17,7 @@ def t2s(v):
     rounds to six decimal places
     """
     u=pif(v)
-    if  isinstance(u,(int)) and u > 90000:
+    if  isinstance(u,int) and u > 90000:
         u = round(u/ 90000.0, 6)
     return u
 
@@ -41,10 +41,6 @@ def un_xml(v):
         "false": False,
         "true": True,
     }
-##    if v.isdigit():
-##        return int(v)
-##    if v.replace(".", "").isdigit():
-##        return float(v)
     v=pif(v)
     if v in mapped:
         return mapped[v]
@@ -74,21 +70,22 @@ def val2xml(val):
     """
     val2xmlconvert val for xml
     """
-    if isinstance(val, (bool, int, float)):
-        return str(val).lower()
-    if isinstance(val, str):
-        if val.lower()[:2] == "0x":
-            return str(pif(val))
-    return val
+    ##    if isinstance(val, (bool, int, float)):
+    ##        return str(val).lower()
+    ##    if isinstance(val, str):
+    ##        if val.lower()[:2] == "0x":
+    ##            return str(pif(val))
+    ##    return val
+    return str(pif(val))
 
 
 def key2xml(string):
     """
     key2xml convert name to camel case
     """
-    new_string = string
-    if "_" in string:
-        new_string = string.title().replace("_", "")
+##    new_string = string
+##    if "_" in string:
+    new_string = string.title().replace("_", "")
     return new_string[0].lower() + new_string[1:]
 
 
