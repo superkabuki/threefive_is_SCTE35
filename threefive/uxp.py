@@ -337,7 +337,7 @@ class NodeConverter:
     def _xmltimedescriptor(node):
         setme = {
             "tag": 3,
-            "identifi er": "CUEI",
+            "identifier": "CUEI",
         }
         node.attrs.update(setme)
         return node.attrs
