@@ -258,6 +258,8 @@ cue.show()
      * The cli tool comes with builtin documentation just type `threefive help`
 ### `HLS`
 * [Advanced Parsing of SCTE-35 in HLS with threefive](https://github.com/superkabuki/threefive/blob/main/hls.md) All HLS SCTE-35 tags, Sidecar Files, AAC ID3 Header Timestamps, SCTE-35 filters... Who loves you baby?
+  <img width="1084" height="689" alt="image" src="https://github.com/user-attachments/assets/35804a93-1002-46e5-b930-143c3cc1428e" />
+
 ### `MPEGTS Packet Injection`
 * [The SuperKabuki MPEGTS Packet Injection Engine in the Cli](inject.md)
 
