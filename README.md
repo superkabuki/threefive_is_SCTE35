@@ -605,7 +605,7 @@ threefive '/DAWAAAAAAAAAP/wBQb+ztd7owAAdIbbmw=='
 |  __Stdin__        |  `threefive < video.ts`            |
 |  __UDP Multicast__|  `threefive udp://@235.35.3.5:9999`                                                                          |
 |  __UDP Unicast__  |                                                                      `threefive udp://10.0.0.7:5555`                                              |
-|  HLS__          |                                                                                                    `threefive hls https://example.com/master.m3u8`|
+|  __HLS__          |                                                                                                    `threefive hls https://example.com/master.m3u8`|
 |               |                                                                                                                                                    |
 
 
