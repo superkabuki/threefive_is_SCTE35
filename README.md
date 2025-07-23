@@ -315,7 +315,8 @@ ___
 ### `Using the library`
 
 * Let me show you how easy threefive is to use.
-* well start off reading SCTE-35 xml from a file
+
+* reading SCTE-35 xml from a file
 ```py3
 a@fu:~/threefive$ pypy3
 Python 3.9.16 (7.3.11+dfsg-2+deb12u3, Dec 30 2024, 22:36:23)
@@ -324,6 +325,7 @@ Type "help", "copyright", "credits" or "license" for more information.
 >>>> from threefive import reader
 >>>> from threefive import Cue
 >>>> data =reader('/home/a/xml.xml').read()
+```
 * load it into a threefive.Cue instance
 ```py3
 >>>> cue = Cue(data)
@@ -382,34 +384,8 @@ Type "help", "copyright", "credits" or "license" for more information.
             "provider_avail_id": 13,
             "descriptor_length": 8
         },
-        {
-            "tag": 0,
-            "identifier": "CUEI",
-            "name": "Avail Descriptor",
-            "provider_avail_id": 14,
-            "descriptor_length": 8
-        },
-        {
-            "tag": 0,
-            "identifier": "CUEI",
-            "name": "Avail Descriptor",
-            "provider_avail_id": 15,
-            "descriptor_length": 8
-        },
-        {
-            "tag": 0,
-            "identifier": "CUEI",
-            "name": "Avail Descriptor",
-            "provider_avail_id": 16,
-            "descriptor_length": 8
-        },
-        {
-            "tag": 0,
-            "identifier": "CUEI",
-            "name": "Avail Descriptor",
-            "provider_avail_id": 17,
-            "descriptor_length": 8
-        }
+      
+
     ]
 }
 ```
