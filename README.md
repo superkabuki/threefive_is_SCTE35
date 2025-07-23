@@ -30,13 +30,13 @@
 
 
 
-
 ### [Super Cool SCTE-35 __Examples__](https://github.com/superkabuki/threefive/tree/main/examples)
 
 
 
 ### [New XML stuff in threefive](node.md) 
 
+### [SCTE-35 Sidecar Files](https://github.com/superkabuki/SCTE-35_Sidecar_Files)
 ---
 
 # `Documentation`
