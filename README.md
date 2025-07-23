@@ -1,4 +1,3 @@
- [__Install__](#install) |[__SCTE-35 Cli__](#the-cli-tool) | [__SCTE-35 HLS__](https://github.com/superkabuki/threefive/blob/main/hls.md) | [__Cue__ Class](https://github.com/superkabuki/threefive/blob/main/cue.md) | [__Stream__ Class](https://github.com/superkabuki/threefive/blob/main/stream.md) | [__Online SCTE-35 Parser__](https://iodisco.com/scte35) | [__Encode SCTE-35__](https://github.com/superkabuki/threefive/blob/main/encode.md) | [__SCTE-35 Examples__](https://github.com/superkabuki/threefive/tree/main/examples)
  | [__SCTE-35 XML__ ](https://github.com/superkabuki/SCTE-35/blob/main/xml.md) and [More __XML__](node.md) | [__SuperKabuki SCTE-35 MPEGTS Packet Injection__](inject.md) | [__SCTE-35 As a Service__](sassy.md)
 
  # threefive.  _Nobody does SCTE-35 better_.
@@ -21,22 +20,15 @@
 * __Injects SCTE-35 Packets__ into __MPEGTS__ video.
 
 ---
+* [The __SuperKabuki SCTE-35 MPEGTS Packet Injection Engine__](inject.md) 
 
-### [The __SuperKabuki SCTE-35 MPEGTS Packet Injection Engine__](inject.md) 
+* [Sassy, the new SCTE-35 as a service, Decode SCTE-35 in your browser](sassy.md)      
 
+* [Super Cool SCTE-35 __Examples__](https://github.com/superkabuki/threefive/tree/main/examples)
 
+* [New XML stuff in threefive](node.md) 
 
-### [Sassy, the new SCTE-35 as a service, Decode SCTE-35 in your browser](sassy.md)      
-
-
-
-### [Super Cool SCTE-35 __Examples__](https://github.com/superkabuki/threefive/tree/main/examples)
-
-
-
-### [New XML stuff in threefive](node.md) 
-
-### [SCTE-35 Sidecar Files](https://github.com/superkabuki/SCTE-35_Sidecar_Files)
+* [SCTE-35 Sidecar Files](https://github.com/superkabuki/SCTE-35_Sidecar_Files)
 ---
 
 # `Documentation`
@@ -770,85 +762,6 @@ a@fu:~$
 </table> 
 
 
-<details><summary>Base64 SCTE-35</summary>
- 
- 
-* The Cli tool can decode Base64 SCTE-35 on the command line.
-
- 
-```smalltalk
-	a@fu:~$ threefive '/DAgAAAAAAAAAP/wDwUAAAABf//+AA27oAABAAAAANwB3tE='
-```
-
-* Using the library Base64 SCTE-35 is decoded by the Cue class.
-
-```py3
-	
-	from threefive import Cue
-	
-	data='/DAgAAAAAAAAAP/wDwUAAAABf//+AA27oAABAAAAANwB3tE='   
-	
-	cue=Cue(data)
-	
-	cue.show()
-	
-```
-
-</details>
-
-<details><summary>Hex SCTE-35</summary>
-
-	
-* The Cli tool 
-```js
-	a@fu:~$ threefive 0xfc302000000000000000fff00f05000000017ffffe000dbba0000100000000dc01ded1
-
-```
-* Convert from Hex to bas64,bytes,json,Int, xml or xmlbin
-```js
-	a@fu:~$ threefive 0xfc302000000000000000fff00f05000000017ffffe000dbba0000100000000dc01ded1 base64
-```
-```js
-	a@fu:~$ threefive 0xfc302000000000000000fff00f05000000017ffffe000dbba0000100000000dc01ded1 xml
-```
-* Convert to Hex
-```js
-a@fu:~$ threefive '/DAgAAAAAAAAAP/wDwUAAAABf//+AA27oAABAAAAANwB3tE=' hex
-```
-
-* lib
-```py3
-	
-from threefive import Cue
-	
-data='0xfc302000000000000000fff00f05000000017ffffe000dbba0000100000000dc01ded1''   
-	
-cue=Cue(data)
-	
-cue.show()
-	
-```
-
-* Convert from Hex to bas64,bytes,json,Int, xml or xmlbin
-
-```py3
-from threefive import Cue	
-data='0xfc302000000000000000fff00f05000000017ffffe000dbba0000100000000dc01ded1''   
-cue=Cue(data)
-
-cue.base64() 	# base64
-
-cue.bytes()  	# or bytes
-
-cue.show()  	# or json
-
-cue.int()  		# or int
-
-cue.xml()  		# or xml
-
-cue.xmlbin() 	# or xmlbin
-```
-</details>
 
  <svg width="100" height="100">
   <circle cx="50" cy="50" r="40" stroke="green" stroke-width="4" fill="yellow" />
