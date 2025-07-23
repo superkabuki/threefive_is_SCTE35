@@ -26,16 +26,6 @@
 * __Injects SCTE-35 Packets__ into __MPEGTS__ video.
 
 ---
-* [The __SuperKabuki SCTE-35 MPEGTS Packet Injection Engine__](inject.md) 
-
-* [__Sassy__, the new __SCTE-35 as a service__, decode SCTE-35 to JSON with https requests.](sassy.md)      
-
-* [Super Cool SCTE-35 __Examples__](https://github.com/superkabuki/threefive/tree/main/examples)
-
-* [New __XML__ stuff in threefive](node.md) 
-
-* [SCTE-35 __Sidecar Files__](https://github.com/superkabuki/SCTE-35_Sidecar_Files)
----
 
 # `Documentation`
 ### `Install`
