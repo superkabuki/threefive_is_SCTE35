@@ -22,13 +22,13 @@
 ---
 * [The __SuperKabuki SCTE-35 MPEGTS Packet Injection Engine__](inject.md) 
 
-* [Sassy, the new SCTE-35 as a service, Decode SCTE-35 in your browser](sassy.md)      
+* [__Sassy__, the new __SCTE-35 as a service__, decode SCTE-35 to JSON with https requests. No installation required.](sassy.md)      
 
 * [Super Cool SCTE-35 __Examples__](https://github.com/superkabuki/threefive/tree/main/examples)
 
-* [New XML stuff in threefive](node.md) 
+* [New __XML__ stuff in threefive](node.md) 
 
-* [SCTE-35 Sidecar Files](https://github.com/superkabuki/SCTE-35_Sidecar_Files)
+* [SCTE-35 __Sidecar Files__](https://github.com/superkabuki/SCTE-35_Sidecar_Files)
 ---
 
 # `Documentation`
