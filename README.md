@@ -1,13 +1,19 @@
- | [__SCTE-35 XML__ ](https://github.com/superkabuki/SCTE-35/blob/main/xml.md) and [More __XML__](node.md) | [__SuperKabuki SCTE-35 MPEGTS Packet Injection__](inject.md) | [__SCTE-35 As a Service__](sassy.md)
-
  # threefive.  _Nobody does SCTE-35 better_.
- 
+
   ✅  SCTE-35 Decoder   ✅  SCTE-35 Encoder   ✅  SCTE-35 Cli tool  ✅   SCTE-35 Library  
-
-
 ### latest is `v3.0.57` 
 
 <samp>
+
+[__Install__](#install) |[SCTE-35 __Cli__](#the-cli-tool) | [SCTE-35 __HLS__](https://github.com/superkabuki/threefive/blob/main/hls.md) | [__Cue__ Class](https://github.com/superkabuki/threefive/blob/main/cue.md) | [__Stream__ Class](https://github.com/superkabuki/threefive/blob/main/stream.md) | [__Online__ SCTE-35 __Parser__](https://iodisco.com/scte35) | [__Encode__ SCTE-35](https://github.com/superkabuki/threefive/blob/main/encode.md) | [SCTE-35 __Examples__](https://github.com/superkabuki/threefive/tree/main/examples)
+| [SCTE-35 __XML__ ](https://github.com/superkabuki/SCTE-35/blob/main/xml.md) and [More __XML__](node.md) | [__SuperKabuki__ SCTE-35 MPEGTS __Packet Injection__](inject.md) | [SCTE-35 __As a Service__](sassy.md) | [SCTE-35 __Sidecar Files__](https://github.com/superkabuki/SCTE-35_Sidecar_Files)
+
+
+
+ 
+
+
+
 	
 ---
 
