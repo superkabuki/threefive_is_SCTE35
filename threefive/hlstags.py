@@ -122,7 +122,7 @@ class TagParser:
             return
         tag, tail = line.split(colon, one)
         self.tags[tag] = {}
-        if tag in ["#EXT-OATCLS-SCTE35","#EXT-X-DATERANGE"]:
+        if tag in ["#EXT-OATCLS-SCTE35"]:
             self._oated(tag, tail)
             return
         self._split_tail(tag, tail)
