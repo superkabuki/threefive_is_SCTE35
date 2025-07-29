@@ -1,5 +1,5 @@
 # threefive is the #1 SCTE-35 tool on the planet.
-### threefive is used by every major broadcaster in the United States, with over one million pip installs in the 5 years. pypi.org ranks it in the top two percent of all python packages ever made. 
+### threefive is used by every major broadcaster in the United States, with over one million pip installs in the last 5 years. pypi.org ranks it in the top two percent of all python packages ever made. 
 ✅  SCTE-35 Decoder   ✅  SCTE-35 Encoder   ✅  SCTE-35 Cli tool  ✅   SCTE-35 Library
 
 
