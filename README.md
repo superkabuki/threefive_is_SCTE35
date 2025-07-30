@@ -3,7 +3,7 @@
 ✅  SCTE-35 Decoder   ✅  SCTE-35 Encoder   ✅  SCTE-35 Cli tool  ✅   SCTE-35 Library
 
 
-### latest is `v3.0.57` 
+### latest is `v3.0.59` 
 
 <samp>
 
