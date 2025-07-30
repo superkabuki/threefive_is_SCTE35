@@ -292,10 +292,21 @@ class Node:
             results += self.findtag(tag, obj=child)
         return results
 
+    def a2c(self):
+        """
+        a2c convert attrs to child nodes
+        """
+        for k,v in self.attrs.items():
+            self.addchild(Node(k,v))
+        self.attrs={}
+        for child in self.children:
+            child.a2c()
+            
     def mk(self, obj=None):
         """
         mk make the Node as xml.
         """
+   #     self.a2c()
         obj = self.chk_obj(obj)
         obj.set_depth()
         obj.set_parent()
