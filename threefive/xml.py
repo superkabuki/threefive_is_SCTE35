@@ -78,13 +78,8 @@ def val2xml(val):
 
 
 def key2xml(string):
-    """
-    key2xml convert name to camel case
-    """
-##    new_string = string
-##    if "_" in string:
-    head,*tail  = ""string.title().replace("_", "")
-    return new_string[0].lower() + new_string[1:]
+    newstring  = string.title().replace("_", "")
+    return newstring[0:1].lower() + newstring[1:]
 
 
 def mk_xml_attrs(attrs):
