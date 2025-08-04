@@ -13,18 +13,9 @@
 
 
 ### Over 1 million installs. Last month: 11,000 installs. Last week: 2300 installs.
-### Why do I only have 11 stars? Everybody like to feel appreciated and I don't. 
 <img width="1032" height="152" alt="image" src="https://github.com/user-attachments/assets/56ebd69d-845c-4122-9723-9e905654c609" />
 
-### If you would like this project to continue, I need two things, some help and some appreciation.
-### A lot of big companies are using my code and putting their name on it, now they need give something back to the project.
-### This is the last time I'm bringing this up.
-* I need folks to write docs
-* I need folks to create some unit testing type stuff.
-* I need CSS folks, I want to do a web interface with click to add SCTE-35 built in to the player. I have most of it done, but I need somebody to design the page.
-* I would also like some design for the online parser. 
- 
-
+### Why do I only have 11 stars?  Y'all are going to miss me when I leave to become a Dallas Cowboys Cheerleader.
 
 
 	
