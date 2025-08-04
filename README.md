@@ -15,7 +15,7 @@
 ### Over 1 million installs. Last month: 11,000 installs. Last week: 2300 installs.
 <img width="1032" height="152" alt="image" src="https://github.com/user-attachments/assets/56ebd69d-845c-4122-9723-9e905654c609" />
 
-### Why do I only have 11 stars?  Y'all are going to miss me when I leave to become a Dallas Cowboys Cheerleader.
+### Why do I only have 11 stars?  <br>Y'all are going to miss me when I leave to become a Dallas Cowboys Cheerleader.
 
 
 	
