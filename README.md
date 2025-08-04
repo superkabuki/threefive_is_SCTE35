@@ -1,10 +1,10 @@
 # threefive is the #1 SCTE-35 tool on the planet.
-#### After watching Fifteen seasons of The Dallas Cowboy Cheerleaders, "Making The Team", I feel like this is my year to try out. 
-### It's my time, my time to shine.  
+<samp><i>
+ After watching fifteen seasons of The Dallas Cowboy Cheerleaders,<br>"Making The Team", I feel like this is my year to try out.<br> It's my time, my time to shine.  <br>
 ✅  SCTE-35 Decoder   ✅  SCTE-35 Encoder   ✅  SCTE-35 Cli tool  ✅   SCTE-35 Library
 
-
 ### latest is `v3.0.59` 
+</i></samp>
 
 <samp>
 
