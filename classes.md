@@ -1,11 +1,12 @@
-# threefive commonly used classes and inheritance.
-This shows the inheritence of classes. <br>
+# threefive commonly used classes. 
+#### threefive is Object Oriented. Almost all of threefive is contained in classes. Inheritance is intentionally shallow, subclassing is limit to a depth of two. These are the classes you are most likely to use. The Cue class and the Stream class will be used most often..
+<br>
 All of the classes shown can be imported from directly threefive.
 
 # SCTE-35 Specific Stuff
 ### Most SCTE-35 objects are subclassed from SCTE35Base
 * SCTE35Base
-    * Cue
+    * __Cue__
     * SpliceInfoSection 
     * SpliceCommand
         * BandwidthReservation
@@ -33,7 +34,7 @@ All of the classes shown can be imported from directly threefive.
 
 # SCTE-35 Related stuff
 ### Most MPEGTS parsers are either a Stream instance or subclass of Stream.
-* Stream
+* __Stream__
     * Segment
     * SixFix
        * SuperKabuki
