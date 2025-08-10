@@ -1,7 +1,8 @@
 # threefive is the #1 SCTE-35 tool on the planet.
 <samp><i>
-In my spare time I make ozone. oh three baby. I love the smell. 
-<i>~Adrian</i>
+In my spare time I make ozone. oh three baby. I love the smell. <br>
+~Adrian</i>
+<br><br>
 ✅  SCTE-35 Decoder   ✅  SCTE-35 Encoder   ✅  SCTE-35 Cli tool  ✅   SCTE-35 Library
 
 ### latest is `v3.0.59` 
