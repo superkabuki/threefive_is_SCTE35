@@ -6,7 +6,7 @@ All of the classes shown can be imported from directly threefive.
 # SCTE-35 Specific Stuff
 ### Most SCTE-35 objects are subclassed from SCTE35Base
 * SCTE35Base
-    * __Cue__
+    * [__Cue__](threefive/cue.py)
     * SpliceInfoSection 
     * SpliceCommand
         * BandwidthReservation
