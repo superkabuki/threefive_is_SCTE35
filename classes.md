@@ -1,5 +1,5 @@
 # threefive commonly used classes. 
-#### threefive is Object Oriented. Almost all of threefive is contained in classes. Inheritance is intentionally shallow, subclassing is limit to a depth of two. These are the classes you are most likely to use. The Cue class and the Stream class will be used most often..
+#### threefive is Object Oriented. Almost all of threefive is contained in classes. Inheritance is intentionally shallow, subclassing is limit to a depth of two. These are the classes you are most likely to use. The Cue class and the Stream class will be used most often.
 <br>
 All of the classes shown can be imported from directly threefive.
 
@@ -7,14 +7,14 @@ All of the classes shown can be imported from directly threefive.
 ### Most SCTE-35 objects are subclassed from SCTE35Base
 * SCTE35Base
     * [__Cue__](threefive/cue.py)
-    * SpliceInfoSection 
-    * SpliceCommand
+    * [SpliceInfoSection](threefive/section.py) 
+    * [SpliceCommand](threefive/commands.py)
         * BandwidthReservation
         * PrivateCommand
         * SpliceNull
         * TimeSignal
             * SpliceInsert
-   * SpliceDescriptor
+   * [SpliceDescriptor](threefive/descriptors.py)
         * AvailDescriptor
         * DtmfDescriptor
         * DVBDASDescriptor
@@ -22,7 +22,7 @@ All of the classes shown can be imported from directly threefive.
         * TimeDescriptor
 
 ## All upids are either Upid instances or a subclass of Upid.
-* Upid
+* [Upid](threefive/upids.py)
     * AirId
     * Atsc
     * Mid
@@ -34,32 +34,32 @@ All of the classes shown can be imported from directly threefive.
 
 # SCTE-35 Related stuff
 ### Most MPEGTS parsers are either a Stream instance or subclass of Stream.
-* __Stream__
-    * Segment
-    * SixFix
-       * SuperKabuki
+* [__Stream__](threefive/stream.py)
+    * [Segment](threefive/segment.py)
+    * [SixFix](threefive/sixfix.py)
+       * [SuperKabuki](threefive/superkabuki.py)
 
 ### Other MPEGTS classes.
-* IFramer
+* [IFramer](threefive/iframes.py)
 * Socked(socket.socket)
 * PMT
 
 ### Multicast Sender/Server
-* GumS
+* [GumS](threefive/gums.py)
 
 ### HLS related classes
-* AacParser
-* HlsParser
-* TagParser
+* [AacParser](threefive/aac.py)
+* [HlsParser](threefive/hls.py)
+* [TagParser](threefive/hlstags.py)
 
 ### Bitwise decoder and encoder classes
-* Bitn
-* NBin
+* [Bitn](threefive/bitn.py)
+* [NBin](threefive/bitn.py)
 
 ### Xml
-* UltraXmlParser
-* NameSpace
-* Node
-    * Comment
-* NodeConverter
-* NodeList(list)
+* [UltraXmlParser](threefive/uxp.py)
+* [NameSpace](threefive/xml.py)
+* [Node](threefive/xml.py)
+    * [Comment](threefive/xml.py)
+* [NodeConverter](threefive/uxp.py)
+* [NodeList](threefive/xml.py)
