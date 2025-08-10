@@ -14,8 +14,8 @@ In my spare time I make ozone. oh three baby. I love the smell. <br>
 | [SCTE-35 __XML__ ](https://github.com/superkabuki/SCTE-35/blob/main/xml.md) and [More __XML__](node.md) | [__SuperKabuki__ SCTE-35 MPEGTS __Packet Injection__](inject.md) | [SCTE-35 __As a Service__](sassy.md) | [SCTE-35 __Sidecar Files__](https://github.com/superkabuki/SCTE-35_Sidecar_Files)
 
 
-### Over 1 million installs. Last month: 11,000 installs. Last week: 2300 installs.
-<img width="1032" height="152" alt="image" src="https://github.com/user-attachments/assets/56ebd69d-845c-4122-9723-9e905654c609" />
+### Over 1 million installs. 
+<img width="1069" height="137" alt="image" src="https://github.com/user-attachments/assets/68a342b7-bbd0-437c-b806-33f78d1172d0" />
 
 
 
