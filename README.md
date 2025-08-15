@@ -1,29 +1,28 @@
- SCTE-35 Decoder   ✅  SCTE-35 Encoder   ✅  SCTE-35 Cli tool  ✅   SCTE-35 Library ✅ 
-
-# threefive is the #1 SCTE-35 tool on the planet.
-
-# latest is `v3.0.59` 
-
-# Q. Who uses threefive? 
-
-# A. Everybody. threefive has been installed 1,050,106 times.
-
-<samp><i>
-threefive is the most advanced and easiest to use SCTE-35 tool on the planet. It has no direct competition. If you think you found a better SCTE-35 tool, you've probably been drinking. Don't drive home. ~Adrian</i>
-<br><br>
-
-</i></samp>
-
-<samp>
 
 [__Install__](#install) |[SCTE-35 __Cli__](#the-cli-tool) | [SCTE-35 __HLS__](https://github.com/superkabuki/threefive/blob/main/hls.md) | [__Cue__ Class](https://github.com/superkabuki/threefive/blob/main/cue.md) | [__Stream__ Class](https://github.com/superkabuki/threefive/blob/main/stream.md) | [SCTE-35 __Online Parser__](https://iodisco.com/scte35) | [__Encode__ SCTE-35](https://github.com/superkabuki/threefive/blob/main/encode.md) | [SCTE-35 __Examples__](https://github.com/superkabuki/threefive/tree/main/examples)
 | [SCTE-35 __XML__ ](https://github.com/superkabuki/SCTE-35/blob/main/xml.md) and [More __XML__](node.md) | [__SuperKabuki__ SCTE-35 MPEGTS __Packet Injection__](inject.md) | [SCTE-35 __As a Service__](sassy.md) | [SCTE-35 __Sidecar Files__](https://github.com/superkabuki/SCTE-35_Sidecar_Files)
 
+# threefive is the #1 SCTE-35 tool on the planet.
+
+
+<samp><i>
+threefive is the most advanced and easiest to use SCTE-35 tool available.<br> If you think you found a better SCTE-35 tool, you're probably drunk. Don't drive home. ~Adrian</i>
+<br><br>
+
+</i></samp>
+
+ ___
+ SCTE-35 Decoder   ✅  SCTE-35 Encoder   ✅  SCTE-35 Cli tool  ✅   SCTE-35 Library ✅ 
+___
 
 
 
-	
----
+### `Q`. Who uses threefive? 
+
+### `A`. Everybody. threefive has been installed 1,050,106 times.
+
+___
+
 
 # threefive
 * __Decodes SCTE-35__ in __TEN__ formats: __MPEGTS, Base64, Bytes, Dicts, Hex,HLS, Integers,JSON,XML and XML+Binary__.
