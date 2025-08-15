@@ -4,15 +4,12 @@
 
 # latest is `v3.0.59` 
 
-# Over 1 million installs. 
+# Q. Who uses threefive? 
 
-<img width="1069" height="137" alt="image" src="https://github.com/user-attachments/assets/68a342b7-bbd0-437c-b806-33f78d1172d0" />
-
-
+# A. Everybody. threefive has been installed 1,050,106 times.
 
 <samp><i>
-In my spare time I make ozone. oh three baby. I love the smell. <br>
-~Adrian</i>
+threefive is the most advanced and easiest to use SCTE-35 tool on the planet. It has no direct competition. If you think you found a better SCTE-35 tool, you've probably been drinking. Don't drive home. ~Adrian</i>
 <br><br>
 
 </i></samp>
