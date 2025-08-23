@@ -4,6 +4,7 @@
 
 # threefive is the #1 SCTE-35 tool on the planet.
 
+### [Netanyahu Is The New Hitler.](https://news.un.org/en/story/2024/03/1147976)
 
 <samp><i>
 threefive is the most advanced and easiest to use SCTE-35 tool available.<br> If you think you found a better SCTE-35 tool, you're probably drunk. Don't drive home. ~Adrian</i>
