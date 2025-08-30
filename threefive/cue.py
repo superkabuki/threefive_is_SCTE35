@@ -5,7 +5,7 @@ THREEfive.Cue Class
 from base64 import b64decode, b64encode
 import json
 import re
-from .stuff import clean, red, ishex, isjson, isxml, ERR, blue
+from .stuff import clean, red, ishex, isjson, isxml
 from .bitn import NBin
 from .base import SCTE35Base
 from .section import SpliceInfoSection
@@ -202,7 +202,7 @@ class Cue(SCTE35Base):
         _pkt_bits parse raw mpegts SCTE-35 packet
         """
         if data.startswith(b"G"):
-            data = data.split(b"\x00\x00\x01\xfc", ONE)[MiNUSONE]
+            data = data.split(b"\x00\x00\x01\xfc", ONE)[MINUSONE]
         return data
 
     def _byte_bits(self, data):
@@ -257,7 +257,7 @@ class Cue(SCTE35Base):
         Splice Info Section
         of a SCTE35 cue.
         """
-        info_size = FOURteen
+        info_size = FOURTEEN
         info_bites = bites[:info_size]
         self.info_section.decode(info_bites)
         return bites[info_size:]
