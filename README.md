@@ -1,11 +1,12 @@
+### [Netanyahu Is The New Hitler.](https://news.un.org/en/story/2024/03/1147976)
 
 [__Install__](#install) |[SCTE-35 __Cli__](#the-cli-tool) | [SCTE-35 __HLS__](https://github.com/superkabuki/threefive/blob/main/hls.md) | [__Cue__ Class](https://github.com/superkabuki/threefive/blob/main/cue.md) | [__Stream__ Class](https://github.com/superkabuki/threefive/blob/main/stream.md) | [SCTE-35 __Online Parser__](https://iodisco.com/scte35) | [__Encode__ SCTE-35](https://github.com/superkabuki/threefive/blob/main/encode.md) | [SCTE-35 __Examples__](https://github.com/superkabuki/threefive/tree/main/examples)
 | [SCTE-35 __XML__ ](https://github.com/superkabuki/SCTE-35/blob/main/xml.md) and [More __XML__](node.md) | [__SuperKabuki__ SCTE-35 MPEGTS __Packet Injection__](inject.md) | [SCTE-35 __As a Service__](sassy.md) | [SCTE-35 __Sidecar Files__](https://github.com/superkabuki/SCTE-35_Sidecar_Files)
 
 
 # threefive is the #1 SCTE-35 tool on the planet.
-
-### [Netanyahu Is The New Hitler.](https://news.un.org/en/story/2024/03/1147976)
+### Cyclomatic Complexity Score: 1.985507 
+_python 3.11 standard library score is 3.07778 (lower is better)_
 
 <samp><i>
 threefive is the most advanced and easiest to use SCTE-35 tool available.<br> If you think you found a better SCTE-35 tool, you're probably drunk. Don't drive home. ~Adrian</i>
