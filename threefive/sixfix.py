@@ -113,6 +113,8 @@ class SixFix(Stream):
         even if they were not that way in the original stream.
         """
         pmt_parts = []
+        if not self.pmt_headers:
+            return False
         pmt = self.pmt_headers.popleft() + pmt.mk()
         if len(pmt) < 188:
             pad = (188 - len(pmt)) * b"\xff"
@@ -120,7 +122,7 @@ class SixFix(Stream):
         else:
             pmt_parts.append(pmt[:188])
             pmt = pmt[188:]
-            while pmt and self.pmt_headers:
+            while pmt and   self.pmt_headers:
                 pmtpkt = self.pmt_headers.popleft() + pmt
                 if len(pmtpkt) < 188:
                     pad = 188 - len(pmtpkt) * b"\xff"
