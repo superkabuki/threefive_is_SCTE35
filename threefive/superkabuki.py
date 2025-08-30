@@ -11,7 +11,7 @@ from operator import itemgetter
 from .new_reader import reader
 from .iframes import IFramer
 from .cue import Cue
-from .stuff import print2, ERR, pif
+from .stuff import print2, ERR, pif,red,blue
 from .bitn import NBin
 from .commands import TimeSignal
 from .sixfix import SixFix
@@ -200,8 +200,8 @@ class SuperKabuki(SixFix):
                 pid = self._parse_pid(pkt[1], pkt[2])
                 pkt = self._parse_by_pid(pkt, pid)
                 if pkt:
-                    self.iframe_action(pkt, active)
                     active.write(pkt)
+                    self.iframe_action(pkt, active)
                     pkt_count = (pkt_count + 1) % chunk_size
                     if not pkt_count:
                         outfile.write(active.getbuffer())
