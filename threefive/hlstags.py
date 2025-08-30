@@ -5,17 +5,17 @@ hlstags.py
 
 from .stuff import pif, ERR
 from .words import (
-    minusone,
-    zero,
-    one,
-    two,
-    colon,
-    comma,
-    equalsign,
-    dblquote,
-    octothorpe,
-    space,
-    nothing,
+    MINUSONE,
+    ZERO,
+    ONE,
+    TWO,
+    COLON,
+    COMMA,
+    EQUALSIGN,
+    DBLQUOTE,
+    OCTOTHORPE,
+    SPACE,
+    NOTHING,
 )
 
 BASIC_TAGS = (
@@ -87,22 +87,22 @@ class TagParser:
         return tail.rstrip(",")
 
     def _oated(self, tag, line):
-        vee = line.split(comma, one)[zero]
+        vee = line.split(COMMA, ONE)[ZERO]
         self.tags[tag] = vee
 
     @staticmethod
     def _starts_with_octothorpe(line):
-        return line[zero] == octothorpe
+        return line[ZERO] == OCTOTHORPE
 
     @staticmethod
     def _colon_in_line(line):
-        return colon in line
+        return COLON in line
 
     def precheck(self, line):
         """
         precheck precheck that a line has tags
         """
-        line = line.replace(space, nothing)
+        line = line.replace(SPACE, NOTHING)
         if not line:
             return False
         if not self._starts_with_octothorpe(line):
@@ -120,7 +120,7 @@ class TagParser:
         line = self.precheck(line)
         if not line:
             return
-        tag, tail = line.split(colon, one)
+        tag, tail = line.split(COLON, ONE)
         self.tags[tag] = {}
         if tag in ["#EXT-OATCLS-SCTE35"]:
             self._oated(tag, tail)
@@ -133,7 +133,7 @@ class TagParser:
         """
         while tail:
             tail = self._strip_last_comma(tail)
-            if equalsign not in tail:
+            if EQUALSIGN not in tail:
                 self.tags[tag] = pif(tail)
                 return
             tail, value = self._split_value(tag, tail)
@@ -145,14 +145,14 @@ class TagParser:
         _split_key splits off the last attribute key
         """
         if tail:
-            splitup = tail.rsplit(comma, one)
-            if len(splitup) == two:
+            splitup = tail.rsplit(COMMA, ONE)
+            if len(splitup) == TWO:
                 tail, key = splitup
             else:
-                key = splitup[zero]
+                key = splitup[ZERO]
                 tail = None
-            if equalsign in key:
-                key, value = key.split(equalsign, one)
+            if EQUALSIGN in key:
+                key, value = key.split(EQUALSIGN, ONE)
             self.tags[tag][key] = value
         return tail
 
@@ -161,7 +161,7 @@ class TagParser:
         _split_value does a right split
         off tail for the value in a key=value pair.
         """
-        if tail[minusone:] == dblquote:
+        if tail[MINUSONE:] == DBLQUOTE:
             tail, value = self._quoted(tag, tail)
         else:
             tail, value = self._unquoted(tag, tail)
@@ -173,10 +173,10 @@ class TagParser:
         """
         value = None
         try:
-            tail, value = tail[:minusone].rsplit(equalsign + dblquote, one)
+            tail, value = tail[:MINUSONE].rsplit(EQUALSIGN + DBLQUOTE, ONE)
         except ERR:
             self.tags[tag]
-            value = tail.replace(dblquote, nothing)
+            value = tail.replace(DBLQUOTE, NOTHING)
             tail = None
         return tail, value
 
@@ -187,11 +187,11 @@ class TagParser:
         value = None
         hold = ""
         # = is only allowed as a suffix in base64
-        while tail.endswith(equalsign):
-            hold += tail[minusone]
-            tail = tail[:minusone]
+        while tail.endswith(EQUALSIGN):
+            hold += tail[MINUSONE]
+            tail = tail[:MINUSONE]
         try:
-            tail, value = tail.rsplit(equalsign, one)
+            tail, value = tail.rsplit(EQUALSIGN, ONE)
             value += hold
             value = pif(value)
         except ERR:
