@@ -11,7 +11,7 @@ from operator import itemgetter
 from .new_reader import reader
 from .iframes import IFramer
 from .cue import Cue
-from .stuff import print2, ERR, pif,red,blue
+from .stuff import print2, ERR, pif
 from .bitn import NBin
 from .commands import TimeSignal
 from .sixfix import SixFix
