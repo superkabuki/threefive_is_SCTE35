@@ -14,7 +14,7 @@ from .descriptors import splice_descriptor, descriptor_map
 from .crc import crc32
 from .segmentation import table22
 from .words import (
-    MiNUSONE,
+    MINUSONE,
     ZERO,
     ONE,
     TWO,
