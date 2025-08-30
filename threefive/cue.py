@@ -1,5 +1,5 @@
 """
-threefive.Cue Class
+THREEfive.Cue Class
 """
 
 from base64 import b64decode, b64encode
@@ -14,17 +14,17 @@ from .descriptors import splice_descriptor, descriptor_map
 from .crc import crc32
 from .segmentation import table22
 from .words import (
-    minusone,
-    zero,
-    one,
-    two,
-    three,
-    four,
-    eight,
-    eleven,
-    fourteen,
-    sixteen,
-    equalsign,
+    MiNUSONE,
+    ZERO,
+    ONE,
+    TWO,
+    THREE,
+    FOUR,
+    EIGHT,
+    ELEVEN,
+    FOURTEEN,
+    SIXTEEN,
+    EQUALSIGN,
 )
 from .xml import Node
 from .uxp import xml2cue
@@ -32,13 +32,13 @@ from .uxp import xml2cue
 
 class Cue(SCTE35Base):
     """
-    The threefive.Cue class handles parsing
+    The THREEfive.Cue class handles parsing
     SCTE 35 message strings.
     Example usage:
 
-    >>>> import threefive
+    >>>> import THREEfive
     >>>> Base64 = "/DAvAAAAAAAA///wBQb+dGKQoAAZAhdDVUVJSAAAjn+fCAgAAAAALKChijUCAKnMZ1g="
-    >>>> cue = threefive.Cue(Base64)
+    >>>> cue = THREEfive.Cue(Base64)
     >>>> cue.show()
 
     * A cue instance can be initialized with
@@ -90,7 +90,7 @@ class Cue(SCTE35Base):
             bites = self._set_splice_command(bites)
             bites = self._mk_descriptors(bites)
             if bites:
-                crc = hex(int.from_bytes(bites[zero:four], byteorder="big"))
+                crc = hex(int.from_bytes(bites[ZERO:FOUR], byteorder="big"))
                 self.info_section.crc = crc
                 return True
         return False
@@ -99,7 +99,7 @@ class Cue(SCTE35Base):
         """
         Cue._descriptor_loop parses all splice descriptors
         """
-        tag_n_len = two
+        tag_n_len = TWO
         while len(loop_bites) > tag_n_len:
             spliced = splice_descriptor(loop_bites)
             sd_size = tag_n_len + spliced.descriptor_length
@@ -138,8 +138,8 @@ class Cue(SCTE35Base):
         """
         fix_bad_b64 fixes bad padding on Base64
         """
-        while len(data) % four != zero:
-            data = data + equalsign
+        while len(data) % FOUR != ZERO:
+            data = data + EQUALSIGN
         return data
 
     # mk_bits stuff
@@ -148,7 +148,7 @@ class Cue(SCTE35Base):
         """
         _int_bits convert a SCTE-35 Cue from integer to bytes.
         """
-        length = data.bit_length() >> three
+        length = data.bit_length() >> THREE
         bites = int.to_bytes(data, length, byteorder="big")
         self.bites = bites
 
@@ -156,7 +156,7 @@ class Cue(SCTE35Base):
         """
         _hex_bits convert a SCTE-35 Cue from hex to bytes.
         """
-        i = int(data, sixteen)
+        i = int(data, SIXTEEN)
         self._int_bits(i)
 
     def _b64_bits(self, data):
@@ -202,7 +202,7 @@ class Cue(SCTE35Base):
         _pkt_bits parse raw mpegts SCTE-35 packet
         """
         if data.startswith(b"G"):
-            data = data.split(b"\x00\x00\x01\xfc", one)[minusone]
+            data = data.split(b"\x00\x00\x01\xfc", ONE)[MiNUSONE]
         return data
 
     def _byte_bits(self, data):
@@ -244,9 +244,9 @@ class Cue(SCTE35Base):
         then call Cue._descriptor_loop
         """
         while bites:
-            dll = (bites[zero] << eight) | bites[one]
+            dll = (bites[ZERO] << EIGHT) | bites[ONE]
             self.info_section.descriptor_loop_length = dll
-            bites = bites[two:]
+            bites = bites[TWO:]
             self._descriptor_loop(bites[:dll])
             return bites[dll:]
         return False
@@ -257,7 +257,7 @@ class Cue(SCTE35Base):
         Splice Info Section
         of a SCTE35 cue.
         """
-        info_size = fourteen
+        info_size = FOURteen
         info_bites = bites[:info_size]
         self.info_section.decode(info_bites)
         return bites[info_size:]
@@ -290,11 +290,11 @@ class Cue(SCTE35Base):
         self.info_section.splice_command_type = self.command.command_type
         # 11 bytes for info section + command + 2 descriptor loop length
         # + descriptor loop + 4 for crc
-        self.info_section.section_length = eleven + cmdl + two + dll + four
+        self.info_section.section_length = ELEVEN + cmdl + TWO + dll + FOUR
         self.bites = self.info_section.encode()
         self.bites += cmd_bites
         self.bites += int.to_bytes(
-            self.info_section.descriptor_loop_length, two, byteorder="big"
+            self.info_section.descriptor_loop_length, TWO, byteorder="big"
         )
         self.bites += dscptr_bites
 
@@ -353,7 +353,7 @@ class Cue(SCTE35Base):
         """
         crc_int = crc32(self.bites)
         self.info_section.crc = hex(crc_int)
-        self.bites += int.to_bytes(crc_int, four, byteorder="big")
+        self.bites += int.to_bytes(crc_int, FOUR, byteorder="big")
 
     def _unloop_descriptors(self):
         """
@@ -366,8 +366,8 @@ class Cue(SCTE35Base):
         dbite_chunks = [dsptr.encode() for dsptr in self.descriptors]
         for chunk, dsptr in zip(dbite_chunks, self.descriptors):
             dsptr.descriptor_length = len(chunk)
-            all_bites.add_int(dsptr.tag, eight)
-            all_bites.add_int(dsptr.descriptor_length, eight)
+            all_bites.add_int(dsptr.tag, EIGHT)
+            all_bites.add_int(dsptr.descriptor_length, EIGHT)
             all_bites.add_bites(chunk)
         return all_bites.bites
 
@@ -487,7 +487,7 @@ class Cue(SCTE35Base):
 
     def xml(self, ns="scte35"):
         """
-        xml returns a threefive.Node instance
+        xml returns a THREEfive.Node instance
         which can be edited as needed or printed.
         xmlbin
         """
@@ -501,7 +501,7 @@ class Cue(SCTE35Base):
 
     def xmlbin(self, ns="scte35"):
         """
-        xml returns a threefive.Node instance
+        xml returns a THREEfive.Node instance
         which can be edited as needed or printed.
         xmlbin
         """
