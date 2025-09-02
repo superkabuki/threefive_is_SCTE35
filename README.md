@@ -1,4 +1,4 @@
-### [Netanyahu Is The New Hitler.](https://news.un.org/en/story/2024/03/1147976)
+# [Netanyahu Is The New Hitler.](https://news.un.org/en/story/2024/03/1147976)
 
 [__Install__](#install) |[SCTE-35 __Cli__](#the-cli-tool) | [SCTE-35 __HLS__](https://github.com/superkabuki/threefive/blob/main/hls.md) | [__Cue__ Class](https://github.com/superkabuki/threefive/blob/main/cue.md) | [__Stream__ Class](https://github.com/superkabuki/threefive/blob/main/stream.md) | [SCTE-35 __Online Parser__](https://iodisco.com/scte35) | [__Encode__ SCTE-35](https://github.com/superkabuki/threefive/blob/main/encode.md) | [SCTE-35 __Examples__](https://github.com/superkabuki/threefive/tree/main/examples)
 | [SCTE-35 __XML__ ](https://github.com/superkabuki/SCTE-35/blob/main/xml.md) and [More __XML__](node.md) | [__SuperKabuki__ SCTE-35 MPEGTS __Packet Injection__](inject.md) | [SCTE-35 __As a Service__](sassy.md) | [SCTE-35 __Sidecar Files__](https://github.com/superkabuki/SCTE-35_Sidecar_Files)
@@ -35,6 +35,67 @@ ___
 * __Injects SCTE-35 Packets__ into __MPEGTS__ video.
 
 ---
+<details><summary> Bug fix</summary>
+
+### The bug: threefive does SCTE-35 packet injection, with the cli tool the `superkabuki` keyword and the `-t` switch was supposed to insert a  SCTE-35 TimeSignal  at every iframe, but the SCTE-35 packet was being inserted a fraction of a second early. This bug causes all packet injection to be off by a fraction of a second. The fix has already been committed. 
+
+Example
+
+*  Inject SCTE-35 Time Signals at iframes
+```sh
+a@fu:~$ threefive superkabuki -i ~/mpegts2/mpegts/abcnew.ts -t -o old-sk.ts
+
+Output File:	old-sk.ts
+a@fu:~$ 
+
+```
+* Parse the created file 
+```js
+a@fu:~$ threefive old-sk.ts 
+
+{
+    "info_section": {
+        "table_id": "0xfc",
+        "section_syntax_indicator": false,
+        "private": false,
+        "sap_type": "0x03",
+        "sap_details": "No Sap Type",
+        "section_length": 22,
+        "protocol_version": 0,
+        "encrypted_packet": false,
+        "encryption_algorithm": 0,
+        "pts_adjustment": 0.0,
+        "cw_index": "0x00",
+        "tier": "0x0fff",
+        "splice_command_length": 5,
+        "splice_command_type": 6,
+        "descriptor_loop_length": 0,
+        "crc": "0xbd407add"
+    },
+    "command": {
+        "command_length": 5,
+        "command_type": 6,
+        "name": "Time Signal",
+        "time_specified_flag": true,
+        "pts_time": 72668.4959       # <---- This is Iframe PTS
+    },
+    "descriptors": [],
+    "packet_data": {
+        "pid": 134,
+        "program": 1,
+        "pts": 72668.246522    # <---- This is the PTS of the inserted packet
+    }
+
+```
+*  That's 0.2493780 seconds early, not that much but enough to cause problems.
+
+# The Fix
+* Write the packet that was just parsed before inserting the SCTE-35 packet. Here's the commit
+ <img width="1058" height="497" alt="image" src="https://github.com/user-attachments/assets/dbede8ef-f558-4340-b1d3-4f985baa1530" />
+
+ * Example
+
+</details>
 
 # `Documentation`
 ### `Install`
