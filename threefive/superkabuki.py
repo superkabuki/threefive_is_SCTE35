@@ -165,12 +165,14 @@ class SuperKabuki(SixFix):
             self._parse_pts(pkt, pid)
         return pkt
 
-    def iframe_action(self, pkt, active):
+    def iframe_action(self, pkt, pid,active):
         """
         iframe_action this is what we do when we find an iframe.
         """
         pts = self.iframer.parse(pkt)  # insert on iframe
         if pts:
+            prgm = self.pid2prgm(pid)
+            self.maps.prgm_pts[prgm] = pts
             self.auto_time_signals(pts, active)
             self.load_sidecar(pts)
             self.add_scte35_pkt(pts, active)
@@ -200,8 +202,8 @@ class SuperKabuki(SixFix):
                 pid = self._parse_pid(pkt[1], pkt[2])
                 pkt = self._parse_by_pid(pkt, pid)
                 if pkt:
+                    self.iframe_action(pkt, pid,active)
                     active.write(pkt)
-                    self.iframe_action(pkt, active)
                     pkt_count = (pkt_count + 1) % chunk_size
                     if not pkt_count:
                         outfile.write(active.getbuffer())
