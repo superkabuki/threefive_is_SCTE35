@@ -1,13 +1,6 @@
 # threefive is The Best SCTE-35 Tool Available.***
 
 
-<i>
-<b>If you work with SCTE-35 , you want to use threefive</b>.</i> ~Adrian
-<br><br>
-
-</i>
-
-
 *** No asterisks needed.
 
 
@@ -36,120 +29,8 @@ ___
 * __Injects SCTE-35 Packets__ into __MPEGTS__ video.
 
 ---
+<img width="516" height="512" alt="image" src="https://github.com/user-attachments/assets/642cb803-9465-408e-bb6e-03549eb22d78" />
 
-## Head's up!
-<details><summary><B>Fix for the SCTE-35 packet injection "off by one" Bug. </B> </summary>
-
-# The Bug
-
-### threefive does SCTE-35 packet injection. Using the cli tool with the `superkabuki` keyword and the `-t` switch was supposed to insert a  SCTE-35 TimeSignal  at every iframe, but the SCTE-35 packet was being inserted a fraction of a second early. This bug causes all packet injection to be off by a fraction of a second. The fix has already been committed. 
-
-Example
-
-*  Inject SCTE-35 Time Signals at iframes
-```sh
-a@fu:~$ threefive superkabuki -i ~/mpegts2/mpegts/abcnew.ts -t -o old-sk.ts
-
-Output File:	old-sk.ts
-a@fu:~$ 
-
-```
-* Parse the created file 
-```js
-a@fu:~$ threefive old-sk.ts 
-
-{
-    "info_section": {
-        "table_id": "0xfc",
-        "section_syntax_indicator": false,
-        "private": false,
-        "sap_type": "0x03",
-        "sap_details": "No Sap Type",
-        "section_length": 22,
-        "protocol_version": 0,
-        "encrypted_packet": false,
-        "encryption_algorithm": 0,
-        "pts_adjustment": 0.0,
-        "cw_index": "0x00",
-        "tier": "0x0fff",
-        "splice_command_length": 5,
-        "splice_command_type": 6,
-        "descriptor_loop_length": 0,
-        "crc": "0xbd407add"
-    },
-    "command": {
-        "command_length": 5,
-        "command_type": 6,
-        "name": "Time Signal",
-        "time_specified_flag": true,
-        "pts_time": 72668.4959       # <---- This is PTS of the Iframe and the SCTE-35 pts_time
-    },
-    "descriptors": [],
-    "packet_data": {
-        "pid": 134,
-        "program": 1,
-        "pts": 72668.246522     # <---- PTS of the inserted SCTE-35 packet 
-    }
-
-```
-###   Those two PTS should be the same and they are not. 0.2493780 seconds offy.
-
-# The Fix
-
-* Write the packet that was just parsed before inserting the SCTE-35 packet. Here's the commit
- <img width="1058" height="497" alt="image" src="https://github.com/user-attachments/assets/dbede8ef-f558-4340-b1d3-4f985baa1530" />
-
-  Example with the bug fixed.
-
-*  Inject SCTE-35 Time Signals at iframes
-```sh
-a@fu:~$ threefive superkabuki -i ~/mpegts2/mpegts/abcnew.ts -t -o new-sk.ts
-
-Output File:	new-sk.ts
-a@fu:~$ 
-```
-* Parse the created file for SCTE-35
-```
-a@fu:~$ threefive new-sk.ts 
-{
-    "info_section": {
-        "table_id": "0xfc",
-        "section_syntax_indicator": false,
-        "private": false,
-        "sap_type": "0x03",
-        "sap_details": "No Sap Type",
-        "section_length": 22,
-        "protocol_version": 0,
-        "encrypted_packet": false,
-        "encryption_algorithm": 0,
-        "pts_adjustment": 0.0,
-        "cw_index": "0x00",
-        "tier": "0x0fff",
-        "splice_command_length": 5,
-        "splice_command_type": 6,
-        "descriptor_loop_length": 0,
-        "crc": "0xbd407add"
-    },
-    "command": {
-        "command_length": 5,
-        "command_type": 6,
-        "name": "Time Signal",
-        "time_specified_flag": true,
-        "pts_time": 72668.4959    # <---- This is PTS of the Iframe and the SCTE-35 pts_time
-    },
-    "descriptors": [],
-    "packet_data": {
-        "pid": 134,
-        "program": 1,
-        "pts": 72668.4959    # <---- PTS of the SCTE-35 packet 
-    }
-```
-
-### Now it lines up.
-### The Update will be in the next release, probably this week.
-
-
-</details>
 
 # `Documentation`
 ### `Install`
