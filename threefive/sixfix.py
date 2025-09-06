@@ -6,7 +6,7 @@ import io
 import sys
 from collections import deque
 from functools import partial
-from .stuff import print2, ERR
+from .stuff import print2, ERR,blue
 from .stream import Stream, ProgramInfo
 from .pmt import PMT
 
@@ -15,7 +15,9 @@ fixme = []
 
 def passed(cue):
     """
-    passed a no-op function
+    passed  is a function passed to decode
+    used to pull pids from streams containing SCTE-35
+    so that we don't convert non-SCTE-35 0x06 streams.
     """
     global fixme
     fixme.append(cue.packet_data.pid)
@@ -80,7 +82,7 @@ class SixFix(Stream):
         active = io.BytesIO()
         # active hold
         pkt_count = 0
-        activepkts = 2884
+        activepkts = 2632
         for pkt in self.iter_pkts():
             pid = self._parse_pid(pkt[1], pkt[2])
             pkt = self._parse_by_pid(pkt, pid)
@@ -125,7 +127,8 @@ class SixFix(Stream):
             while pmt and   self.pmt_headers:
                 pmtpkt = self.pmt_headers.popleft() + pmt
                 if len(pmtpkt) < 188:
-                    pad = 188 - len(pmtpkt) * b"\xff"
+                    padding =188 - len(pmtpkt)
+                    pad =  padding * b"\xff"
                     pmtpkt = pmtpkt + pad
                 else:
                     pmt = pmtpkt[188:]
@@ -188,15 +191,16 @@ def sixfix(arg):
     global fixme
     fixme = []
     s1 = PreFix(arg)
+    blue(f'reading {arg}')
     sixed = s1.decode(func=passed)
 
     if not sixed:
-        print2("No bin data streams containing SCTE-35 data were found.")
+        print2("no bin data streams containing SCTE-35 data were found.")
         return
     s2 = SixFix(arg)
     s2.con_pids = sixed
     s2.convert_pids()
-    print2(f'Wrote: sixfixed-{arg.rsplit("/")[-1]}\n')
+    print2(f'wrote: sixfixed-{arg.rsplit("/")[-1]}\n')
     return
 
 
