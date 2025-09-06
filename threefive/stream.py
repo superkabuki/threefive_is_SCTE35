@@ -261,8 +261,7 @@ class Stream:
         a threefive.Cue instance as it's only argument.
         """
         num_pkts = 2800
-        for chunk in self.iter_pkts(num_pkts=num_pkts):
-            self._decode2cues(chunk, func)
+        _= [ self._decode2cues(chunk, func) for chunk in self.iter_pkts(num_pkts=num_pkts)]
         return False
 
     def decode_next(self):
@@ -312,10 +311,11 @@ class Stream:
         displays streams that will be
         parsed for SCTE-35.
         """
+        min_pmt_count=32 # parse at least 32 PMT packets for streams
         self.info = True
         for pkt in self.iter_pkts():
             self._parse(pkt)
-            if self.pmt_count > 2 << 3:
+            if self.pmt_count > min_pmt_count:
                 blue(f"PMT Count: {self.pmt_count}")
                 break
         if self.maps.prgm.keys():
@@ -422,11 +422,6 @@ class Stream:
         if len(payload) > 13:
             if self._pts_flag(payload):
                 pts =self.mk_pts(payload)
-##                pts = (payload[9] & 14) << 29
-##                pts |= payload[10] << 22
-##                pts |= (payload[11] >> 1) << 15
-##                pts |= payload[12] << 7
-##                pts |= payload[13] >> 1
                 prgm = self.pid2prgm(pid)
                 self.maps.prgm_pts[prgm] = pts
                 if prgm not in self.start:
@@ -459,11 +454,11 @@ class Stream:
 
     def _pmt_pid(self, pay, pid):
         if pid in self.pids.pmt:
-##            self.pmt_count += 1
+            self.pmt_count += 1
             prgm = self.pid2prgm(pid)
-##            if prgm in self.pmt_payloads:
-##                if self.pmt_count > len(self.pmt_payloads) << 3:
-##                    return
+            if prgm in self.pmt_payloads:
+                if self.pmt_count > len(self.pmt_payloads) << 3:
+                    return
             self.pmt_payloads[prgm] = pay
             self._parse_pmt(pay, pid)
 
@@ -647,12 +642,13 @@ class Stream:
         parse program association table
         for program to pmt_pid mappings.
         """
+        if self._same_as_last(pay, self.pids.PAT_PID):
+            return False
         pay = self._chk_partial(pay, self.pids.PAT_PID, b"")
         seclen = self._parse_length(pay[2], pay[3])
         if self._section_incomplete(pay, self.pids.PAT_PID, seclen):
             return False
-##        if self._same_as_last(pay, self.pids.PAT_PID):
-##            return False
+
         seclen -= 5  # pay bytes 4,5,6,7,8
         idx = 9
         chunk_size = 4
