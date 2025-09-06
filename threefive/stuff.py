@@ -25,20 +25,21 @@ write2 = True
 
 def codec_detect(data):
     """
-    codec_detect decode bytes by trying multiple encodings.
+    codec_detect decode bytes by trying multiple encodings
+    to find one that is compatible. 
     """
     codecs = [
         "utf8",
-        "latin1",
         "ascii",
-        "big5",
-        "euc_kr",
-        "koi8_r",
-        "koi8_t",
+        "latin1",
         "cp437",
         "cp1250",
         "cp1251",
-        "utf16",
+         "big5",
+        "euc_kr",
+        "koi8_r",
+        "koi8_t",
+         "utf16",
         "utf32",
     ]
     for codec in codecs:
@@ -88,7 +89,7 @@ def isjson(data):
 
 def isfloat(value):
     """
-    isfloat determine if a str or bytes is a float 
+    isfloat determine if a str or bytes is a float
     """
     value = clean(value)
     return "." in value and value.replace(".", "",1).isdigit()
@@ -209,7 +210,7 @@ def blue(message):
     blue  print info messages in blue to stderr.
 
     """
-    mesg = f"\033[;107m\033[44m{message} \033[0m"
+    mesg = f"\033[;94m{message} \033[0m"
     print2(mesg)
 
 
