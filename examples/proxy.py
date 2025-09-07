@@ -20,6 +20,7 @@ python3 proxy.py video.ts  2 > scte35.log 1> copy-of-video.ts
 
 
 """
+
 import sys
 from threefive import Stream
 
