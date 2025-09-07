@@ -11,7 +11,6 @@ from threefive.aac import AacParser
 
 ap = AacParser()
 #  this is an HLS audio only segment with PTS in an ID3 header tag.
-url = 'https://futzu.com/id3.aac' 
+url = "https://futzu.com/id3.aac"
 pts = ap.parse(url)
-print(f'PTS : {pts}')
-
+print(f"PTS : {pts}")
