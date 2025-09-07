@@ -35,11 +35,11 @@ def codec_detect(data):
         "cp437",
         "cp1250",
         "cp1251",
-         "big5",
+        "big5",
         "euc_kr",
         "koi8_r",
         "koi8_t",
-         "utf16",
+        "utf16",
         "utf32",
     ]
     for codec in codecs:
@@ -68,11 +68,11 @@ def ishex(data):
     """
     ishex determine if a string is a hex value.
     """
-    data=clean(data)
+    data = clean(data)
     hexed = "0123456789abcdef"
     data = data.lower().strip("0x")
     return all([c in hexed for c in data])
-    #return False
+    # return False
 
 
 def isjson(data):
@@ -92,7 +92,7 @@ def isfloat(value):
     isfloat determine if a str or bytes is a float
     """
     value = clean(value)
-    return "." in value and value.replace(".", "",1).isdigit()
+    return "." in value and value.replace(".", "", 1).isdigit()
 
 
 def isxml(data):
@@ -112,9 +112,9 @@ def pif(value):
     pif  parses  an int or float from byte strings and strings and hex
     if it's not a string or byte string it  just returns the value.
     """
-    if not isinstance(value,(str,bytes)):
+    if not isinstance(value, (str, bytes)):
         return value
-    value= clean(value)
+    value = clean(value)
     value = value.strip()
     value = value.strip(",")
     if value.isdigit():
@@ -178,11 +178,10 @@ def print2(gonzo=b""):
     """
     print2 prints to 2 aka stderr.
     """
-    if 'HTTP_USER_AGENT' in environ:
+    if "HTTP_USER_AGENT" in environ:
         print(f'<script>alert("{gonzo}");</script>')
     else:
         print(gonzo, file=stderr, flush=True)
-
 
 
 def iso8601():
