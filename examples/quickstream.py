@@ -42,8 +42,7 @@ def parse_pid(pkt):
     """
     parse a pid from a mpegts packet
     """
-    return  (pkt[1] & 15) << 8 | pkt[2]
-    
+    return (pkt[1] & 15) << 8 | pkt[2]
 
 
 def parseSCTE35(pkt):
