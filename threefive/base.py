@@ -5,7 +5,7 @@ the class SCTE35Base.
 
 import json
 from .bitn import NBin
-from .stuff import print2, red,blue
+from .stuff import print2, red, blue
 
 
 class SCTE35Base:
@@ -99,9 +99,9 @@ class SCTE35Base:
         has runs hasattr with self and what
         returns value if set.
         """
-        obj=self
+        obj = self
         if hasattr(obj, what):
-            return getattr(obj,what)
+            return getattr(obj, what)
         return None
 
     @staticmethod
