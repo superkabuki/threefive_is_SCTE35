@@ -3,7 +3,7 @@ threefive.version
 from the cli tool run: threefive version
 """
 
-major = 3
-minor = 0
-maintenance = 59
-version = f"{major}.{minor}.{maintenance}"
+MAJOR = 3
+MINOR = 0
+MINI = 59
+version = f"{MAJOR}.{MINOR}.{MINI}"
