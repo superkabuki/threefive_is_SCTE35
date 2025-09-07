@@ -8,7 +8,7 @@ import socket
 import struct
 import sys
 import urllib.request
-from .stuff import blue, ERR, pif
+from .stuff import red, blue, ERR, pif
 
 TIMEOUT = 60
 
@@ -69,7 +69,11 @@ def reader(uri, headers={}):
         req = urllib.request.Request(uri, headers=headers)
         return urllib.request.urlopen(req)
     # File
-    return open(uri, "rb")
+    try:
+        return open(uri, "rb")
+    except FileNotFoundError:
+        red(f"{uri}   File Not Found Error")
+        return False
 
 
 def lshiftbuf(socked):
@@ -87,12 +91,12 @@ def _mk_socked():
     socked = Socked(socket.AF_INET, socket.SOCK_DGRAM, socket.IPPROTO_UDP)
     lshiftbuf(socked)
     socked.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-    blue(" setting socket.SO_REUSEADDR")
+    blue(f" setting socket.SO_REUSEADDR")
     if hasattr(socket, "SO_REUSEPORT"):
         blue(" setting socket.SO_REUSEPORT")
         socked.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEPORT, 1)
     socked.settimeout(TIMEOUT)
-    blue(f" setting socket timeout to {TIMEOUT}")
+    blue(f"setting socket timeout to {TIMEOUT}")
     return socked
 
 
@@ -127,6 +131,7 @@ def _open_mcast(uri):
     socked = _mk_socked()
     socked.setsockopt(socket.IPPROTO_IP, socket.IP_MULTICAST_TTL, struct.pack("b", TTL))
     blue(f" TTL set to {TTL}")
+
     socked.bind(("", multicast_port))
     socked.setsockopt(
         socket.SOL_IP,
