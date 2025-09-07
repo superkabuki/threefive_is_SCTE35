@@ -6,7 +6,7 @@ import io
 import sys
 from collections import deque
 from functools import partial
-from .stuff import print2, ERR,blue
+from .stuff import print2, ERR, blue
 from .stream import Stream, ProgramInfo
 from .pmt import PMT
 
@@ -124,11 +124,11 @@ class SixFix(Stream):
         else:
             pmt_parts.append(pmt[:188])
             pmt = pmt[188:]
-            while pmt and   self.pmt_headers:
+            while pmt and self.pmt_headers:
                 pmtpkt = self.pmt_headers.popleft() + pmt
                 if len(pmtpkt) < 188:
-                    padding =188 - len(pmtpkt)
-                    pad =  padding * b"\xff"
+                    padding = 188 - len(pmtpkt)
+                    pad = padding * b"\xff"
                     pmtpkt = pmtpkt + pad
                 else:
                     pmt = pmtpkt[188:]
@@ -191,7 +191,7 @@ def sixfix(arg):
     global fixme
     fixme = []
     s1 = PreFix(arg)
-    blue(f'reading {arg}')
+    blue(f"reading {arg}")
     sixed = s1.decode(func=passed)
 
     if not sixed:
