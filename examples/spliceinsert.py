@@ -19,7 +19,7 @@ hex2cue = threefive.Cue(HEX)
 # Using Base64
 # (output should be the same as above)
 
-base642cue=threefive.Cue(B64)
+base642cue = threefive.Cue(B64)
 
 threefive.blue("Cue from Hex")
 hex2cue.show()
