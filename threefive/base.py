@@ -5,7 +5,7 @@ the class SCTE35Base.
 
 import json
 from .bitn import NBin
-from .stuff import print2, red, blue
+from .stuff import print2, red
 
 
 class SCTE35Base:
@@ -39,15 +39,16 @@ class SCTE35Base:
     def _wrong_type(self, var_value, var_type):
         return not isinstance(var_value, var_type)
 
-    def _is_none(self, var_value, var_type):
-        return var_value is None
+    #def _is_none(self, var_value, var_type):
+     #   return var_value is None
+  #      return type(var_value) != var_type
 
     def _chk_var(self, var_type, nbin_method, var_name, bit_count):
         """
         _chk_var is used to check var values and types before encoding
         """
         var_value = self.__dict__[var_name]
-        for me in [self._is_none, self._bool_int, self._wrong_type]:
+        for me in [self._bool_int, self._wrong_type]:
             if me(var_value, var_type):
                 self._err2(var_name, var_value, bit_count, var_type)
                 return
@@ -161,8 +162,8 @@ class SCTE35Base:
             self.__dict__[k] = v
 
     def _vrfy_load(self, gonzo):
-        for k, v in gonzo.items():
-            self._chk_vars(k, v)
+        _={self._chk_vars(k, v) for k, v in gonzo.items()}
+
 
     def _load_dict(self, gonzo):
         if isinstance(gonzo, dict):
