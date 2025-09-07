@@ -262,9 +262,8 @@ class Stream:
         func can be set to a custom function that accepts
         a threefive.Cue instance as it's only argument.
         """
-        num_pkts = 2800
-        if self._tsdata:
-            _ = [
+        num_pkts = 1200
+        _ = [
                 self._decode2cues(chunk, func)
                 for chunk in self.iter_pkts(num_pkts=num_pkts)
             ]
