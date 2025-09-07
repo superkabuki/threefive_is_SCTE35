@@ -113,12 +113,12 @@ def add_stream_types(alist, streamtype):
         streamtype_map[j] = streamtype
 
 
-def mk_streamtype_map(others):
+def mk_streamtype_map(those):
     """
     mk_streamtype_map dynamically adds
     stream types to streamtype_map
     """
-    for k, v in others.items():
+    for k, v in those.items():
         add_stream_types(v, k)
     keys = list(streamtype_map.keys())
     keys.sort()
