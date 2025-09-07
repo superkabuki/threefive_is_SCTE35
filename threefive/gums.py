@@ -13,7 +13,7 @@ import sys
 import time
 from functools import partial
 from .new_reader import reader
-from .stuff import blue, reblue, print2,pif
+from .stuff import blue, reblue, print2, pif
 
 
 DGRAM_SIZE = 1316
