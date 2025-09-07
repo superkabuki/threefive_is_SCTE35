@@ -2,7 +2,7 @@
 The bitn.Bitn and bitn.NBin classes
 """
 
-from .stuff import red,pif
+from .stuff import red, pif
 
 
 class Bitn:
