@@ -4,7 +4,7 @@ xml.py  The Node class for converting to xml,
         and several helper functions
 """
 
-from .stuff import red,pif
+from .stuff import red, pif
 
 MAXCHILDREN = 128
 MAXDEPTH = 64
@@ -16,9 +16,9 @@ def t2s(v):
     90k ticks to seconds and
     rounds to six decimal places
     """
-    u=pif(v)
-    if  isinstance(u,int) and u > 90000:
-        u = round(u/ 90000.0, 6)
+    u = pif(v)
+    if isinstance(u, int) and u > 90000:
+        u = round(u / 90000.0, 6)
     return u
 
 
@@ -41,11 +41,11 @@ def un_xml(v):
         "false": False,
         "true": True,
     }
-##    if v.isdigit():
-##        return int(v)
-##    if v.replace(".", "").isdigit():
-##        return float(v)
-    v=pif(v)
+    ##    if v.isdigit():
+    ##        return int(v)
+    ##    if v.replace(".", "").isdigit():
+    ##        return float(v)
+    v = pif(v)
     if v in mapped:
         return mapped[v]
     return v
@@ -78,7 +78,7 @@ def val2xml(val):
 
 
 def key2xml(string):
-    newstring  = string.title().replace("_", "")
+    newstring = string.title().replace("_", "")
     return newstring[0:1].lower() + newstring[1:]
 
 
@@ -296,17 +296,17 @@ class Node:
         """
         a2c convert attrs to child nodes
         """
-        for k,v in self.attrs.items():
-            self.addchild(Node(k,v))
-        self.attrs={}
+        for k, v in self.attrs.items():
+            self.addchild(Node(k, v))
+        self.attrs = {}
         for child in self.children:
             child.a2c()
-            
+
     def mk(self, obj=None):
         """
         mk make the Node as xml.
         """
-   #     self.a2c()
+        #     self.a2c()
         obj = self.chk_obj(obj)
         obj.set_depth()
         obj.set_parent()
