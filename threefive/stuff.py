@@ -26,7 +26,7 @@ write2 = True
 def codec_detect(data):
     """
     codec_detect decode bytes by trying multiple encodings
-    to find one that is compatible. 
+    to find one that is compatible.
     """
     codecs = [
         "utf8",
@@ -200,7 +200,7 @@ def red(message):
     red  print error messages in red to stderr.
 
     """
-    mesg = f" \033[107;31m {message} \033[0m "
+    mesg = f" \033[107m\033[41m{message} \033[0m "
     print2(mesg)
     return False
 
@@ -210,7 +210,7 @@ def blue(message):
     blue  print info messages in blue to stderr.
 
     """
-    mesg = f"\033[;94m{message} \033[0m"
+    mesg = f"\033[107m\033[44m{message} \033[0m"
     print2(mesg)
 
 
@@ -218,5 +218,5 @@ def reblue(message):
     """
     reblue overwrites the last line in place
     """
-    mesg = f"\033[;107m\033[44m{message} \033[0m"
+    mesg = f"\033[107m\033[44m{message} \033[0m"
     print(mesg, end="\r", file=stderr, flush=True)
