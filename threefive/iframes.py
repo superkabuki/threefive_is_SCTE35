@@ -24,6 +24,7 @@ class IFramer:
     def _to90k(pts):
         if pts:
             return round(pts / 90000.0, 6)
+        return False
 
     @staticmethod
     def _abc_flags(pkt):
@@ -126,6 +127,7 @@ class IFramer:
         """
         if self._pusi_flag(pkt):
             return self._get_pts(pkt)
+        return False
 
     def iter_pkts(self, video, num_pkts=1):
         """
@@ -153,6 +155,7 @@ class IFramer:
                     pts = self.parse(pkt)
                     if pts:
                         return pts
+        return False
 
 
 def cli():
@@ -173,6 +176,9 @@ def cli():
 
 
 def firstcli():
+    """
+    firstcli cli function to return only the first pts
+    """
     iframer = IFramer()
     pts = iframer.first(sys.argv[1])
     return pts
