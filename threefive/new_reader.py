@@ -8,7 +8,7 @@ import socket
 import struct
 import sys
 import urllib.request
-from .stuff import red, blue, ERR, pif
+from .stuff import  blue, ERR, pif
 
 TIMEOUT = 60
 
@@ -69,11 +69,8 @@ def reader(uri, headers={}):
         req = urllib.request.Request(uri, headers=headers)
         return urllib.request.urlopen(req)
     # File
-    try:
-        return open(uri, "rb")
-    except FileNotFoundError:
-        red(f"{uri}   File Not Found Error")
-        return False
+    return open(uri, "rb")
+
 
 
 def lshiftbuf(socked):
@@ -91,7 +88,7 @@ def _mk_socked():
     socked = Socked(socket.AF_INET, socket.SOCK_DGRAM, socket.IPPROTO_UDP)
     lshiftbuf(socked)
     socked.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-    blue(f" setting socket.SO_REUSEADDR")
+    blue(" setting socket.SO_REUSEADDR")
     if hasattr(socket, "SO_REUSEPORT"):
         blue(" setting socket.SO_REUSEPORT")
         socked.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEPORT, 1)
@@ -124,13 +121,13 @@ def _open_mcast(uri):
     udp://@227.1.3.10:4310
     """
     blue(" Opening Multicast socket")
-    TTL = 32
+    ttl= 32
     interface_ip = "0.0.0.0"
     multicast_group, port = (uri.split("udp://@")[1]).rsplit(":", 1)
     multicast_port = pif(port)
     socked = _mk_socked()
-    socked.setsockopt(socket.IPPROTO_IP, socket.IP_MULTICAST_TTL, struct.pack("b", TTL))
-    blue(f" TTL set to {TTL}")
+    socked.setsockopt(socket.IPPROTO_IP, socket.IP_MULTICAST_TTL, struct.pack("b", ttl))
+    blue(f" TTL set to {ttl}")
 
     socked.bind(("", multicast_port))
     socked.setsockopt(
