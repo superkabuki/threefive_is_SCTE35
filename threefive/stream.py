@@ -261,7 +261,8 @@ class Stream:
         a threefive.Cue instance as it's only argument.
         """
         num_pkts = 2800
-        _= [ self._decode2cues(chunk, func) for chunk in self.iter_pkts(num_pkts=num_pkts)]
+        if self._tsdata:
+            _= [ self._decode2cues(chunk, func) for chunk in self.iter_pkts(num_pkts=num_pkts)]
         return False
 
     def decode_next(self):
