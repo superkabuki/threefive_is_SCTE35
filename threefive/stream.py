@@ -248,8 +248,10 @@ class Stream:
         return False
 
     def _mk_pkts(self, chunk):
-        return [self._parse(chunk[i : i + self.PACKET_SIZE])
-                for i in range(0, len(chunk), self.PACKET_SIZE)]
+        return [
+            self._parse(chunk[i : i + self.PACKET_SIZE])
+            for i in range(0, len(chunk), self.PACKET_SIZE)
+        ]
 
     def _decode2cues(self, chunk, func):
         _ = [func(cue) for cue in self._mk_pkts(chunk) if cue]
@@ -262,7 +264,10 @@ class Stream:
         """
         num_pkts = 2800
         if self._tsdata:
-            _= [ self._decode2cues(chunk, func) for chunk in self.iter_pkts(num_pkts=num_pkts)]
+            _ = [
+                self._decode2cues(chunk, func)
+                for chunk in self.iter_pkts(num_pkts=num_pkts)
+            ]
         return False
 
     def decode_next(self):
@@ -312,7 +317,7 @@ class Stream:
         displays streams that will be
         parsed for SCTE-35.
         """
-        min_pmt_count=32 # parse at least 32 PMT packets for streams
+        min_pmt_count = 32  # parse at least 32 PMT packets for streams
         self.info = True
         for pkt in self.iter_pkts():
             self._parse(pkt)
@@ -413,7 +418,6 @@ class Stream:
         pts |= payload[13] >> 1
         return pts
 
-
     def _parse_pts(self, pkt, pid):
         """
         parse pts and store by program key
@@ -422,7 +426,7 @@ class Stream:
         payload = self._parse_payload(pkt)
         if len(payload) > 13:
             if self._pts_flag(payload):
-                pts =self.mk_pts(payload)
+                pts = self.mk_pts(payload)
                 prgm = self.pid2prgm(pid)
                 self.maps.prgm_pts[prgm] = pts
                 if prgm not in self.start:
@@ -498,7 +502,7 @@ class Stream:
             self._parse_pcr(pkt, pid)
 
     def _chk_pts(self, pkt, pid):
-     #   if pid in self.pids.pcr:
+        #   if pid in self.pids.pcr:
         self._parse_pts(pkt, pid)
 
     def _chk_scte35(self, pkt, pid):
@@ -612,8 +616,8 @@ class Stream:
         seclen = self._parse_length(pay[1], pay[2])
         if self._section_incomplete(pay, self.pids.SDT_PID, seclen):
             return False
-##        if not self._same_as_last(pay,pid):
-##            return False
+        ##        if not self._same_as_last(pay,pid):
+        ##            return False
         idx = 11
         while idx < seclen + 3:
             service_id = self._parse_program(pay[idx], pay[idx + 1])
@@ -673,7 +677,7 @@ class Stream:
         seclen = self._parse_length(pay[1], pay[2])
         if self._section_incomplete(pay, pid, seclen):
             return False
-        if self._same_as_last(pay,pid):
+        if self._same_as_last(pay, pid):
             return False
         program_number = self._parse_program(pay[3], pay[4])
         if not program_number:
