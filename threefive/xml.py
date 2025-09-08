@@ -297,7 +297,7 @@ class Node:
         a2c convert attrs to child nodes
         """
         for k, v in self.attrs.items():
-            self.addchild(Node(k, v))
+            self.addchild(Node(key2xml(k), v))
         self.attrs = {}
         for child in self.children:
             child.a2c()
