@@ -432,7 +432,7 @@ class Stream:
                     self.start[prgm] = pts
 
     def _parse_pcr(self, pkt, pid):
-        if self._afc_flag(pkt[3]):
+        if self._afc_flag(pkt):
             pcr = pkt[6] << 25
             pcr |= pkt[7] << 17
             pcr |= pkt[8] << 9
@@ -516,6 +516,8 @@ class Stream:
         # print('PID ==> ', pid)
         if self._pusi_flag(pkt):
             self._chk_pts(pkt, pid)
+            if pid in self.pids.pcr and  self._pcr_flag(pkt):
+                self._parse_pcr(pkt, pid)
         if self._pid_has_scte35(pid):
             cue = self._parse_scte35(pkt, pid)
         return cue
