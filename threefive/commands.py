@@ -283,9 +283,10 @@ class SpliceInsert(TimeSignal):
         self._chk_var(bool, nbin.add_flag, "break_auto_return", 1)
         nbin.forward(6)
         if not self.break_duration:
-            return red("break_duration is not set")
+            red("break_duration is not set")
+        else:
         ##            self.break_duration = self.as_90k(self.break_duration_ticks)
-        nbin.add_int(self.as_ticks(self.break_duration), 33)
+            nbin.add_int(self.as_ticks(self.break_duration), 33)
 
     def xml(self, ns="scte35"):
         """
