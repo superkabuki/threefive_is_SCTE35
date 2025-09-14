@@ -300,6 +300,8 @@ class Pane:
         all_lines = self.lines + [self.media]
         return "".join(all_lines)
 
+    def __repr__(self):
+        return str(self.__dict__)
 
 class SlidingWindow:
     """
@@ -575,7 +577,6 @@ class HlsParser:
             self._set_break_timer(line, cont_tags)
             self._set_break_duration(line, cont_tags)
             line = self.auto_cuein(line)
-
         return self.auto_cont()
 
     def chk_x_cue_in(self, tags, line):
@@ -609,6 +610,7 @@ class HlsParser:
             pts, new_line = self.prof.validate_cue(cue)
             if pts and new_line:
                 return self.set_cue_state(tags["#EXT-X-SCTE35"]["CUE"], new_line)
+        return None
 
     #  return self.invalid(line)
 
@@ -627,6 +629,7 @@ class HlsParser:
                     return self.set_cue_state(
                         tags["#EXT-X-DATERANGE"][scte35_tag], new_line
                     )
+        return None
 
     # return self.invalid(line)
 
@@ -695,8 +698,10 @@ class HlsParser:
             if self.break_timer >= self.break_duration:
                 self.cue_state = "IN"
                 self.clear()
+                first=f"{iso8601()}{REV} AUTO CUE-IN {NORM}{self.pts_stuff()}"
+                second=f"{self.diff_stuff()}{NSUB}{self.media_stuff()}"
                 blue(
-                    f"{iso8601()}{REV} AUTO CUE-IN {NORM}{self.pts_stuff()}{self.diff_stuff()}{NSUB}{self.media_stuff()}"
+                    f"{first}{second}"
                 )
                 self.reset_break()
                 self.to_sidecar(self.pts, "#AUTO\n#EXT-X-CUE-IN\n")
@@ -743,10 +748,12 @@ class HlsParser:
         ##                    print("AUTO IN HERE")
         ##                    self.auto_cuein("## AUTO IN")
         else:
-            gonzo = f'{REV}Media \033[;107m\033[44m {self.media[-1].rsplit("/", 1)[1].split("?", 1)[0].strip()}'
-
+            first=f'{REV}Media \033[;107m\033[44m'
+            second=f'{self.media[-1].rsplit("/", 1)[1].split("?", 1)[0].strip()}'
+            gonzo =  f'{first}{second}'
+        third=f"{iso8601()}{REV} {self.hls_pts}\033[;107m\033[44m"
         reblue(
-            f"{iso8601()}{REV} {self.hls_pts}\033[;107m\033[44m {self.pts:.6f}\033[;107m\033[44m {gonzo}"
+             f"{third}{self.pts:.6f}\033[;107m\033[44m {gonzo}"
         )
 
     def ts_pts(self, seg):
@@ -796,7 +803,6 @@ class HlsParser:
         chk_ts  check MPEGTS for PTS and SCTE-35.
         """
         if ".ts" in this:
-            (this)
             if self.first_segment:
                 Segment(this, key_uri=self.key_uri, iv=self.iv).show()
             seg = Segment(this, key_uri=self.key_uri, iv=self.iv)
@@ -1007,8 +1013,8 @@ class HlsParser:
                 break
             if line.startswith(b"#EXT-X-STREAM-INF"):
                 nline = arg.readline()
-                self.base_url = uri.rsplit("/", 1)[0]
-                nuri = self.base_url + "/" + nline.decode("utf-8")
+                self.base_uri = uri.rsplit("/", 1)[0]
+                nuri = self.base_uri + "/" + nline.decode("utf-8")
                 nuri.replace("\n", "")
                 print(f"{REV} Rendition Found {NORM} {nuri} ")
                 self.rendition = nuri
@@ -1026,7 +1032,7 @@ class HlsParser:
 
 def _chk_help():
     if "help" in sys.argv:
-        print(helpme)
+        print(HELPME)
         sys.exit()
 
 
@@ -1071,7 +1077,7 @@ def cli():
     sys.exit()
 
 
-helpme = """
+HELPME = """
 
 [ threefive hls ]
 
