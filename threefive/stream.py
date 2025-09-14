@@ -42,13 +42,14 @@ class ProgramInfo:
     hold Program information
     for use with Stream.show()
     """
+    provider = b""
+    service = b""
+    streams = {}  # pid to stream_type mapping
+
 
     def __init__(self, pid=None, pcr_pid=None):
         self.pid = pid
         self.pcr_pid = pcr_pid
-        self.provider = b""
-        self.service = b""
-        self.streams = {}  # pid to stream_type mapping
 
     def _mk_vee(self, k):
         vee = int(self.streams[k], base=16)
@@ -82,15 +83,14 @@ class Pids:
     """
     Pids holds sets of pids for pat,pcr,pmt, and scte35
     """
-
     SDT_PID = 0x11
     PAT_PID = 0x00
+    pcr = set()
+    pmt = set()
+    scte35 = set()
+    maybe_scte35 = set()
 
     def __init__(self):
-        self.pcr = set()
-        self.pmt = set()
-        self.scte35 = set()
-        self.maybe_scte35 = set()
         self.tables = set()
         self.tables.add(self.PAT_PID)
         self.tables.add(self.SDT_PID)
@@ -105,15 +105,13 @@ class Maps:
     programs mapped to pcr and pts
 
     """
-
-    def __init__(self):
-        self.pid_cc = {}
-        self.pid_prgm = {}
-        self.prgm_pcr = {}
-        self.prgm_pts = {}
-        self.prgm = {}
-        self.partial = {}
-        self.last = {}
+    pid_cc = {}
+    pid_prgm = {}
+    prgm_pcr = {}
+    prgm_pts = {}
+    prgm = {}
+    partial = {}
+    last = {}
 
 
 class Stream:
@@ -135,6 +133,15 @@ class Stream:
     ROLLOVER = 8589934591  # 95443.717678
     ROLLOVER9K = 95443.717678
     SCTE35_PES_START = b"\x00\x00\x01\xfc"
+    start = {}
+    info = False
+    the_scte35_pids = []
+    pids = Pids()
+    maps = Maps()
+    pmt_payloads = {}
+    pmt_count = 0
+    pmt_pkt = None
+    pat_pkt = None
 
     def __init__(self, tsdata, show_null=True):
         """
@@ -153,15 +160,7 @@ class Stream:
         else:
             self._tsdata = tsdata
         self.show_null = show_null
-        self.start = {}
-        self.info = False
-        self.the_scte35_pids = []
-        self.pids = Pids()
-        self.maps = Maps()
-        self.pmt_payloads = {}
-        self.pmt_count = 0
-        self.pmt_pkt = None
-        self.pat_pkt = None
+
 
     def __repr__(self):
         return str(self.__dict__)
@@ -264,9 +263,9 @@ class Stream:
         """
         num_pkts = 1200
         _ = [
-                self._decode2cues(chunk, func)
-                for chunk in self.iter_pkts(num_pkts=num_pkts)
-            ]
+            self._decode2cues(chunk, func)
+            for chunk in self.iter_pkts(num_pkts=num_pkts)
+        ]
         return False
 
     def decode_next(self):
@@ -516,7 +515,7 @@ class Stream:
         # print('PID ==> ', pid)
         if self._pusi_flag(pkt):
             self._chk_pts(pkt, pid)
-            if pid in self.pids.pcr and  self._pcr_flag(pkt):
+            if pid in self.pids.pcr and self._pcr_flag(pkt):
                 self._parse_pcr(pkt, pid)
         if self._pid_has_scte35(pid):
             cue = self._parse_scte35(pkt, pid)
