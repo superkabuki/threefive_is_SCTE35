@@ -182,7 +182,7 @@ class SuperKabuki(SixFix):
         mk_pmt generate PMT with the new SCTE-35 stream.
         """
         pmt = PMT(pay)
-        pmt.add_SCTE35stream(self.scte35_pid)
+        pmt.add_scte35stream(self.scte35_pid)
         return pmt
 
     def encode(self):
