@@ -9,7 +9,7 @@ __pylint score__ : __9.87__`   | __cyclomatic complexity__ : __A (1.99)__
 
 * _No asterisks needed._
 
-<br>
+
 ## `Q`. Who uses threefive? 
 
 ## `A`. Everybody. 
