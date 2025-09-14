@@ -44,13 +44,13 @@ class PmtStream:
 
         self.descriptors = []
         self.stream_type = None
-        self.elementary_PID = None
-        self.ES_info_length = 0
+        self.elementary_pid = None
+        self.es_info_length = 0
         if bitn:
             self.parse(bitn)
         if conv_pids:
             self._chk_conv_pids(conv_pids)
-        self.total_size = 5 + self.ES_info_length
+        self.total_size = 5 + self.es_info_length
 
     def parse(self, bitn):
         """
@@ -58,22 +58,22 @@ class PmtStream:
         """
         self.stream_type = bitn.as_int(8)
         bitn.forward(3)
-        self.elementary_PID = bitn.as_int(13)
+        self.elementary_pid = bitn.as_int(13)
         bitn.forward(4)
-        self.ES_info_length = bitn.as_int(12)
-        eil = self.ES_info_length << 3
+        self.es_info_length = bitn.as_int(12)
+        eil = self.es_info_length << 3
         while eil > 0:
             dscptr = Dscptr(bitn)
             eil -= dscptr.total_size << 3
             self.descriptors.append(dscptr)
 
     def _chk_conv_pids(self, conv_pids):
-        if self.elementary_PID in conv_pids:
-            self.add_CUEI()
+        if self.elementary_pid in conv_pids:
+            self.add_cuei()
 
-    def add_CUEI(self):
+    def add_cuei(self):
         """
-        add_CUEI create CUEI descriptor for stream
+        add_cuei create CUEI descriptor for stream
         """
         self.stream_type = 134
         cuei = Dscptr()
@@ -82,7 +82,7 @@ class PmtStream:
         cuei.value = b"CUEI"
         cuei.total_size = 6
         self.descriptors = [cuei] + self.descriptors
-        self.ES_info_length += cuei.total_size
+        self.es_info_length += cuei.total_size
 
     def __repr__(self):
         return str(vars(self))
@@ -93,9 +93,9 @@ class PmtStream:
         """
         nbin.add_int(self.stream_type, 8)
         nbin.reserve(3)
-        nbin.add_int(self.elementary_PID, 13)
+        nbin.add_int(self.elementary_pid, 13)
         nbin.reserve(4)
-        nbin.add_int(self.ES_info_length, 12)
+        nbin.add_int(self.es_info_length, 12)
         for dscptr in self.descriptors:
             dscptr.add(nbin)
 
@@ -120,7 +120,7 @@ class PMT:
         self.section_number = bitn.as_int(8)
         self.last_section_number = bitn.as_int(8)
         bitn.forward(3)
-        self.PCR_PID = bitn.as_int(13)
+        self.pcr_pid = bitn.as_int(13)
         bitn.forward(4)
         self.program_info_length = bitn.as_int(12)
         self.bitn = bitn
@@ -157,14 +157,14 @@ class PMT:
             streams.append(pms)
         return streams
 
-    def add_SCTE35stream(self, pid):
+    def add_scte35stream(self, pid):
         """
-        add_SCTE35stream add SCTE35 stream to PMT
+        add_scte35stream add SCTE35 stream to PMT
         """
         pms = PmtStream()
-        pms.elementary_PID = pid
+        pms.elementary_pid = pid
         pms.stream_type = 0x86
-        # pms.add_CUEI()
+        # pms.add_cuei()
         pms.total_size = 5
         self.streams.append(pms)
 
@@ -205,7 +205,7 @@ class PMT:
         nbin.add_int(self.section_number, 8)  # 56
         nbin.add_int(self.last_section_number, 8)  # 64
         nbin.reserve(3)  # 67
-        nbin.add_int(self.PCR_PID, 13)  # 80
+        nbin.add_int(self.pcr_pid, 13)  # 80
         nbin.reserve(4)  # 84
         nbin.add_int(self.program_info_length, 12)  # 96
         for dscptr in self.descriptors:
