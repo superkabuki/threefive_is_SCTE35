@@ -1,0 +1,6 @@
+<scte35:SpliceInfoSection xmlns:scte35="https://scte.org/schemas/35" 
+        ptsAdjustment="0" protocolVersion="0" sapType="3" tier="4095">
+   <scte35:TimeSignal>
+      <scte35:SpliceTime ptsTime="12600480"/>
+   </scte35:TimeSignal>
+</scte35:SpliceInfoSection>
