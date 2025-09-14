@@ -4,19 +4,22 @@
 __pylint score__ : __9.87__`   | __cyclomatic complexity__ : __A (1.99)__
 
 
-# threefive is The Best SCTE-35 Tool Available*
+# `threefive is the best SCTE-35 tool available`*
 
 
 * _No asterisks needed._
 
 
-## `Q`. Who uses threefive? 
+## Q. `Who uses threefive?` 
 
-## `A`. Everybody. 
+## A. `Everybody.` 
 _(threefive has been installed over one million times according to [pypi.org](https://pypi.org)_
+
+ <img width="516" height="512" alt="image" src="https://github.com/user-attachments/assets/642cb803-9465-408e-bb6e-03549eb22d78" />
 
 ___
 
+# `Features`
 * __Decodes SCTE-35__ in __TEN__ formats: __MPEGTS, Base64, Bytes, Dicts, Hex,HLS, Integers,JSON,XML and XML+Binary__.
 * __Encodes SCTE-35__ in __EIGHT__ formats: __MPEGTS, Base64, Bytes, Hex, Int, JSON,XML, and Xml+binary.__
 * __Supports All HLS SCTE-35 Tags__.
@@ -25,6 +28,8 @@ ___
 * __Injects SCTE-35 Packets__ into __MPEGTS__ video.
 
 <samp>
+
+# `Documentation`
 	
 * [__Install__](#install)
 * [SCTE-35 Decoding __Quick Start__ ](#quick-start) _threefive makes decoding SCTE-35 fast and easy_
@@ -761,5 +766,4 @@ a@fu:~$
 ___
  [__Install__](#install) |[__SCTE-35 Cli__](#the-cli-tool) | [__SCTE-35 HLS__](https://github.com/superkabuki/threefive/blob/main/hls.md) | [__Cue__ Class](https://github.com/superkabuki/threefive/blob/main/cue.md) | [__Stream__ Class](https://github.com/superkabuki/threefive/blob/main/stream.md) | [__Online SCTE-35 Parser__](https://iodisco.com/scte35) | [__Encode SCTE-35__](https://github.com/superkabuki/threefive/blob/main/encode.md) | [__SCTE-35 Examples__](https://github.com/superkabuki/threefive/tree/main/examples)
  | [__SCTE-35 XML__ ](https://github.com/superkabuki/SCTE-35/blob/main/xml.md) and [More __XML__](node.md) | [__threefive runs Four Times Faster on pypy3__](https://pypy.org/) | [__SuperKabuki SCTE-35 MPEGTS Packet Injection__](inject.md)
- <img width="516" height="512" alt="image" src="https://github.com/user-attachments/assets/642cb803-9465-408e-bb6e-03549eb22d78" />
 
