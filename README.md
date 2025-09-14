@@ -1,11 +1,15 @@
+ SCTE-35 Decoder   ✅  SCTE-35 Encoder   ✅  SCTE-35 Cli tool  ✅   SCTE-35 Library ✅ 
+<br>
+
+__pylint score__ : __9.87__`   | __cyclomatic complexity__ : __A (1.99)__
+
+
 # threefive is The Best SCTE-35 Tool Available.*
 
 
 * _No asterisks needed._
 
- SCTE-35 Decoder   ✅  SCTE-35 Encoder   ✅  SCTE-35 Cli tool  ✅   SCTE-35 Library ✅ 
-
-
+<br>
 ## `Q`. Who uses threefive? 
 
 ## `A`. Everybody. 
