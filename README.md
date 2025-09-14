@@ -4,7 +4,7 @@
 __pylint score__ : __9.87__`   | __cyclomatic complexity__ : __A (1.99)__
 
 
-# threefive is The Best SCTE-35 Tool Available.*
+# threefive is The Best SCTE-35 Tool Available*
 
 
 * _No asterisks needed._
