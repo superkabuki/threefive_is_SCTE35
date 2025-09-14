@@ -218,7 +218,7 @@ cue.show()
 * __cli__
 	* put xml SCTE-35 in a file and redirect it into threefive 
 	```js
-	threefive < xmlbin.xml
+	threefive < [xml.xml](xml.xml)
 	```
 * __lib__
 ```py3
@@ -246,7 +246,7 @@ cue.show()
 * __cli__
 	* write xml+binary to a file and redirect it to threefive
 ```js
-threefive < xmlbin.xml
+threefive < [xmlbin.xml](xmlbin.xml)
 ```
 * __lib__
 ```py3
