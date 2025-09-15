@@ -92,8 +92,6 @@ class Pids:
     tables =set([PAT_PID,SDT_PID])
 
 
-
-
 @dataclass
 class Maps:
     """
@@ -125,7 +123,6 @@ class Stream:
     _SYNC_BYTE = SYNC_BYTE = 0x47
     _MIN_PMT_COUNT=16
     # tids
-
     _PMT_TID = PMT_TID = b"\x02"
     _SCTE35_TID = SCTE35_TID = b"\xfc"
     _SDT_TID = SDT_TID = b"\x42"
@@ -159,7 +156,6 @@ class Stream:
         else:
             self._tsdata = tsdata
         self.show_null = show_null
-
 
     def __repr__(self):
         return str(self.__dict__)
@@ -222,11 +218,6 @@ class Stream:
             return False
 
     def _find_start(self):
-        """
-        _find_start locates the first SYNC_BYTE
-        parses 1 packet and returns True
-        if SYNC_BYTE is found.
-        """
         while self._tsdata:
             one = self._tsdata.read(1)
             if one:
@@ -458,9 +449,6 @@ class Stream:
         if pid in self.pids.pmt:
             self.pmt_count += 1
             prgm = self.pid2prgm(pid)
-##            if prgm in self.pmt_payloads:
-##                if self.pmt_count > self._MIN_PMT_COUNT:
-##                    return
             self.pmt_payloads[prgm] = pay
             self._parse_pmt(pay, pid)
 
@@ -474,21 +462,12 @@ class Stream:
                 self._parse_sdt(pay)
 
     def _parse_tables(self, pkt, pid):
-        """
-        _parse_tables parse for
-        PAT, PMT,  and SDT tables
-        based on pid of the pkt
-        """
         pay = self._parse_payload(pkt)
         self._pmt_pid(pay, pid)
         self._pat_pid(pay, pid)
         self._sdt_pid(pay, pid)
 
     def _parse_info(self, pkt):
-        """
-        _parse_info parses the packet for tables
-        and returns the pid
-        """
         pid = self._parse_pid(pkt[1], pkt[2])
         if pid in self.pids.tables:
             self._parse_tables(pkt, pid)
