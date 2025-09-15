@@ -123,7 +123,7 @@ class Stream:
 
     _PACKET_SIZE = PACKET_SIZE = 188
     _SYNC_BYTE = SYNC_BYTE = 0x47
-    _MIN_PMT_COUNT=32
+    _MIN_PMT_COUNT=16
     # tids
 
     _PMT_TID = PMT_TID = b"\x02"
@@ -260,7 +260,7 @@ class Stream:
         func can be set to a custom function that accepts
         a threefive.Cue instance as it's only argument.
         """
-        num_pkts = 1200
+        num_pkts = 1400
         _ = [
             self._decode2cues(chunk, func)
             for chunk in self.iter_pkts(num_pkts=num_pkts)
@@ -278,13 +278,14 @@ class Stream:
                 return cue
         return False
 
-    def decode_pids(self, scte35_pids=[], func=show_cue):
+    def decode_pids(self, scte35_pids=None, func=show_cue):
         """
         Stream.decode_pids takes a list of SCTE-35 Pids parse
         and an optional call back function to run when a Cue is found.
         if scte35_pids is not set, all threefive pids will be parsed.
         """
-        self.the_scte35_pids = scte35_pids
+        if scte35_pids:
+            self.the_scte35_pids = scte35_pids
         return self.decode(func)
 
     def decode_start_time(self):
@@ -393,7 +394,7 @@ class Stream:
         return pdata
 
     def _parse_cc(self, pkt, pid):
-        last_cc = Non
+        last_cc = None
         c_c = pkt[3] & 0xF
         if pid in self.maps.pid_cc:
             last_cc = self.maps.pid_cc[pid]
@@ -457,9 +458,9 @@ class Stream:
         if pid in self.pids.pmt:
             self.pmt_count += 1
             prgm = self.pid2prgm(pid)
-            if prgm in self.pmt_payloads:
-                if self.pmt_count > self._MIN_PMT_COUNT:
-                    return
+##            if prgm in self.pmt_payloads:
+##                if self.pmt_count > self._MIN_PMT_COUNT:
+##                    return
             self.pmt_payloads[prgm] = pay
             self._parse_pmt(pay, pid)
 
@@ -513,8 +514,8 @@ class Stream:
         # print('PID ==> ', pid)
         if self._pusi_flag(pkt):
             self._chk_pts(pkt, pid)
-            if pid in self.pids.pcr and self._pcr_flag(pkt):
-                self._parse_pcr(pkt, pid)
+            if pid in self.pids.pcr:
+                self._chk_pcr(pkt, pid)
         if self._pid_has_scte35(pid):
             cue = self._parse_scte35(pkt, pid)
         return cue
