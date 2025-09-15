@@ -1,7 +1,7 @@
 """
 Mpeg-TS Stream parsing class Stream
 """
-
+from dataclasses import dataclass, field
 import sys
 
 from functools import partial
@@ -42,12 +42,12 @@ class ProgramInfo:
     hold Program information
     for use with Stream.show()
     """
-    provider = b""
-    service = b""
-    streams = {}  # pid to stream_type mapping
 
 
     def __init__(self, pid=None, pcr_pid=None):
+        self.provider = b""
+        self.service = b""
+        self.streams = {}  # pid to stream_type mapping
         self.pid = pid
         self.pcr_pid = pcr_pid
 
@@ -87,15 +87,14 @@ class Pids:
     PAT_PID = 0x00
     pcr = set()
     pmt = set()
-    scte35 = set()
-    maybe_scte35 = set()
-
-    def __init__(self):
-        self.tables = set()
-        self.tables.add(self.PAT_PID)
-        self.tables.add(self.SDT_PID)
+    scte35 =set()
+    maybe_scte35=set()
+    tables =set([PAT_PID,SDT_PID])
 
 
+
+
+@dataclass
 class Maps:
     """
     Maps holds mappings
@@ -105,13 +104,13 @@ class Maps:
     programs mapped to pcr and pts
 
     """
-    pid_cc = {}
-    pid_prgm = {}
-    prgm_pcr = {}
-    prgm_pts = {}
-    prgm = {}
-    partial = {}
-    last = {}
+    pid_cc : dict= field(default_factory=dict)
+    pid_prgm :dict =field(default_factory=dict)
+    prgm_pcr : dict =field(default_factory=dict)
+    prgm_pts : dict =field(default_factory=dict)
+    prgm : dict =field(default_factory=dict)
+    partial : dict=field(default_factory=dict)
+    last : dict =field(default_factory=dict)
 
 
 class Stream:
@@ -124,7 +123,7 @@ class Stream:
 
     _PACKET_SIZE = PACKET_SIZE = 188
     _SYNC_BYTE = SYNC_BYTE = 0x47
-
+    _MIN_PMT_COUNT=32
     # tids
 
     _PMT_TID = PMT_TID = b"\x02"
@@ -315,11 +314,10 @@ class Stream:
         displays streams that will be
         parsed for SCTE-35.
         """
-        min_pmt_count = 32  # parse at least 32 PMT packets for streams
         self.info = True
         for pkt in self.iter_pkts():
             self._parse(pkt)
-            if self.pmt_count > min_pmt_count:
+            if self.pmt_count > self._MIN_PMT_COUNT:
                 blue(f"PMT Count: {self.pmt_count}")
                 break
         if self.maps.prgm.keys():
@@ -395,7 +393,7 @@ class Stream:
         return pdata
 
     def _parse_cc(self, pkt, pid):
-        last_cc = None
+        last_cc = Non
         c_c = pkt[3] & 0xF
         if pid in self.maps.pid_cc:
             last_cc = self.maps.pid_cc[pid]
@@ -460,7 +458,7 @@ class Stream:
             self.pmt_count += 1
             prgm = self.pid2prgm(pid)
             if prgm in self.pmt_payloads:
-                if self.pmt_count > len(self.pmt_payloads) << 3:
+                if self.pmt_count > self._MIN_PMT_COUNT:
                     return
             self.pmt_payloads[prgm] = pay
             self._parse_pmt(pay, pid)
