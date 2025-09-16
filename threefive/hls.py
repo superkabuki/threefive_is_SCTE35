@@ -303,6 +303,7 @@ class Pane:
     def __repr__(self):
         return str(self.__dict__)
 
+
 class SlidingWindow:
     """
     The Sliding Window class
@@ -698,11 +699,9 @@ class HlsParser:
             if self.break_timer >= self.break_duration:
                 self.cue_state = "IN"
                 self.clear()
-                first=f"{iso8601()}{REV} AUTO CUE-IN {NORM}{self.pts_stuff()}"
-                second=f"{self.diff_stuff()}{NSUB}{self.media_stuff()}"
-                blue(
-                    f"{first}{second}"
-                )
+                first = f"{iso8601()}{REV} AUTO CUE-IN {NORM}{self.pts_stuff()}"
+                second = f"{self.diff_stuff()}{NSUB}{self.media_stuff()}"
+                blue(f"{first}{second}")
                 self.reset_break()
                 self.to_sidecar(self.pts, "#AUTO\n#EXT-X-CUE-IN\n")
                 return "#AUTO\n#EXT-X-CUE-IN\n" + line
@@ -748,13 +747,11 @@ class HlsParser:
         ##                    print("AUTO IN HERE")
         ##                    self.auto_cuein("## AUTO IN")
         else:
-            first=f'{REV}Media \033[;107m\033[44m'
-            second=f'{self.media[-1].rsplit("/", 1)[1].split("?", 1)[0].strip()}'
-            gonzo =  f'{first}{second}'
-        third=f"{iso8601()}{REV} {self.hls_pts}\033[;107m\033[44m"
-        reblue(
-             f"{third}{self.pts:.6f}\033[;107m\033[44m {gonzo}"
-        )
+            first = f"{REV}Media \033[;107m\033[44m"
+            second = f'{self.media[-1].rsplit("/", 1)[1].split("?", 1)[0].strip()}'
+            gonzo = f"{first}{second}"
+        third = f"{iso8601()}{REV} {self.hls_pts}\033[;107m\033[44m"
+        reblue(f"{third}{self.pts:.6f}\033[;107m\033[44m {gonzo}")
 
     def ts_pts(self, seg):
         """
