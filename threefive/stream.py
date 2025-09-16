@@ -1,6 +1,7 @@
 """
 Mpeg-TS Stream parsing class Stream
 """
+
 from dataclasses import dataclass, field
 import sys
 
@@ -43,7 +44,6 @@ class ProgramInfo:
     for use with Stream.show()
     """
 
-
     def __init__(self, pid=None, pcr_pid=None):
         self.provider = b""
         self.service = b""
@@ -83,13 +83,14 @@ class Pids:
     """
     Pids holds sets of pids for pat,pcr,pmt, and scte35
     """
+
     SDT_PID = 0x11
     PAT_PID = 0x00
     pcr = set()
     pmt = set()
-    scte35 =set()
-    maybe_scte35=set()
-    tables =set([PAT_PID,SDT_PID])
+    scte35 = set()
+    maybe_scte35 = set()
+    tables = set([PAT_PID, SDT_PID])
 
 
 @dataclass
@@ -102,13 +103,14 @@ class Maps:
     programs mapped to pcr and pts
 
     """
-    pid_cc : dict= field(default_factory=dict)
-    pid_prgm :dict =field(default_factory=dict)
-    prgm_pcr : dict =field(default_factory=dict)
-    prgm_pts : dict =field(default_factory=dict)
-    prgm : dict =field(default_factory=dict)
-    partial : dict=field(default_factory=dict)
-    last : dict =field(default_factory=dict)
+
+    pid_cc: dict = field(default_factory=dict)
+    pid_prgm: dict = field(default_factory=dict)
+    prgm_pcr: dict = field(default_factory=dict)
+    prgm_pts: dict = field(default_factory=dict)
+    prgm: dict = field(default_factory=dict)
+    partial: dict = field(default_factory=dict)
+    last: dict = field(default_factory=dict)
 
 
 class Stream:
@@ -121,7 +123,7 @@ class Stream:
 
     _PACKET_SIZE = PACKET_SIZE = 188
     _SYNC_BYTE = SYNC_BYTE = 0x47
-    _MIN_PMT_COUNT=16
+    _MIN_PMT_COUNT = 16
     # tids
     _PMT_TID = PMT_TID = b"\x02"
     _SCTE35_TID = SCTE35_TID = b"\xfc"
