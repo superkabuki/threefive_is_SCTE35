@@ -55,3 +55,5 @@ from .descriptors import (
     TimeDescriptor,
     descriptor_map,
 )
+
+ADRIAN = "Super Cool"
