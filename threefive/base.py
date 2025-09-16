@@ -39,20 +39,15 @@ class SCTE35Base:
     def _wrong_type(self, var_value, var_type):
         return not isinstance(var_value, var_type)
 
-    #def _is_none(self, var_value, var_type):
-     #   return var_value is None
-  #      return type(var_value) != var_type
-
     def _chk_var(self, var_type, nbin_method, var_name, bit_count):
         """
         _chk_var is used to check var values and types before encoding
         """
         var_value = self.__dict__[var_name]
-        for me in [self._bool_int, self._wrong_type]:
-            if me(var_value, var_type):
-                self._err2(var_name, var_value, bit_count, var_type)
-                return
-        nbin_method(var_value, bit_count)
+        if self._bool_int(var_value, var_type) or self._wrong_type(var_value, var_type):
+            self._err2(var_name, var_value, bit_count, var_type)
+        else:
+            nbin_method(var_value, bit_count)
 
     @staticmethod
     def as_90k(int_time):
@@ -162,8 +157,7 @@ class SCTE35Base:
             self.__dict__[k] = v
 
     def _vrfy_load(self, gonzo):
-        _={self._chk_vars(k, v) for k, v in gonzo.items()}
-
+        _ = {self._chk_vars(k, v) for k, v in gonzo.items()}
 
     def _load_dict(self, gonzo):
         if isinstance(gonzo, dict):
