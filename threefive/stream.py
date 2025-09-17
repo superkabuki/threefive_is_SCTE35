@@ -2,15 +2,16 @@
 Mpeg-TS Stream parsing class Stream
 """
 
-from dataclasses import dataclass, field
 import sys
 
+from dataclasses import dataclass, field
 from functools import partial
-from .new_reader import reader
-from .stuff import print2, blue, clean, ERR
+
 from .cue import Cue
+from .new_reader import reader
 from .packetdata import PacketData
 from .streamtypes import streamtype_map
+from .stuff import blue, clean, ERR, print2
 
 
 def no_op(cue):
@@ -133,7 +134,7 @@ class Stream:
     SCTE35_PES_START = b"\x00\x00\x01\xfc"
     start = {}
     info = False
-    the_scte35_pids = []
+    the_scte35_pids = None
     pids = Pids()
     maps = Maps()
     pmt_payloads = {}
@@ -569,6 +570,9 @@ class Stream:
         parse a threefive cue from one or more packets
         """
         # self._parse_pts(pkt, pid)  # Check ffmpeg style packets
+        if self.the_scte35_pids:  # for parse by pid
+            if pid not in self.the_scte35_pids:
+                return False
         pay = self._mk_scte35_payload(pkt, pid)
         if not pay:
             return False
