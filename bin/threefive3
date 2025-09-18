@@ -57,7 +57,7 @@ def mk_sidecar(cue):
 
 
 HELP = f"""
-{BLUE} threefive3 cli tool                                {U}
+{BLUE} threefive cli tool                                {U}
 
     {B} Default      {U} {BLUE}The default action is to read a input and write a SCTE-35 output.{U}
 
@@ -68,60 +68,60 @@ HELP = f"""
     {BLUE}scte35 can read from {U} strings, files, stdin, http(s), multicast, and Udp.
 
     Input {U}    Output {U}
-   {U}{BLUE} mpegts {U}  {U}{BLUE} base64 {NORM} threefive3 https://example.com/video.ts  base64
-   {U}{BLUE} base64 {U}  {U}{BLUE} hex    {NORM} threefive3 '/DAWAAAAAAAAAP/wBQb+AKmKxwAACzuu2Q==' hex
-   {U}{BLUE} xmlbin  {U} {BLUE} int    {NORM} threefive3   < xmlbin.xml int
-   {U}{BLUE} xml    {U}  {BLUE} json   {NORM} threefive3   < xml.xml 
-   {U}{BLUE} mpegts {U}  {BLUE} json   {NORM} threefive3 video.ts
-   {U}{BLUE} json{U}    {BLUE}  xml    {NORM} threefive3  < json.json  xml
+   {U}{BLUE} mpegts {U}  {U}{BLUE} base64 {NORM} threefive https://example.com/video.ts  base64
+   {U}{BLUE} base64 {U}  {U}{BLUE} hex    {NORM} threefive '/DAWAAAAAAAAAP/wBQb+AKmKxwAACzuu2Q==' hex
+   {U}{BLUE} xmlbin  {U} {BLUE} int    {NORM} threefive   < xmlbin.xml int
+   {U}{BLUE} xml    {U}  {BLUE} json   {NORM} threefive   < xml.xml 
+   {U}{BLUE} mpegts {U}  {BLUE} json   {NORM} threefive video.ts
+   {U}{BLUE} json{U}    {BLUE}  xml    {NORM} threefive  < json.json  xml
 
     {B}  hls        {U}{NORM}{BLUE} SCTE-35 HLS decode{U}
 
-    threefive3 hls help   |   threefive3 hls https://example.com/master.m3u8{U}
+    threefive hls help   |   threefive hls https://example.com/master.m3u8{U}
 
     {B} iframes     {U}{BLUE} Show MPEGTS iframes{NORM}
 
-    threefive3 iframes video.ts
+    threefive iframes video.ts
 
     {B} inject      {U}{NORM}{BLUE} SuperKabuki SCTE-35 MPEGTS Packet Injection Engine{U}
 
-    threefive3 inject help
+    threefive inject help
 
     {B} mcast       {U}{NORM}{BLUE} Multicast sender(server){U}
 
-    threefive3 mcast help  |   threefive3 mcast video.ts
+    threefive mcast help  |   threefive mcast video.ts
 
     {B}  packets    {U}{NORM}{BLUE} Print raw SCTE-35 packets{NORM}
 
-    threefive3 packets udp://@235.35.3.5:3535
+    threefive packets udp://@235.35.3.5:3535
 
     {B}  proxy      {U}{NORM}{BLUE} Parse a MPEGTS stream and copy it to stdout{NORM}
 
-    threefive3 proxy video.ts
+    threefive proxy video.ts
 
     {B}  pts        {U}{NORM}{BLUE} Print PTS from MPEGTS video{NORM}
 
-    threefive3 pts video.ts
+    threefive pts video.ts
 
     {B}  sidecar    {U}{NORM}{BLUE} Create a SCTE-35 sidecar file{NORM}
 
-    threefive3 sidecar video.ts
+    threefive sidecar video.ts
 
     {B}  sixfix     {U}{NORM}{BLUE} Fix SCTE-35 data mangled by ffmpeg{NORM}
 
-    threefive3 sixfix video.ts
+    threefive sixfix video.ts
 
     {B}  show       {U}{NORM}{BLUE} Probe MPEGTS video{NORM}
 
-    threefive3 show video.ts
+    threefive show video.ts
 
     {B}  version    {U}{NORM}{BLUE} Show version{NORM}
 
-    threefive3 version
+    threefive version
 
     {B}  help       {U}{NORM} {BLUE}Help{NORM}
 
-    threefive3 help
+    threefive help
 
 """
 
@@ -157,7 +157,7 @@ def print_help():
 
 def print_version():
     """
-    print_version print the threefive3 version
+    print_version print the threefive version
     """
     print2(version)
 
@@ -189,14 +189,6 @@ def iframe_chk(this):
     """
     iframer = IFramer()
     iframer.do(this)
-
-
-def inject_chk(this):
-    """
-    inject_chk use the superkabuki
-                        packet injection engine.
-    """
-    skcli()
 
 
 def packet_chk(this):
@@ -401,7 +393,6 @@ cli_map = {
     "superkabuki": skcli,
     "inject": skcli,
     "sixfix": sixcli,
-    "sk": skcli,
 }
 
 
