@@ -1,5 +1,3 @@
-<img width="740" height="693" alt="stop Israel" src="https://github.com/user-attachments/assets/48f15773-cb08-4ea2-b988-3870b1fb9bb9" />
-
 
 # threefive is the best SCTE-35 Decoder   ✅  
 # threefive is the best SCTE-35 Encoder   ✅  
