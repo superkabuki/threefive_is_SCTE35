@@ -11,17 +11,16 @@ from threefive.version import version
 setuptools.setup(
     name="threefive",
     version=version,
-    author="Adrian of Doom, Mei and Li(the blond)",
+    author="Adrian ",
     author_email="spam@iodisco.com",
-    description="threefive is The #1 SCTE-35 tool on the Planet. Death to those who oppose me.",
+    description="threefive is The #1 SCTE-35 Decoder and Encoder on the Planet",
     long_description=readme,
     long_description_content_type="text/markdown",
     url="https://github.com/superkabuki/threefive",
     install_requires=[
         "pyaes",
     ],
-
-    scripts=['bin/threefive'],
+    scripts=["bin/threefive","bin/threefive3",],
     packages=setuptools.find_packages(),
     classifiers=[
         "License :: OSI Approved :: Sleepycat License",
@@ -31,9 +30,9 @@ setuptools.setup(
         "Operating System :: POSIX :: BSD :: NetBSD",
         "Operating System :: POSIX :: Linux",
         "Topic :: Multimedia :: Video",
-        "Programming Language :: Python :: 3.6",
+        "Programming Language :: Python :: 3.8",
         "Programming Language :: Python :: Implementation :: PyPy",
         "Programming Language :: Python :: Implementation :: CPython",
     ],
-    python_requires=">=3.6",
+    python_requires=">=3.8",
 )
