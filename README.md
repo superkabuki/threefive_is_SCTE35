@@ -1,25 +1,11 @@
 
-# threefive is the best SCTE-35 Decoder   ✅  
-# threefive is the best SCTE-35 Encoder   ✅  
-# threefive is a SCTE-35 Cli tool  ✅   
-# threefive is a   SCTE-35 Library ✅ 
-<br>
-
-__pylint score__ : __9.87__`   | __cyclomatic complexity__ : __A (1.99)__
-
-
-# `threefive is the best SCTE-35 tool available`*
-
-
-* _No asterisks needed._
-
+### threefive is a SCTE-35 Decoder   ✅   threefive is a SCTE-35 Encoder   ✅  
+### threefive is a SCTE-35 Cli tool  ✅    threefive is a SCTE-35 Library ✅ 
 
 ## Q. `Who uses threefive?` 
 
 ## A. `Everybody.` 
 _(threefive has been installed over one million times according to [pypi.org](https://pypi.org)_
-
- <img width="516" height="512" alt="image" src="https://github.com/user-attachments/assets/642cb803-9465-408e-bb6e-03549eb22d78" />
 
 ___
 
@@ -32,6 +18,7 @@ ___
 * __Injects SCTE-35 Packets__ into __MPEGTS__ video.
 
 <samp>
+ <img width="258" height="256" alt="image" src="https://github.com/user-attachments/assets/642cb803-9465-408e-bb6e-03549eb22d78" />
 
 # `Documentation`
 	
@@ -749,16 +736,8 @@ a@fu:~$
 ```
 
 ### [iodisco.com/scte35](https://iodisco.com/scte35)
- <table>
-  <tr>
-    <th>Month</th>
-    <th>Savings</th>
-  </tr>
-  <tr>
-    <td>January</td>
-    <td>$100</td>
-  </tr>
-</table> 
+
+
 
 
 
