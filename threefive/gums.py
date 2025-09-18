@@ -28,7 +28,7 @@ NORM = "\033[27m"
 
 class GumS:
     """
-    GumS class is the UDP Unicast/Multicast Sender
+    GumS is the Gonzo Unicast and Multicast Sender
     """
 
     def __init__(self, addr=None, mttl=16, bind_addr="0.0.0.0"):
