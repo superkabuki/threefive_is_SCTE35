@@ -123,6 +123,63 @@ while True:
 
     13141.5047    #  returns start time in seconds.
 ```
+## Stream.proxy
+
+```py3
+   proxy(self, func=show_cue)
+```
+```
+       Stream.proxy writes all ts packets are written to stdout
+       for piping into another program like mplayer.
+       SCTE-35 cues are print2`ed to stderr.
+```
+
+* example
+
+```py3
+    from threefive import Stream
+    st=Stream('/home/a/video.ts')
+    st.proxy()
+```
+
+## Stream.show
+```py3
+   show(self)
+```
+```
+       displays streams that will be
+       parsed for SCTE-35.
+```
+* example
+```py3
+from threefive import Stream
+st=Stream('/home/a/mpegts2/mpegts/abcnew.ts')
+st.show()
+```
+
+```
+PMT Count: 33 
+
+Program: 1
+
+	Service:  Service01
+	Provider: FFmpeg
+	Pid:      4096
+	Pcr Pid:  256
+	Streams:
+	  Pid		Type
+	  256 [0x100]	0x24	 H.265
+	  257 [0x101]	0x3	MPEG-2 audio
+	  258 [0x102]	0x6	MPEG-2 binary data
+	  259 [0x103]	0x15	ID3
+```
+
+
+# Helper Methods 
+```
+If you are using the Stream class but want to customize the parsing, these are methods that may help
+```
+
 ## Stream.iter_pkts
 
 ```py3
@@ -147,44 +204,27 @@ while True:
             sys.stdout.buffer.write(pkt)
         return False
 ```
-```  
+## Stream.pid2pcr
+
+```py3  
   pid2pcr(self, pid)
-      pid2pcr takes a pid
-       returns the current pcr
-   
-   pid2prgm(self, pid)
-       pid2prgm takes a pid,
-       returns the program
-   
-   pid2pts(self, pid)
-       pid2pts takes a pid
-       returns the current pts
-   
-   proxy(self, func=show_cue)
- |      Stream.decode_proxy writes all ts packets are written to stdout
- |      for piping into another program like mplayer.
- |      SCTE-35 cues are print2`ed to stderr.
- |  
- |  pts(self)
- |      pts returns a dict of  program:pts
- |  
- |  show(self)
- |      displays streams that will be
- |      parsed for SCTE-35.
- |  
- |  show_pts(self)
- |      show_pts displays current pts by pid.
- |  
- |  ----------------------------------------------------------------------
- |  Static methods defined here:
- |  
- |  as_90k(ticks)
- |      as_90k returns ticks as 90k clock time
- |  
- |  mk_pts(payload)
- |      mk_pts calculate pts from payload
- |  
- |  ----------------------------------------------------------------------
-
-
 ```
+```
+   pid2pcr takes a pid and returns the current pcr
+   the pid is used to determine which program to use
+   for pcr 
+```
+## Stream.pid2pgrm
+```py3
+   pid2prgm(self, pid)
+```
+```
+   pid2prgm takes a pid returns the program
+```
+## Stream.pid2pts
+```py3
+   pid2pts(self, pid)
+```
+```
+    pid2pts takes a pid returns the current pts
+```   
