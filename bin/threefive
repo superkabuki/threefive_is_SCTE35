@@ -191,14 +191,6 @@ def iframe_chk(this):
     iframer.do(this)
 
 
-def inject_chk(this):
-    """
-    inject_chk use the superkabuki
-                        packet injection engine.
-    """
-    skcli()
-
-
 def packet_chk(this):
     """
     packet_chk checks for the packet keyword
@@ -401,7 +393,6 @@ cli_map = {
     "superkabuki": skcli,
     "inject": skcli,
     "sixfix": sixcli,
-    "sk": skcli,
 }
 
 
