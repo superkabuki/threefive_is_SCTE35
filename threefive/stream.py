@@ -46,7 +46,7 @@ class Based:
         for k, v in self.__dict__.items():
             stuff.append(f"\n{k}:\t{v}")
         return "\n".join(stuff)
-    
+
 
 
 class ProgramInfo(Based):
