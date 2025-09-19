@@ -18,7 +18,6 @@ ___
 * __Injects SCTE-35 Packets__ into __MPEGTS__ video.
 
 <samp>
- <img width="258" height="256" alt="image" src="https://github.com/user-attachments/assets/642cb803-9465-408e-bb6e-03549eb22d78" />
 
 # `Documentation`
 	
@@ -45,6 +44,7 @@ ___
 * [Install](#install)
 
 ### `Quick Start` 
+ <img width="258" height="256" alt="image" src="https://github.com/user-attachments/assets/642cb803-9465-408e-bb6e-03549eb22d78" />
 
 
 * Here's how to decode these SCTE-35 formats with threefive.
