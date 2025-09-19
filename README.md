@@ -72,10 +72,6 @@ stream.decode()
 
 </details>
 
----
-
-
-
 
 <details><summary>Base64</summary>
 
@@ -94,7 +90,6 @@ cue.show()
 
 </details>
 
----
 
 <details><summary>Bytes</summary>
 
@@ -112,7 +107,6 @@ cue.show()
 
 </details>
 
----
 
 <details><summary>Hex</summary>
 
@@ -131,11 +125,8 @@ cue=Cue(data)
 cue.show()
 ```
 
-
-
 </details>
 
----
 
 <details><summary>Int</summary>
 
@@ -157,7 +148,6 @@ cue.show()
 
 </details>
 
----
 
 <details><summary>JSON</summary>
 
@@ -206,9 +196,9 @@ cue.show()
 
 </details>
 
----
 
-<details><summary>Xml</summary>
+<details><summary><u>Xml</u>
+</summary>
 
 * __cli__
 	* put xml SCTE-35 in a [file](xml.xml) and redirect it into threefive 
@@ -234,7 +224,7 @@ cue.show()
 
 </details>
 
----
+
 
 <details><summary>Xml+binary</summary>
 
@@ -257,7 +247,6 @@ cue.show()
 
 </details>
 
----
 </samp>
 
 
