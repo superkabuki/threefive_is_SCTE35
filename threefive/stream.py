@@ -4,7 +4,6 @@ Mpeg-TS Stream parsing class Stream
 
 import sys
 
-from dataclasses import dataclass, field
 from functools import partial
 
 from .cue import Cue
@@ -38,7 +37,19 @@ def show_cue_stderr(cue):
     cue.to_stderr()
 
 
-class ProgramInfo:
+class Based:
+    """
+    Based is a base class
+    """
+    def __repr__(self):
+        stuff = []
+        for k, v in self.__dict__.items():
+            stuff.append(f"\n{k}:\t{v}")
+        return "\n".join(stuff)
+    
+
+
+class ProgramInfo(Based):
     """
     ProgramInfo is a class to
     hold Program information
@@ -80,22 +91,24 @@ class ProgramInfo:
             self._mk_vee(k)
 
 
-class Pids:
+class Pids(Based):
     """
     Pids holds sets of pids for pat,pcr,pmt, and scte35
     """
 
     SDT_PID = 0x11
     PAT_PID = 0x00
-    pcr = set()
-    pmt = set()
-    scte35 = set()
-    maybe_scte35 = set()
-    tables = set([PAT_PID, SDT_PID])
+
+    def __init__(self):
+        self.pcr = set()
+        self.pmt = set()
+        self.scte35 = set()
+        self.maybe_scte35 = set()
+        self.tables = set([self.PAT_PID, self.SDT_PID])
 
 
-@dataclass
-class Maps:
+
+class Maps(Based):
     """
     Maps holds mappings
     pids mapped to continuity_counters,
@@ -104,17 +117,17 @@ class Maps:
     programs mapped to pcr and pts
 
     """
+    def __init__(self):
+        self.pid_cc={}
+        self.pid_prgm={}
+        self.prgm_pcr={}
+        self.prgm_pts={}
+        self.prgm={}
+        self.partial={}
+        self.last={}
 
-    pid_cc: dict = field(default_factory=dict)
-    pid_prgm: dict = field(default_factory=dict)
-    prgm_pcr: dict = field(default_factory=dict)
-    prgm_pts: dict = field(default_factory=dict)
-    prgm: dict = field(default_factory=dict)
-    partial: dict = field(default_factory=dict)
-    last: dict = field(default_factory=dict)
 
-
-class Stream:
+class Stream(Based):
     """
     Stream class for parsing MPEG-TS data.
     """
@@ -132,15 +145,6 @@ class Stream:
     ROLLOVER = 8589934591  # 95443.717678
     ROLLOVER9K = 95443.717678
     SCTE35_PES_START = b"\x00\x00\x01\xfc"
-    start = {}
-    info = False
-    the_scte35_pids = None
-    pids = Pids()
-    maps = Maps()
-    pmt_payloads = {}
-    pmt_count = 0
-    pmt_pkt = None
-    pat_pkt = None
 
     def __init__(self, tsdata, show_null=True):
         """
@@ -159,9 +163,16 @@ class Stream:
         else:
             self._tsdata = tsdata
         self.show_null = show_null
+        self.start = {}
+        self.info = False
+        self.the_scte35_pids = None
+        self.pids = Pids()
+        self.maps = Maps()
+        self.pmt_payloads = {}
+        self.pmt_count = 0
+        self.pmt_pkt = None
+        self.pat_pkt = None
 
-    def __repr__(self):
-        return str(self.__dict__)
 
     @staticmethod
     def as_90k(ticks):
@@ -540,7 +551,7 @@ class Stream:
     def _strip_scte35_pes(self, pkt):
         pay = self._parse_payload(pkt)
         if self.SCTE35_PES_START in pay:
-            # print2(f"# Stripping PES Header from SCTE35 @ {self.pid2pts(pid)}")
+           # blue(f"# Stripping PES Header from SCTE35")
             pay = pay.split(self.SCTE35_PES_START, 1)[-1]
             peslen = pay[4] + 5  # PES header length
             pay = pay[peslen:]
