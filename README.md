@@ -40,10 +40,10 @@ ___
 * [Make your __threefive__ script an executable with __cython__](cython.md) _threefive is compatible with all python tools_
 </samp>
 
-### `Install`
+## `Install`
 * [Install](#install)
 
-### `Quick Start` 
+## `Quick Start` 
 
 
 * Here's how to decode these SCTE-35 formats with threefive.
@@ -250,23 +250,23 @@ cue.show()
 </samp>
 
 
-### `Examples` 
+## `Examples` 
 * [__Examples__](https://github.com/superkabuki/threefive/tree/main/examples)
-### `XML`
+## `XML`
 * [XML](https://github.com/superkabuki/SCTE-35/blob/main/xml.md) __New__! _updated 05/01/2025_
-### `Cli`
+## `Cli`
 * [SCTE-35 Cli Super Tool](#the-cli-tool) Encodes, Decodes, and Recodes. This is pretty cool, it does SCTE-35 seven different ways.
      * The cli tool comes with builtin documentation just type `threefive help`
-### `HLS`
+## `HLS`
 * [Advanced Parsing of SCTE-35 in HLS with threefive](https://github.com/superkabuki/threefive/blob/main/hls.md) All HLS SCTE-35 tags, Sidecar Files, AAC ID3 Header Timestamps, SCTE-35 filters... Who loves you baby?
 
-### `MPEGTS Packet Injection`
+## `MPEGTS Packet Injection`
 * [The SuperKabuki MPEGTS Packet Injection Engine in the Cli](inject.md)
 
-### `SCTE-35 As a Service`
+## `SCTE-35 As a Service`
 * Decode SCTE-35 without installing anything. If you can make an https request, you can use [__Sassy__](sassy.md) to decode SCTE-35. . 
 
-### `Classes`
+## `Classes`
 * The python built in help is always the most up to date docs for the library.
 
 ```py3
@@ -284,7 +284,7 @@ a@fu:~/build7/threefive$ pypy3
 
 ___
 
-### `| more`
+## `| more`
 
 * [Online SCTE-35 Parser](https://iodisco.com/scte35)  Supporte Base64, Bytes,Hex,Int, Json, Xml, and Xml+binary.
 
@@ -293,7 +293,7 @@ ___
 
 ___
 
-### `Install`
+## `Install`
 * python3 via pip
 ```rebol
 python3 -mpip install threefive
@@ -310,7 +310,7 @@ make install
 ```
 ___
 
-### `Using the library`
+## `Using the library`
 
 * Let me show you how easy threefive is to use.
 
@@ -548,7 +548,7 @@ Type "help", "copyright", "credits" or "license" for more information.
 ```
 
 
-### `The Cli tool`
+## `The Cli tool`
 
 #### The cli tool installs automatically with pip or the Makefile.
 
@@ -695,7 +695,7 @@ ___
 ___
 
 
-### Stream Multicast with the threefive cli, it's easy.
+## Stream Multicast with the threefive cli, it's easy.
 
 * The threefive cli has long been a Multicast Receiver( client )
 * The cli now comes with a builtin Multicast Sender( server).
@@ -723,7 +723,7 @@ optional arguments:
 a@fu:~$ 
 ```
 
-### [iodisco.com/scte35](https://iodisco.com/scte35)
+## [iodisco.com/scte35](https://iodisco.com/scte35)
 
 
 
