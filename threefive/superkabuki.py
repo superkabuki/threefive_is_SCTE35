@@ -93,14 +93,6 @@ class SuperKabuki(SixFix):
             const=True,
             help="Flag to insert Time Signal cues at iframes.",
         )
-        parser.add_argument(
-            "-v",
-            "--version",
-            action="store_const",
-            default=False,
-            const=True,
-            help="Show version",
-        )
 
         args = parser.parse_args()
         self._apply_args(args)
