@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/env pypy3
 
 """
 scte35 command line SCTE35 decoder.
@@ -8,6 +8,7 @@ scte35 command line SCTE35 decoder.
 
 import select
 import sys
+from threefive.bump import cli as bumpcli
 from threefive.gums import cli as gumscli
 from threefive.hls import cli as hlscli
 from threefive.sixfix import cli as sixcli
@@ -71,9 +72,12 @@ HELP = f"""
    {U}{BLUE} mpegts {U}  {U}{BLUE} base64 {NORM} threefive https://example.com/video.ts  base64
    {U}{BLUE} base64 {U}  {U}{BLUE} hex    {NORM} threefive '/DAWAAAAAAAAAP/wBQb+AKmKxwAACzuu2Q==' hex
    {U}{BLUE} xmlbin  {U} {BLUE} int    {NORM} threefive   < xmlbin.xml int
-   {U}{BLUE} xml    {U}  {BLUE} json   {NORM} threefive   < xml.xml 
+   {U}{BLUE} xml    {U}  {BLUE} json   {NORM} threefive   < xml.xml
    {U}{BLUE} mpegts {U}  {BLUE} json   {NORM} threefive video.ts
    {U}{BLUE} json{U}    {BLUE}  xml    {NORM} threefive  < json.json  xml
+
+    {B} adjust   {U}{NORM}{BLUE} Adjust SCTE-35 PTS in MPEGTS{U}
+    threefive adjust help  |  threefive adjust -i input.ts -o output.ts --bump 4.53
 
     {B}  hls        {U}{NORM}{BLUE} SCTE-35 HLS decode{U}
 
@@ -340,6 +344,7 @@ def to_funk(this):
     """
     to_funk prints a cue in a variety of formats.
     """
+    blue(this)
     cue = None
     if this in ["", b""]:
         return
@@ -389,6 +394,7 @@ def chk_funk_map():
 # cli map
 
 cli_map = {
+    "adjust": bumpcli,
     "mcast": gumscli,
     "superkabuki": skcli,
     "inject": skcli,
