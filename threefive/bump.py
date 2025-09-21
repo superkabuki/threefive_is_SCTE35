@@ -19,14 +19,18 @@ final values are modolo`ed to the ROLLOVER.
 
 """
 
+import argparse
 import io
 import sys
+
 from .cue import Cue
 from .stuff import blue
 from .stream import Stream
 
 
 ROLLOVER = 95443.717678
+REV = "\033[7m"
+NORM = "\033[27m"
 
 
 def bump_pts_time(cue, bump):
@@ -46,6 +50,13 @@ def bump_pts_adjust(cue, bump):
     cue.info_section.pts_adjustment = bumped % ROLLOVER
 
 
+def show_bump(pay, cue):
+    """
+    show_bump show the Cue with adjusted pts.
+    """
+    blue("Cue adjusted")
+
+
 def bump_pts(pay, bump):
     """
     bump_pts adjust SCTE-35 pts by bump
@@ -56,6 +67,8 @@ def bump_pts(pay, bump):
     else:
         bump_pts_adjust(cue, bump)
     cue.encode()
+    bites = cue.bytes()
+    show_bump(pay, cue)
     return cue.bytes()
 
 
@@ -83,39 +96,96 @@ def bumped(pkt, bump):
     return pkt
 
 
-class BumpStream(Stream):
+class StreamBumper(Stream):
     """
-    Bump Stream class
+    StreamBumper class
 
         Adjust SCTE-35 PTS times  in MPEGTS
     """
 
-    def _scte35(self, pkt, pid, bump):
+    def __init__(self, tsdata=None, show_null=True):
+        super().__init__(tsdata)
+        self.outfile = sys.stdout.buffer
+        self.infile = None
+        self.bump = 0.0
+        self._parse_args()
+
+    def _pts(self, pkt, pid):
+        if self._pusi_flag(pkt):
+            self._chk_pts(pkt, pid)
+
+    def _scte35(self, pkt, pid):
         if self._pid_has_scte35(pid):
             cue = self._parse_scte35(pkt, pid)
-            pkt = bumped(pkt, bump)
+            pkt = bumped(pkt, self.bump)
         return pkt
 
-    def parse(self, pkt, bump):
+    def _parse2(self, pkt):
         """
         parse packets for tables and SCTE-35,
         adjust SCTE-35 PTS by bump.
         return modified pkt.
         """
         pid = self._parse_info(pkt)
-        pkt = self._scte35(pkt, pid, bump)
+        pkt = self._scte35(pkt, pid)
         return pkt
 
-    def bump_scte35(self, bump):
+    def bump_scte35(self):
         """
         bump_scte_35 adjust pts of the SCTE-35 by bump
         """
-        bump = float(bump)
         num_pkts = 2420
-        for chunk in self.iter_pkts(num_pkts):
-            pkts = [
-                self.parse(chunk[i : i + self.PACKET_SIZE], bump)
-                for i in range(0, len(chunk), self.PACKET_SIZE)
-            ]
-            sys.stdout.buffer.write(b"".join(pkts))
- 
+        with open(self.outfile, "wb") as outfile:
+            for chunk in self.iter_pkts(num_pkts):
+                pkts = [
+                    self._parse2(chunk[i : i + self.PACKET_SIZE])
+                    for i in range(0, len(chunk), self.PACKET_SIZE)
+                ]
+                outfile.write(b"".join(pkts))
+                outfile.flush()
+        return False
+
+    def _apply_args(self, args):
+        """
+        _apply_args applies command line args
+        """
+        self.outfile = args.output
+        self.infile = args.input
+        self.bump = float(args.bump)
+        super().__init__(self.infile)
+
+    def _parse_args(self):
+        """
+        _parse_args parse command line args
+        """
+        parser = argparse.ArgumentParser()
+        parser.add_argument(
+            "-i",
+            "--input",
+            default=sys.stdin.buffer,
+            help=f""" Input source, stdin, file, http(s), udp, or multicast mpegts
+                                    [ default:{REV}sys.stdin.buffer{NORM} ]
+                                    """,
+        )
+        parser.add_argument(
+            "-o",
+            "--output",
+            default=sys.stdout.buffer,
+            help=f"Output file  [ default:{REV}sys.stdout.buffer{NORM} ]",
+        )
+        parser.add_argument(
+            "-b",
+            "--bump",
+            default=0.0,
+            help=f"Adjustment to apply to SCTE-35 Cues. [default: {REV}0.0{NORM}]",
+        )
+        args = parser.parse_args()
+        self._apply_args(args)
+
+
+def cli():
+    """
+    function to make a cli tool
+    """
+    bumper = StreamBumper()
+    bumper.bump_scte35()
