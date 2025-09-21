@@ -20,7 +20,6 @@ final values are modolo`ed to the ROLLOVER.
 """
 
 import argparse
-import io
 import sys
 
 from .cue import Cue
@@ -37,20 +36,20 @@ def bump_pts_time(cue, bump):
     """
     bump_pts_time add bump directly to cue.command.pts_time
     """
-    bumped = cue.command.pts_time + cue.info_section.pts_adjustment + bump
+    bumpme = cue.command.pts_time + cue.info_section.pts_adjustment + bump
     cue.info_section.pts_adjustment = 0.0
-    cue.command.pts_time = bumped % ROLLOVER
+    cue.command.pts_time = bumpme % ROLLOVER
 
 
 def bump_pts_adjust(cue, bump):
     """
     bump_pts_adjust add bump to cue.command.pts_adjustment
     """
-    bumped = cue.info_section.pts_adjustment + bump
-    cue.info_section.pts_adjustment = bumped % ROLLOVER
+    bumpme = cue.info_section.pts_adjustment + bump
+    cue.info_section.pts_adjustment = bumpme % ROLLOVER
 
 
-def show_bump(pay, cue):
+def show_bump():
     """
     show_bump show the Cue with adjusted pts.
     """
@@ -67,8 +66,7 @@ def bump_pts(pay, bump):
     else:
         bump_pts_adjust(cue, bump)
     cue.encode()
-    bites = cue.bytes()
-    show_bump(pay, cue)
+    show_bump()
     return cue.bytes()
 
 
@@ -110,13 +108,8 @@ class StreamBumper(Stream):
         self.bump = 0.0
         self._parse_args()
 
-    def _pts(self, pkt, pid):
-        if self._pusi_flag(pkt):
-            self._chk_pts(pkt, pid)
-
     def _scte35(self, pkt, pid):
         if self._pid_has_scte35(pid):
-            cue = self._parse_scte35(pkt, pid)
             pkt = bumped(pkt, self.bump)
         return pkt
 
