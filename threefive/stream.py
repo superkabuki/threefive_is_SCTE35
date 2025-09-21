@@ -41,12 +41,12 @@ class Based:
     """
     Based is a base class
     """
+
     def __repr__(self):
         stuff = []
         for k, v in self.__dict__.items():
             stuff.append(f"\n{k}:\t{v}")
         return "\n".join(stuff)
-
 
 
 class ProgramInfo(Based):
@@ -107,7 +107,6 @@ class Pids(Based):
         self.tables = set([self.PAT_PID, self.SDT_PID])
 
 
-
 class Maps(Based):
     """
     Maps holds mappings
@@ -117,14 +116,15 @@ class Maps(Based):
     programs mapped to pcr and pts
 
     """
+
     def __init__(self):
-        self.pid_cc={}
-        self.pid_prgm={}
-        self.prgm_pcr={}
-        self.prgm_pts={}
-        self.prgm={}
-        self.partial={}
-        self.last={}
+        self.pid_cc = {}
+        self.pid_prgm = {}
+        self.prgm_pcr = {}
+        self.prgm_pts = {}
+        self.prgm = {}
+        self.partial = {}
+        self.last = {}
 
 
 class Stream(Based):
@@ -172,7 +172,6 @@ class Stream(Based):
         self.pmt_count = 0
         self.pmt_pkt = None
         self.pat_pkt = None
-
 
     @staticmethod
     def as_90k(ticks):
@@ -551,7 +550,7 @@ class Stream(Based):
     def _strip_scte35_pes(self, pkt):
         pay = self._parse_payload(pkt)
         if self.SCTE35_PES_START in pay:
-           # blue(f"# Stripping PES Header from SCTE35")
+            # blue(f"# Stripping PES Header from SCTE35")
             pay = pay.split(self.SCTE35_PES_START, 1)[-1]
             peslen = pay[4] + 5  # PES header length
             pay = pay[peslen:]
