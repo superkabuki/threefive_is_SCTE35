@@ -8,9 +8,16 @@ import socket
 import struct
 import sys
 import urllib.request
-from .stuff import  blue, ERR, pif
+from .stuff import blue, ERR, pif
 
 TIMEOUT = 60
+
+CORS={"Origin": "null",
+                    "DNT": "1",
+                    "Connection":"keep-alive",
+                    "Sec-Fetch-Dest": "empty",
+                    "Sec-Fetch-Mode": "cors",
+                    "Sec-Fetch-Site": "cross-site",}
 
 
 class Socked(socket.socket):
@@ -24,6 +31,15 @@ class Socked(socket.socket):
         read is an alias for socket.socket.recv
         """
         return self.recv(bites)
+
+
+def corsreader(uri,headers={}):
+    """
+    corsreader calls reader with CORS headers
+    set to allow all.
+    """
+    all_headers = {**CORS,**headers}
+    return reader(uri,headers=all_headers)
 
 
 def reader(uri, headers={}):
@@ -70,7 +86,6 @@ def reader(uri, headers={}):
         return urllib.request.urlopen(req)
     # File
     return open(uri, "rb")
-
 
 
 def lshiftbuf(socked):
@@ -121,7 +136,7 @@ def _open_mcast(uri):
     udp://@227.1.3.10:4310
     """
     blue(" Opening Multicast socket")
-    ttl= 32
+    ttl = 32
     interface_ip = "0.0.0.0"
     multicast_group, port = (uri.split("udp://@")[1]).rsplit(":", 1)
     multicast_port = pif(port)
