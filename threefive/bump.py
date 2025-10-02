@@ -8,12 +8,24 @@ if the Cue in the packet has cue.command.pts_time:
 
     cue.command.pts_time is adjusted directly  like this:
 
-    cue.command.pts_time = bump + cue.info_section.pts_adjustment+ cue.command.pts_time
-    cue.info_section.pts_adjustment = 0.0
+   1)   cue.command.pts_time = bump + cue.info_section.pts_adjustment+ cue.command.pts_time
+
+  2)  cue.info_section.pts_adjustment = 0.0
+
+  3) if  a negative adjustement is used and cue.command.pts_time reults in a negative pts,
+   then pts_time = ROLLOVER + negative_pts.
+
+    For example if cue.command.pts_time =5000.0 and the adjustment is -8000.0
+     5000.0 + (-8000.0)= -3000.0
+     ROLLOVER +( -3000.0) = 92443.717678
+     cue.command.pts_time would be set to 92443.717678
+
 
 if the Cue in the packet doesn't have cue.command.pts_time:
 
-        cue.info_section.pts_adjustment=bump + cue.info_section.pts_adjustment
+   1)     cue.info_section.pts_adjustment=bump + cue.info_section.pts_adjustment
+
+
 
 final values are modolo`ed to the ROLLOVER.
 
@@ -38,6 +50,8 @@ def bump_pts_time(cue, bump):
     """
     bumpme = cue.command.pts_time + cue.info_section.pts_adjustment + bump
     cue.info_section.pts_adjustment = 0.0
+    if bumpme < 0.0:
+        bumpme= ROLLOVER + bumpme
     cue.command.pts_time = bumpme % ROLLOVER
 
 
