@@ -1,23 +1,42 @@
-# Latest is v3.0.61 released Fri Sep 19 04:38:19 AM EDT 2025
 
-## `pypi.org ranks threefive in the top 2% of all python packages. Ever.`
+# threefive 
+## SCTE-35 CLI tool and python3 library
 
-### threefive is a SCTE-35 Decoder   ✅   threefive is a SCTE-35 Encoder   ✅  
-### threefive is a SCTE-35 Cli tool  ✅    threefive is a SCTE-35 Library ✅ 
+### Q. `Who uses threefive?` 
 
-## Q. `Who uses threefive?` 
-
-## A. `Everybody.` 
+### A. `Everybody.` 
 _(threefive has been installed over one million times according to [pypi.org](https://pypi.org)_
 
-___
 
 # `Features`
-* __Decodes SCTE-35__ in __TEN__ formats: __MPEGTS, Base64, Bytes, Dicts, Hex,HLS, Integers,JSON,XML and XML+Binary__.
-* __Encodes SCTE-35__ in __EIGHT__ formats: __MPEGTS, Base64, Bytes, Hex, Int, JSON,XML, and Xml+binary.__
-* __Supports All HLS SCTE-35 Tags__.
-* __Does Automatic AES decryption__ for __MPEGTS__ and __HLS__.
-* __Has Built-in Multicast Sender__ and __Receiver__.
+<samp>
+
+* __Decodes SCTE-35__ from:
+	* MPEGTS
+ 	* Base64
+  	*  Bytes
+  	*  DASH
+  	*  Dicts
+  	*  Hex
+  	*  HLS
+  	*  Integers
+  	*  JSON
+  	*  XML
+  	*  XML+Binary
+* __Encodes SCTE-35__ to:
+	* MPEGTS
+ 	* Base64
+  	* Bytes
+  	* Hex
+  	* Integers
+  	* JSON
+  	* XML
+  	* XML+Binary
+
+* __Automatic AES decryption__ for __MPEGTS__ and __HLS__.
+
+* __Built-in Multicast Sender__ and __Receiver__.
+
 * __Injects SCTE-35 Packets__ into __MPEGTS__ video.
 
 <samp>
