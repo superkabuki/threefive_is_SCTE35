@@ -1,4 +1,4 @@
-#!/usr/bin/env pypy3
+#!/usr/bin/env python3
 
 """
 scte35 command line SCTE35 decoder.
@@ -8,7 +8,6 @@ scte35 command line SCTE35 decoder.
 
 import select
 import sys
-from threefive.bump import cli as bumpcli
 from threefive.gums import cli as gumscli
 from threefive.hls import cli as hlscli
 from threefive.sixfix import cli as sixcli
@@ -32,31 +31,6 @@ B = "\033[7;1m"
 U = "\033[m"
 
 
-class SupaStream(Stream):
-    """
-    SupaStream is subclass of Stream used
-    to print raw SCTE-35 packets.
-    """
-
-    def _parse_scte35(self, pkt, pid):
-        print2(pkt)
-        print2("")
-        super()._parse_scte35(pkt, pid)
-
-
-def mk_sidecar(cue):
-    """
-    mk_sidecar generates a sidecar file with the SCTE-35 Cues
-    """
-    pts = 0.0
-    with open("sidecar.txt", "a") as sidecar:
-        cue.show()
-        if cue.packet_data.pts:
-            pts = cue.packet_data.pts
-        data = f"{pts},{cue.encode()}\n"
-        sidecar.write(data)
-
-
 HELP = f"""
 {BLUE} threefive cli tool                                {U}
 
@@ -72,12 +46,9 @@ HELP = f"""
    {U}{BLUE} mpegts {U}  {U}{BLUE} base64 {NORM} threefive https://example.com/video.ts  base64
    {U}{BLUE} base64 {U}  {U}{BLUE} hex    {NORM} threefive '/DAWAAAAAAAAAP/wBQb+AKmKxwAACzuu2Q==' hex
    {U}{BLUE} xmlbin  {U} {BLUE} int    {NORM} threefive   < xmlbin.xml int
-   {U}{BLUE} xml    {U}  {BLUE} json   {NORM} threefive   < xml.xml
+   {U}{BLUE} xml    {U}  {BLUE} json   {NORM} threefive   < xml.xml 
    {U}{BLUE} mpegts {U}  {BLUE} json   {NORM} threefive video.ts
    {U}{BLUE} json{U}    {BLUE}  xml    {NORM} threefive  < json.json  xml
-
-    {B} adjust   {U}{NORM}{BLUE} Adjust SCTE-35 PTS in MPEGTS{U}
-    threefive adjust help  |  threefive adjust -i input.ts -o output.ts --bump 4.53
 
     {B}  hls        {U}{NORM}{BLUE} SCTE-35 HLS decode{U}
 
@@ -130,6 +101,31 @@ HELP = f"""
 """
 
 
+class SupaStream(Stream):
+    """
+    SupaStream is subclass of Stream used
+    to print raw SCTE-35 packets.
+    """
+
+    def _parse_scte35(self, pkt, pid):
+        print2(pkt)
+        print2("")
+        super()._parse_scte35(pkt, pid)
+
+
+def mk_sidecar(cue):
+    """
+    mk_sidecar generates a sidecar file with the SCTE-35 Cues
+    """
+    pts = 0.0
+    with open("sidecar.txt", "a") as sidecar:
+        cue.show()
+        if cue.packet_data.pts:
+            pts = cue.packet_data.pts
+        data = f"{pts},{cue.encode()}\n"
+        sidecar.write(data)
+
+
 def mk_args(keys):
     """
     mk_args generates a list of args for inputs
@@ -144,9 +140,6 @@ def mk_args(keys):
 
 def hls():
     sys.argv.remove("hls")
-    ##    if "encode" in sys.argv:
-    ##        sidecli()
-    ##    else:
     hlscli()
 
 
@@ -168,9 +161,22 @@ def print_version():
 
 print_map = {
     "hls": hls,
+    "-h": print_help,
+    "--help": print_help,
     "help": print_help,
+    "-v": print_version,
+    "--version": print_version,
     "version": print_version,
 }
+
+
+def print_key_in_argv(key, val):
+    """
+    print_key_in_argv  if the key in sys.argv call val()
+    """
+    if key in sys.argv:
+        val()
+        sys.exit()
 
 
 def chk_print_map():
@@ -178,9 +184,7 @@ def chk_print_map():
     chk_print_map checks for print_map.keys() in sys.argv
     """
     for k, v in print_map.items():
-        if k in sys.argv:
-            v()
-            sys.exit()
+        print_key_in_argv(k, v)
 
 
 # functions for mpegts_map
@@ -250,6 +254,18 @@ mpegts_map = {
 }
 
 
+def mpegts_key_in_argv(args, key):
+    """
+    key_in_argv check if a key
+    from mpegts_map is in sys.argv
+    """
+    if key in sys.argv:
+        for arg in args:
+            print2(arg)
+            mpegts_map[key](arg)
+        sys.exit()
+
+
 def chk_mpegts_map():
     """
     chk_mpegts_map check sys.argv for mpegts_map keys
@@ -257,14 +273,10 @@ def chk_mpegts_map():
     m_keys = list(mpegts_map.keys())
     args = mk_args(m_keys)
     for key in m_keys:
-        if key in sys.argv:
-            for arg in args:
-                print2(arg)
-                mpegts_map[key](arg)
-            sys.exit()
+        mpegts_key_in_argv(args, key)
 
 
-# functions for funk_map
+# func_map is used to generate  SCTE-35 output formats
 
 
 def base64_out(cue):
@@ -340,42 +352,86 @@ def funk():
     return func
 
 
+def try_stream(this):
+    """
+    try_stream attempts to decode `this`
+    with a Stream class instance.
+    """
+    strm = Stream(this)
+    strm.decode(func=funk())  # funk() works here
+
+
+def try_cue(this):
+    """
+    try_cue attempts to decode `this`
+    with a Cue class instance.
+    """
+    try:
+        cue = Cue(this)
+        if cue:
+            funk()(cue)  #   funk works here too.
+    except ERR:
+        red(f'\n "{this}" isn`t working for me.')
+
+
 def to_funk(this):
     """
     to_funk prints a cue in a variety of formats.
     """
-    blue(this)
     cue = None
     if this in ["", b""]:
         return
-    # if not this.strip().startswith('<'):
     try:
-        # mpegts streams handled here.
-        strm = Stream(this)
-        strm.decode(func=funk())  # funk() works here
+        try_stream(this)
     except:
-        cue = Cue(this)  # This is the
-        if cue:
-            funk()(cue)  #   funk works here too.
+        try_cue(this)
+
+
+def not_pkt(args, rdr, one):
+    """
+    not_pkt , runs when stdin is NOT an mpegts stream
+    """
+    two = rdr.read()
+    args.append((one + two).decode())  # no rewind on stdin?
+
+
+def is_pkt(args, rdr, one):
+    """
+    is_pkt,  runs when stdin is an mpegts stream
+    """
+    two = rdr.read(187)
+    strm = Stream(sys.stdin.buffer)
+    strm._parse(one + two)  # dont drop first packet
+    strm.decode(func=funk())
+    sys.exit()  # I keep forgetting why I do
+
+
+def stdin_is_readable():
+    """
+    stdin_is readable,  detect data on stdin.
+    """
+    readable, _, _ = select.select([sys.stdin], [], [], 0)
+    return sys.stdin in readable  # check stdin for data
+
+
+def read_stdin(args):
+    """
+    read_stdin read from stdin
+    """
+    rdr = reader(sys.stdin.buffer)
+    one = rdr.read(1)
+    if one not in [b"G"]:  # is this a packet?
+        not_pkt(args, rdr, one)
+    else:
+        is_pkt(args, rdr, one)
 
 
 def chk_stdin(args):
     """
     chk_stdin autodetects input from stdin.
-
     """
-    readable, _, _ = select.select([sys.stdin], [], [], 0)
-    if sys.stdin in readable:  # check stdin for data
-        one = reader(sys.stdin.buffer).read(1)
-        if one not in [b"G"]:  # is this a packet?
-            two = reader(sys.stdin.buffer).read()
-            args.append((one + two).decode())  # no rewind on stdin?
-        else:
-            two = reader(sys.stdin.buffer).read(187)
-            strm = Stream(sys.stdin.buffer)
-            strm._parse(one + two)  # dont drop first packet
-            strm.decode(func=funk())
-            sys.exit()  # I keep forgetting why I do
+    if stdin_is_readable():
+        read_stdin(args)
     return args
 
 
@@ -394,7 +450,6 @@ def chk_funk_map():
 # cli map
 
 cli_map = {
-    "adjust": bumpcli,
     "mcast": gumscli,
     "superkabuki": skcli,
     "inject": skcli,
@@ -415,6 +470,18 @@ def dashdashhelp():
         sys.argv[idx] = "--help"
 
 
+def cli_key_in_argv(key, val):
+    """
+    cli_key_in_argv if key in argv call val()
+    """
+    if key in sys.argv:
+        dashdashhelp()
+        sys.argv[0] = f"{sys.argv[0]} {key}"
+        sys.argv.remove(key)
+        val()
+        sys.exit()
+
+
 def chk_cli_map():
     """
     chk_cli_map check if a
@@ -422,19 +489,16 @@ def chk_cli_map():
     pass control to the cli function.
     """
     for k, v in cli_map.items():
-        if k in sys.argv:
-            dashdashhelp()
-            sys.argv[0] = f"{sys.argv[0]} {k}"
-            sys.argv.remove(k)
-            v()
-            sys.exit()
+        cli_key_in_argv(k, v)
 
 
 def go():
+    """
+    go , check all the maps
+    and the call functions.
+    """
     chk_cli_map()
     chk_print_map()
-    if len(sys.argv) < 2:
-        sys.argv.append("json")
     chk_mpegts_map()
     chk_funk_map()
 
