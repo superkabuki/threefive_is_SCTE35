@@ -44,6 +44,14 @@ _(threefive has been installed over one million times according to [pypi.org](ht
 
 <samp>
 
+#  `Tip Of The Week`
+If you want to have a Segmentation Descriptor without a UPID <BR>
+set __segmentation_upid_length__= __0__ <BR>
+set __segmentation_upid_type__= __0__
+___
+
+
+
 # `Documentation`
 	
 * [__Install__](#install)
