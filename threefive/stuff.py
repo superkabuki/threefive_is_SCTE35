@@ -19,6 +19,10 @@ ERR = (
     KeyError,
 )
 
+BLUE='\033[107m\033[44m'
+RED='\033[107m\033[41m'
+RESET=' \033[0m'
+
 
 write2 = True
 
@@ -197,25 +201,26 @@ def iso8601():
 def red(message):
     """
     red  print error messages in red to stderr.
-
     """
-    mesg = f" \033[107m\033[41m{message} \033[0m "
-    print2(mesg)
+    if stderr.isatty():
+        message= f"{RED}{message}{RESET}"
+    print2(f'# {message}')
     return False
 
 
 def blue(message):
     """
     blue  print info messages in blue to stderr.
-
     """
-    mesg = f"\033[107m\033[44m{message} \033[0m"
-    print2(mesg)
+    if stderr.isatty():
+        message = f"{BLUE}{message}{RESET}"
+    print2(f'# {message}')
 
 
 def reblue(message):
     """
     reblue overwrites the last line in place
     """
-    mesg = f"\033[107m\033[44m{message} \033[0m"
-    print(mesg, end="\r", file=stderr, flush=True)
+    if stderr.isatty():
+        message = f"{BLUE}{message}{RESET}"
+    print(message, end="\r", file=stderr, flush=True)
