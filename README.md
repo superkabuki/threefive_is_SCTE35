@@ -1,11 +1,9 @@
 <pre>
-	I'm trying to add SRT support.Test streams are needed to ensure compatibility. 
-	I promise not to share them with anyone. Thank you for your support.
-
-	Adrian
+	SRT support in threefive? 
+	It will never happen, that threefive guy can't even spell SRT....
 </pre>
+* __SRT Live parsing is now working with threefive and will be included in the next release.__ 
 * _checkout [SRTKabuki](https://github.com/superkabuki/srtkabuki)_
-
 
 # threefive is the Highest Rated SCTE-35 Parser. Ever.
 
