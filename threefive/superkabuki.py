@@ -90,7 +90,7 @@ class SuperKabuki(SixFix):
             "--time_signals",
             action="store_const",
             default=False,
-            const=True,
+         #   const=True,
             help="Flag to insert Time Signal cues at iframes.",
         )
 
@@ -202,6 +202,7 @@ class SuperKabuki(SixFix):
                         active = io.BytesIO()
 
     def _gen_time_signal(self, pts):
+
         cue = Cue()
         cue.command = TimeSignal()
         cue.command.time_specified_flag = True
@@ -242,6 +243,14 @@ class SuperKabuki(SixFix):
                 if line:
                     self._chk_sidecar_pts(pts, line)
 
+    @staticmethod
+    def clobber_file(the_file):
+        """
+        clobber_file  blanks the_file
+        """
+        with open(the_file, "w", encoding="utf8") as clobbered:
+            clobbered.close()
+
     def load_sidecar(self, pts):
         """
         _load_sidecar reads (pts, cue) pairs from
@@ -250,6 +259,7 @@ class SuperKabuki(SixFix):
         """
         if self.sidecar_file:
             self._read_sidecar_file(pts)
+            self.clobber_file(self.sidecar_file)
 
     def chk_sidecar_cues(self, pts):
         """
