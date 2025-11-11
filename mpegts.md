@@ -26,71 +26,71 @@ ___
 
 # the threefive cli and MPEGTS.
 
-* __Decode SCTE-35 from MPEGTS__ 
+### __Decode SCTE-35 from MPEGTS__ 
 ```py3
 a@fu:~$ threefive plp0.ts 
 ```
-* the __default output is json__. You can change the output format with keywords.
+#### the __default output is json__. You can change the output format with keywords.
 
-* __base64__
+#### __base64__
 ```py3
 a@fu:~$ threefive plp0.ts  base64
 ```
-* __bytes__
+#### __bytes__
 ```py3
 a@fu:~$ threefive plp0.ts bytes
 ```
-* __hex__
+#### __hex__
 ```py3
 a@fu:~$ threefive plp0.ts hex
 ```
-* __xml__
+#### __xml__
 ```py3
 a@fu:~$ threefive plp0.ts xml
 ```
-* __xml+bin__
+#### __xml+bin__
 ```py3
 a@fu:~$ threefive plp0.ts xmlbin
 ```
-### More Cli MPEGTS tools 
+# More Cli MPEGTS tools 
 
-* __hls__         SCTE-35 HLS decode
+#### __hls__         SCTE-35 HLS decode
 ```smalltalk
 threefive hls https://example.com/master.m3u8
 ```
-* __iframes__      Show MPEGTS iframes
+#### __iframes__      Show MPEGTS iframes
 ```smalltalk
     threefive iframes video.ts
 ```
-* __inject__  SuperKabuki SCTE-35 MPEGTS Packet Injection Engine
+#### __inject__  SuperKabuki SCTE-35 MPEGTS Packet Injection Engine
 ```smalltalk
     threefive inject help
 ```
-* __mcast__        Multicast sender(server)
+#### __mcast__        Multicast sender(server)
 ```smalltalk
   threefive mcast video.ts
 ```
-* __packets__     Print raw SCTE-35 packets
+#### __packets__     Print raw SCTE-35 packets
 ```smalltalk
     threefive packets udp://@235.35.3.5:3535
 ```
-* __proxy__       Parse a MPEGTS stream and copy it to stdout
+#### __proxy__       Parse a MPEGTS stream and copy it to stdout
 ```smalltalk
     threefive proxy video.ts
 ```
-* __pts__         Print PTS from MPEGTS video
+#### __pts__         Print PTS from MPEGTS video
 ```smalltalk
     threefive pts video.ts
 ```
-* __sidecar__     Create a SCTE-35 sidecar file
+#### __sidecar__     Create a SCTE-35 sidecar file
 ```smalltalk
     threefive sidecar video.ts
 ```
-* __sixfix__      Fix SCTE-35 data mangled by ffmpeg
+#### __sixfix__      Fix SCTE-35 data mangled by ffmpeg
 ```smalltalk
     threefive sixfix video.ts
 ```
-* __show__        Probe MPEGTS video
+#### __show__        Probe MPEGTS video
 ```smalltalk
     threefive show video.ts
 ```
