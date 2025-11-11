@@ -1,7 +1,6 @@
-<pre>
-	SRT support in threefive? 
-	It will never happen, that threefive guy can't even spell SRT....
-</pre>
+
+_SRT support in threefive?  It will never happen, the threefive guy can't even spell SRT...._ ~ Linda
+
 * __SRT Live parsing is now working with threefive and will be included in the next release.__ 
 * _checkout [SRTKabuki](https://github.com/superkabuki/srtkabuki)_
 
