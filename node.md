@@ -2,8 +2,7 @@
 #### _requires threefive v3.0.45_
 
 ## Here's what you can do with a Node instance.
-
-* __Parse a DASH mpd__
+#### __Parse a DASH mpd__
 * use __Ultra Xml Parser__ (_Supreme_)
 ```py3
 
@@ -21,7 +20,7 @@ Type "help", "copyright", "credits" or "license" for more information.
 >>>> n =u.parse(data)     # <--- UltraXmlParser.parse(data) returns a Node instance
 ```
 
-* __search recursively for Event tags in the MPD xml__
+#### __search recursively for Event tags in the MPD xml__
 * __Node.findtag(tag)__ returns a NodeList instance, so you can modify the Xml if needed.
 
  ```py3
@@ -62,7 +61,7 @@ Type "help", "copyright", "credits" or "license" for more information.
 ]
 ```
 
-* __These events can be modified or deleted and the changes applied in real time.__
+#### __These events can be modified or deleted and the changes applied in real time.__
 
 ```py3
 
@@ -80,7 +79,7 @@ Type "help", "copyright", "credits" or "license" for more information.
 4
 ```
 
-* you can also search with __Node.findattr(attr)__ for xml nodes that have an attribute
+#### you can also search with __Node.findattr(attr)__ for xml nodes that have an attribute
 
 ```py3
 >>>> bwidth_nodes=n.findattr("bandwidth")
@@ -90,7 +89,7 @@ Type "help", "copyright", "credits" or "license" for more information.
 ]
 ```
 
-* __you can modify those nodes too.__
+#### __you can modify those nodes too.__
 * Here I add an attribute to the first bwidth_node
 
 ```py3
@@ -118,7 +117,7 @@ Type "help", "copyright", "credits" or "license" for more information.
 </AdaptationSet>
 ````
 
-* __go crazy with namespaces__
+#### __go crazy with namespaces__
     * namespaces can be set from the top, or by node.
     *  namespaces can set on tags and/or attributes.
 <br><br>
