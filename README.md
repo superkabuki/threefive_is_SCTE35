@@ -7,18 +7,18 @@
 
 # threefive is the Highest Rated SCTE-35 Parser. Ever.
 
-# SCTE-35 CLI tool and python3 library
+#  SCTE-35 CLI tool and python3 library 
 
-## [Latest version is v3.0.63](v3063.md)
+## [ [Latest version is v3.0.63](v3063.md) ]
 
-
+## [ FAQ ]
 ### Q. `Who uses threefive?` 
 
 ### A. `Everybody.` 
 _(threefive has been installed over one million times according to [pypi.org](https://pypi.org)_
 
 
-# `Features`
+# [ Features ]
 <samp>
 
 * __Decodes SCTE-35__ from:
@@ -51,7 +51,7 @@ _(threefive has been installed over one million times according to [pypi.org](ht
 
 <samp>
 
-#  `Tip Of The Week`
+#  [ Tip Of The Week ]
 If you want to have a Segmentation Descriptor without a UPID <BR>
 set __segmentation_upid_length__= __0__ <BR>
 set __segmentation_upid_type__= __0__
@@ -59,9 +59,9 @@ ___
 
 
 
-# `Documentation`
+# [ Documentation ]
 	
-* [__Install__](#install)
+* [__Install__](#install) 
 * [SCTE-35 Decoding __Quick Start__ ](#quick-start) _threefive makes decoding SCTE-35 fast and easy_
 * [SCTE-35 __Examples__](https://github.com/superkabuki/threefive/tree/main/examples) _examples of all kinds of SCTE-35 stuff_
 * [SCTE-35 __Cli__](#the-cli-tool) _decode SCTE-35 on the command line_
@@ -80,10 +80,10 @@ ___
 * [Make your __threefive__ script an executable with __cython__](cython.md) _threefive is compatible with all python tools_
 </samp>
 
-## `Install`
+## [ Install ]
 * [Install](#install)
 
-## `Quick Start` 
+## [ Quick Start ] 
 
 
 * Here's how to decode these SCTE-35 formats with threefive.
@@ -290,23 +290,23 @@ cue.show()
 </samp>
 
 
-## `Examples` 
+##  [ Examples ]
 * [__Examples__](https://github.com/superkabuki/threefive/tree/main/examples)
-## `XML`
+## [ XML ]
 * [XML](https://github.com/superkabuki/SCTE-35/blob/main/xml.md) __New__! _updated 05/01/2025_
-## `Cli`
+## [ Cli ]
 * [SCTE-35 Cli Super Tool](#the-cli-tool) Encodes, Decodes, and Recodes. This is pretty cool, it does SCTE-35 seven different ways.
      * The cli tool comes with builtin documentation just type `threefive help`
-## `HLS`
+## [ HLS ]
 * [Advanced Parsing of SCTE-35 in HLS with threefive](https://github.com/superkabuki/threefive/blob/main/hls.md) All HLS SCTE-35 tags, Sidecar Files, AAC ID3 Header Timestamps, SCTE-35 filters... Who loves you baby?
 
-## `MPEGTS Packet Injection`
+##  [ MPEGTS Packet Injection ]
 * [The SuperKabuki MPEGTS Packet Injection Engine in the Cli](inject.md)
 
-## `SCTE-35 As a Service`
+##  [ SCTE-35 As a Service ]
 * Decode SCTE-35 without installing anything. If you can make an https request, you can use [__Sassy__](sassy.md) to decode SCTE-35. . 
 
-## `Classes`
+##  [ Classes ]
 * The python built in help is always the most up to date docs for the library.
 
 ```py3
@@ -324,7 +324,7 @@ a@fu:~/build7/threefive$ pypy3
 
 ___
 
-## `| more`
+## [ | more  ]
 
 * [Online SCTE-35 Parser](https://iodisco.com/scte35)  Supporte Base64, Bytes,Hex,Int, Json, Xml, and Xml+binary.
 
@@ -333,7 +333,7 @@ ___
 
 ___
 
-## `Install`
+##  [ Install ]
 * python3 via pip
 ```rebol
 python3 -mpip install threefive
@@ -350,7 +350,7 @@ make install
 ```
 ___
 
-## `Using the library`
+##  [ Using the library ]
 
 * Let me show you how easy threefive is to use.
 
@@ -588,7 +588,7 @@ Type "help", "copyright", "credits" or "license" for more information.
 ```
 
 
-## `The Cli tool`
+## [ The Cli tool ]
 
 #### The cli tool installs automatically with pip or the Makefile.
 
@@ -735,7 +735,7 @@ ___
 ___
 
 
-## Stream Multicast with the threefive cli, it's easy.
+## [ Stream Multicast with the threefive cli, it's easy. ]
 
 * The threefive cli has long been a Multicast Receiver( client )
 * The cli now comes with a builtin Multicast Sender( server).
