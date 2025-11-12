@@ -1,8 +1,9 @@
 # threefive is the Highest Rated SCTE-35 Parser. Ever.
 
  _SRT support in threefive?  It will never happen, the threefive guy can't even spell SRT...._ ~ Linda
-<BR>  _Support for SRT parsing will be included in the next release._ ~Adrian 
-* _checkout [SRTKabuki](https://github.com/superkabuki/srtkabuki)_
+ <BR>
+<BR>  _Support for SRT parsing will be included in  v3.0.65._ ~Adrian <BR>
+<BR> _checkout [SRTKabuki](https://github.com/superkabuki/srtkabuki)_
 
 
 # [ [Latest threefive version is v3.0.63](v3063.md) ]
