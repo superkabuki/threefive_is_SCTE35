@@ -1,16 +1,13 @@
-
-_SRT support in threefive?  It will never happen, the threefive guy can't even spell SRT...._ ~ Linda
-
-* __SRT Live parsing is now working with threefive and will be included in the next release.__ 
-* _checkout [SRTKabuki](https://github.com/superkabuki/srtkabuki)_
-
 # threefive is the Highest Rated SCTE-35 Parser. Ever.
 
-#  SCTE-35 CLI tool and python3 library 
+ _SRT support in threefive?  It will never happen, the threefive guy can't even spell SRT...._ ~ Linda
+<BR>  _Support for SRT parsing will be included in the next release._ ~Adrian 
+* _checkout [SRTKabuki](https://github.com/superkabuki/srtkabuki)_
 
-## [ [Latest version is v3.0.63](v3063.md) ]
 
-## [ FAQ ]
+# [ [Latest threefive version is v3.0.63](v3063.md) ]
+
+# [ FAQ ]
 ### Q. `Who uses threefive?` 
 
 ### A. `Everybody.` 
@@ -56,6 +53,7 @@ set __segmentation_upid_length__= __0__ <BR>
 set __segmentation_upid_type__= __0__
 ___
 
+### If you use open soure, contribute to open source. Do something to make something better. 
 
 
 # [ Documentation ]
