@@ -8,45 +8,26 @@
 
 # [ [Latest threefive version is v3.0.63](v3063.md) ]
 
-# [ FAQ ]
-### Q. `Who uses threefive?` 
 
-### A. `Everybody.` 
-_(threefive has been installed over one million times according to [pypi.org](https://pypi.org)_
+# Q. `Who uses threefive?` 
 
+# A. `Everybody.`
+### _threefive has been pip installed [over one million times](https://clickpy.clickhouse.com/dashboard/threefive)_
+___
 
 # [ Features ]
 <samp>
 
-* __Decodes SCTE-35__ from:
-	* MPEGTS
- 	* Base64
-  	*  Bytes
-  	*  DASH
-  	*  Dicts
-  	*  Hex
-  	*  HLS
-  	*  Integers
-  	*  JSON
-  	*  XML
-  	*  XML+Binary
-* __Encodes SCTE-35__ to:
-	* MPEGTS
- 	* Base64
-  	* Bytes
-  	* Hex
-  	* Integers
-  	* JSON
-  	* XML
-  	* XML+Binary
+* __Decode SCTE-35__  MPEGTS ✔ Base64 ✔ Bytes ✔ Hex ✔ Integers ✔ JSON ✔ XML ✔ XML+Binary ✔ DASH ✔  Dicts ✔  
+* __Encodes SCTE-35__ MPEGTS ✔ Base64 ✔ Bytes ✔ Hex ✔ Integers ✔ JSON ✔ XML ✔ XML+Binary ✔
 
-* __Automatic AES decryption__ for __MPEGTS__ and __HLS__.
+* __Automatic AES decryption__ for __MPEGTS__ and __HLS__. ✔
 
-* __Built-in Multicast Sender__ and __Receiver__.
+* __Built-in Multicast Sender__ and __Receiver__. ✔
 
-* __Injects SCTE-35 Packets__ into __MPEGTS__ video.
+* __Injects SCTE-35 Packets__ into __MPEGTS__ video ✔.
 
-<samp>
+___
 
 #  [ Tip Of The Week ]
 If you want to have a Segmentation Descriptor without a UPID <BR>
@@ -54,7 +35,6 @@ set __segmentation_upid_length__= __0__ <BR>
 set __segmentation_upid_type__= __0__
 ___
 
-### If you use open soure, contribute to open source. Do something to make something better. 
 
 
 # [ Documentation ]
