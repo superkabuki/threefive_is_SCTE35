@@ -3,7 +3,7 @@
  _SRT support in threefive?  It will never happen, the threefive guy can't even spell SRT...._ ~ Linda
  <br>
  <BR>
-<img width="500" height="475" alt="image" src="https://github.com/user-attachments/assets/eb404d57-02f1-43a9-80eb-cb5345dea346" />
+<img width="600" height="575" alt="image" src="https://github.com/user-attachments/assets/eb404d57-02f1-43a9-80eb-cb5345dea346" />
 
 <BR>  _Support for SRT parsing will be included in  v3.0.65._ ~Adrian <BR>
 
