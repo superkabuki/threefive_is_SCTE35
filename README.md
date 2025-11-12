@@ -67,7 +67,12 @@ ___
 * Here's how to decode these SCTE-35 formats with threefive.
 * This covers both the Cli tool and library.
 
-<details><summary> MPEGTS </summary> </summary>
+ <details><summary>
+
+### mpegts 
+
+ </summary>
+ 
 * MPEGTS streams can be  Files, Http(s), Multicast, UDP Unicast, or  stdin. 
 
 * __cli__
@@ -91,7 +96,12 @@ stream.decode()
 </details>
 
 
-<details><summary>Base64</summary>
+
+<details><summary>
+
+### Base64
+
+</summary>
 
 * __cli__
 ```js
@@ -109,7 +119,11 @@ cue.show()
 </details>
 
 
-<details><summary>Bytes</summary>
+<details><summary>
+
+### Bytes
+
+</summary>
 
 * __cli__
 	* Bytes don't work on the cli
@@ -126,7 +140,11 @@ cue.show()
 </details>
 
 
-<details><summary>Hex</summary>
+<details><summary>
+	
+### Hex
+
+</summary>
 
 * Can be a hex literal or hex string or bytes.
 
@@ -146,7 +164,11 @@ cue.show()
 </details>
 
 
-<details><summary>Int</summary>
+<details><summary>
+	
+### Int
+
+</summary>
 
 * Can be a literal integer or string or bytes.
 
@@ -167,7 +189,11 @@ cue.show()
 </details>
 
 
-<details><summary>JSON</summary>
+<details><summary>
+	
+### JSON
+
+</summary>
 
 * __cli__
 	* 	put JSON SCTE-35 in a file and redirect it into threefive 
@@ -215,7 +241,11 @@ cue.show()
 </details>
 
 
-<details><summary><u>Xml</u>
+<details><summary><u>
+
+### Xml
+
+</u>
 </summary>
 
 * __cli__
@@ -244,7 +274,11 @@ cue.show()
 
 
 
-<details><summary>Xml+binary</summary>
+<details><summary>
+	
+### Xml+binary
+
+</summary>
 
 * __cli__
 	* write xml+binary to a [file](xmlbin.xml) and redirect it to threefive
