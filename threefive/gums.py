@@ -16,8 +16,7 @@ from .new_reader import reader
 from .stuff import blue, reblue, print2, pif
 
 
-DGRAM_SIZE = 1316
-THIRTY_DGRAMS = 30 * DGRAM_SIZE
+DGRAM = 1316
 
 DEFAULT_MULTICAST = "235.35.3.5:3535"
 
@@ -73,7 +72,7 @@ class GumS:
         now = time.time
         total_bytes = 0
         with reader(vid) as gum:
-            for dgram in iter(partial(gum.read, THIRTY_DGRAMS), b""):
+            for dgram in iter(partial(gum.read, DGRAM), b""):
                 self.sock.sendto(dgram, self.dest_grp)
                 total_bytes += len(dgram)
                 elapsed = now() - start_time
